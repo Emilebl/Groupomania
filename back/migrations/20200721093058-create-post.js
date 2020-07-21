@@ -25,15 +25,17 @@ module.exports = {
         type: Sequelize.STRING
       },
       attachment: {
-        allowNull: false,
+        allowNull: true,
         type: Sequelize.STRING
       },
       likes: {
         allowNull: false,
+        defaultValue: 0,
         type: Sequelize.INTEGER
       },
       dislikes: {
         allowNull: false,
+        defaultValue: 0,
         type: Sequelize.INTEGER
       },
       createdAt: {
