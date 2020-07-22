@@ -33,7 +33,7 @@ exports.createPost = (req, res) => {
                         title: title,
                         content: content,
                         attachment: attachmentURL,
-                        idUSERS: user.id
+                        UserId: user.id
                     })
                         .then((newPost) => {
                             res.status(201).json(newPost)
