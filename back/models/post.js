@@ -16,7 +16,7 @@ module.exports = (sequelize, DataTypes) => {
           allowNull: false
         }
       }),
-      models.Post.hasMany(models.UsersLiked)
+      models.Post.hasMany(models.UserReact)
     }
   };
   Post.init({

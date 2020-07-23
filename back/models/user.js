@@ -12,7 +12,7 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       // define association here
       models.User.hasMany(models.Post),
-      models.User.hasMany(models.UsersLiked)
+      models.User.hasMany(models.UserReact)
     }
   };
   User.init({
