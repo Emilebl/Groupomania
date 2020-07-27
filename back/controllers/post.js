@@ -56,6 +56,11 @@ exports.getAllPosts = (req, res) => {
         include: [{
             model: models.User,
             attributes: ['lastName' , 'firstName']
+        },{
+            model: models.UserReact,
+            required: false,
+            attributes: ['userId', 'type']
+            
         }],
         order: [['createdAt', 'DESC']]
     })
@@ -76,7 +81,12 @@ exports.getOnePost = (req, res) => {
         include: [{
             model: models.User,
             attributes: ['firstName', 'lastName']
-        }],
+        },{
+            model: models.UserReact,
+            required: false,
+            attributes: ['userId', 'type']
+            
+        }]
     })
     .then(post => {
         res.status(200).json(post)
@@ -146,7 +156,10 @@ exports.updatePost = (req, res) => {
                         fs.unlink(`images/${filename}`, () => {
                             models.Post
                             .destroy({
-                                where: { id: postFind.id }
+                                where: { id: postFind.id },
+                                // include: [{
+                                //     model: models.UserReact
+                                // }],
                             })
                             .then(() => res.end())
                             .catch(err => res.status(500).json(err))
