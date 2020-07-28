@@ -4,6 +4,8 @@ const bodyParser = require('body-parser');
 const postRoutes = require('./routes/post');
 const userRoutes = require('./routes/user');
 
+const path = require('path');
+
 const app = express();
 
 app.use((req, res, next) => { // We declare all the headers to allow :
@@ -13,9 +15,10 @@ app.use((req, res, next) => { // We declare all the headers to allow :
     next();
 });
 
-app.use(bodyParser.urlencoded({extended: false}));
+app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
 
+app.use('/images', express.static(path.join(__dirname, 'images')));
 
 app.use('/api/users', userRoutes);
 app.use('/api/posts', postRoutes);

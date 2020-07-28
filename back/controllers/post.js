@@ -27,8 +27,6 @@ exports.createPost = (req, res) => {
             if ((title == 'null' && content == 'null' && attachmentURL == null)) {
                 res.status(400).json({ error: 'Rien à publier' })
             } else {
-                console.log(attachmentURL)
-                console.log(user.id)
                 models.Post.create({
                     title: title,
                     content: content,
