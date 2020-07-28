@@ -18,7 +18,7 @@ module.exports = (sequelize, DataTypes) => {
       }),
       models.UserReact.belongsTo(models.Post, {
         foreignKey: {
-          allowNull: false
+          allowNull: false,
         }
       })
     }

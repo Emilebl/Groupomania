@@ -22,9 +22,7 @@ module.exports = (sequelize, DataTypes) => {
   Post.init({
     title: DataTypes.STRING,
     content: DataTypes.STRING,
-    attachment: DataTypes.STRING,
-    likes: DataTypes.INTEGER,
-    dislikes: DataTypes.INTEGER
+    attachment: DataTypes.STRING
   }, {
     sequelize,
     modelName: 'Post',
