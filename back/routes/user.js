@@ -2,14 +2,15 @@ const express = require('express');
 const router = express.Router();
 const userCtrl = require('../controllers/user');
 const auth = require('../middleware/auth');
+const multer = require('../middleware/multer-config');
 
 
 
 
-router.post("/signup", userCtrl.signup);
+router.post("/signup", multer, userCtrl.signup);
 router.post("/login", userCtrl.login);
 router.get('/me', auth, userCtrl.getUserProfile);
-router.put('/update', auth, userCtrl.updateProfile);
+router.put('/update', auth, multer, userCtrl.updateProfile);
 router.delete('/delete', auth, userCtrl.deleteProfile);
 
 

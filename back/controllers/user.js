@@ -12,7 +12,14 @@ exports.signup = (req, res) => {
     let lastName = req.body.lastName;
     let password = req.body.password;
     let bio = req.body.bio;
-
+    let attachmentURL;
+    if (req.file != undefined) {
+        attachmentURL = `${req.protocol}://${req.get('host')}/images/${req.file.filename}`;
+    }
+    else {
+        attachmentURL == null
+    };
+    console.log(email);
     if (email == null || firstName == null || lastName == null || password == null) {
         res.status(400).json({ error: 'il manque un paramètre' })
     }
@@ -39,6 +46,7 @@ exports.signup = (req, res) => {
                             firstName: firstName,
                             lastName: lastName,
                             password: bcryptPassword,
+                            profilePic: attachmentURL,
                             bio: bio,
                             isAdmin: false
                         })
@@ -94,7 +102,7 @@ exports.login = (req, res) => {
 exports.getUserProfile = (req, res) => {
     let id = utils.getUserId(req.headers.authorization)
     models.User.findOne({
-        attributes: ['id', 'email', 'firstName', 'lastName', 'bio', 'isAdmin'],
+        attributes: ['id', 'email', 'firstName', 'lastName', 'profilePic', 'bio', 'isAdmin'],
         where: { id: id }
     })
         .then(user => res.status(200).json(user))
@@ -106,8 +114,18 @@ exports.updateProfile = (req, res) => {
     
     //Récupère l'id de l'user et le nouveau password
     let userId = utils.getUserId(req.headers.authorization);
+
+    const lastName = req.body.lastName;
+    const firstName = req.body.firstName;
     const bio = req.body.bio;
-    //Vérification regex du nouveau mot de passe
+    let attachmentURL;
+
+    if (req.file != undefined) {
+        attachmentURL = `${req.protocol}://${req.get('host')}/images/${req.file.filename}`;
+    }
+    else {
+        attachmentURL == null
+    };
 
     models.User.findOne({
         attributes: ['id','bio'],
@@ -117,6 +135,9 @@ exports.updateProfile = (req, res) => {
     console.log('user trouvé', user)
                     
     user.update({
+        firstName:(firstName ? firstName : user.firstName),
+        lastName:(lastName ? lastName : user.lastName),
+        profilePic:(attachmentURL ? attachmentURL : user.profilePic),
         bio: (bio ? bio : user.bio)
     })
     .then(() => res.status(201).json({ confirmation: 'bio modifiée avec succès'}))
