@@ -2,6 +2,7 @@
 let models = require('../models');
 let utils = require('../utils/jwtUtils');
 const fs = require('fs');
+const post = require('../models/post');
 
 //Création d'un message
 exports.createPost = (req, res) => {
@@ -96,36 +97,73 @@ exports.getOnePost = (req, res) => {
 exports.updatePost = (req, res) => {
     //récupération de l'id du demandeur pour vérification
     let userOrder = req.body.userIdOrder;
-    //identification du demandeur
-    let id = utils.getUserId(req.headers.authorization);
+    //Declaration de l'url de l'image
+    let attachmentURL
+    //identifier qui créé le message
+    let id = utils.getUserId(req.headers.authorization)
     models.User.findOne({
         attributes: ['id', 'email', 'firstName', 'lastName', 'isAdmin'],
         where: { id: id }
     })
     .then(user => {
-        //Vérification que le demandeur est soit l'admin soit le poster (vérif aussi sur le front)
+        console.log(user)
         if (user && (user.isAdmin == true || user.id == userOrder)) {
-            console.log('Modif ok pour le post :', req.params.id);
-            models.Post
-            .update(
-                {
-                    title: req.body.newTitle,
-                    content: req.body.newText,
-                    attachment: req.body.newImg
-                },
-                { where: { id: req.params.id } }
-                )
-                console.log(userOrder)
-                .then(() => res.end())
-                .catch(err => res.status(500).json(err))
+             //Récupération du corps du post
+            let title = req.body.newTitle;
+            let content = req.body.newContent;
+            if (req.file != undefined) {
+                attachmentURL = `${req.protocol}://${req.get('host')}/images/${req.file.filename}`;
+                console.log(attachmentURL)
+                
             }
             else {
-                res.status(401).json({ error: 'Utilisateur non autorisé à modifier ce post' })
-            }
-        }
-        )
-        .catch(error => res.status(500).json(error));
-    },
+                attachmentURL == null
+            };
+            models.Post.update({
+                title: (title ? title : post.title),
+                content: (content ? content : post.content),
+                attachment: (attachmentURL ? attachmentURL : post.attachment)
+            },
+            { where: { id: req.params.id }}
+            )
+            .then(() => {res.status(201).json({confirmation: 'post modifié avec succès'})})
+            .catch((err) => {res.status(500).json(err)})
+         } else {
+            res.status(401).json({ error: 'Utilisateur non autorisé à modifier ce post' })
+         }
+    })
+    .catch(() => res.status(500).json(error));
+},
+    // //identification du demandeur
+    // let id = utils.getUserId(req.headers.authorization);
+    // models.User.findOne({
+    //     attributes: ['id', 'email', 'firstName', 'lastName', 'isAdmin'],
+    //     where: { id: id }
+    // })
+    // .then(user => {
+    //     //Vérification que le demandeur est soit l'admin soit le poster (vérif aussi sur le front)
+    //     if (user && (user.isAdmin == true || user.id == userOrder)) {
+    //         console.log('Modif ok pour le post :', req.params.id);
+    //         models.Post
+    //         .update(
+    //             {
+    //                 title: req.body.newTitle,
+    //                 content: req.body.newText,
+    //                 attachment: req.body.newImg
+    //             },
+    //             { where: { id: req.params.id } }
+    //             )
+    //             console.log(userOrder)
+    //             .then(() => res.end())
+    //             .catch(err => res.status(500).json(err))
+    //         }
+    //         else {
+    //             res.status(401).json({ error: 'Utilisateur non autorisé à modifier ce post' })
+    //         }
+    //     }
+    //     )
+    //     .catch(error => res.status(500).json(error));
+    // },
     
     //Suppression d'un post
     exports.deletePost = (req, res) => {
@@ -154,10 +192,7 @@ exports.updatePost = (req, res) => {
                         fs.unlink(`images/${filename}`, () => {
                             models.Post
                             .destroy({
-                                where: { id: postFind.id },
-                                // include: [{
-                                //     model: models.UserReact
-                                // }],
+                                where: { id: postFind.id }
                             })
                             .then(() => res.end())
                             .catch(err => res.status(500).json(err))
