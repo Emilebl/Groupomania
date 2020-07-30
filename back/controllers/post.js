@@ -54,11 +54,20 @@ exports.getAllPosts = (req, res) => {
     models.Post.findAll({
         include: [{
             model: models.User,
-            attributes: ['lastName' , 'firstName']
+            attributes: ['lastName' , 'firstName' , 'profilePic']
         },{
             model: models.UserReact,
             required: false,
             attributes: ['userId', 'type']
+            
+        },{
+            model: models.Comment,
+            required: false,
+            attributes: ['content'],
+            include: [{
+                model: models.User,
+                attributes: ['firstName', 'lastName', 'profilePic']
+            }]
             
         }],
         order: [['createdAt', 'DESC']]
@@ -79,12 +88,20 @@ exports.getOnePost = (req, res) => {
         where: { id: req.params.id},
         include: [{
             model: models.User,
-            attributes: ['firstName', 'lastName']
+            attributes: ['firstName', 'lastName', 'profilePic']
         },{
             model: models.UserReact,
             required: false,
             attributes: ['userId', 'type']
             
+        },{
+            model: models.Comment,
+            required: false,
+            attributes: ['content'],
+            include: [{
+                model: models.User,
+                attributes: ['firstName', 'lastName', 'profilePic']
+            }]  
         }]
     })
     .then(post => {
@@ -370,5 +387,75 @@ exports.updatePost = (req, res) => {
             //   }
             // })
             // .catch(error => res.status(400).json({ error }));
-        }
+        },
+
+        exports.commentPost = (req, res) => {
+            //identify who creates the comment
+            let id = utils.getUserId(req.headers.authorization)
+            models.User.findOne({
+                attributes: ['id', 'firstName', 'lastName'],
+                where: { id: id }
+            })
+            .then(user => {
+                if (user !== null) {
+                    //Récupération du corps du post
+                    let content = req.body.content;
+                    let postId = req.params.id;
+                    if (content == 'null' ) {
+                        res.status(400).json({ error: 'Rien à commenter' })
+                    } else {
+                    models.Comment.create({
+                        content: content,
+                        PostId: postId,
+                        UserId: user.id
+                    })
+                        .then((newComment) => {
+                            res.status(201).json(newComment)
+                        })
+                        .catch((err) => {
+                            res.status(500).json(err)
+                            console.log('ici')
+                        })
+                    };
+                } else {
+                    res.status(400).json(error);
+                }
+            })
+            .catch(error => res.status(500).json(error));
+        },
+
+        exports.deleteComment = (req, res) => {
+            //req => userId, postId, user.isAdmin
+            let userOrder = req.body.userIdOrder;
+            console.log(userOrder);
+            //identification du demandeur
+            let id = utils.getUserId(req.headers.authorization)
+            models.User.findOne({
+                attributes: ['id', 'email', 'firstName','lastName', 'isAdmin'],
+                where: { id: id }
+            })
+            .then(user => {
+                //Vérification que le demandeur est soit l'admin soit le poster (vérif aussi sur le front)
+                if (user && (user.isAdmin == true || user.id == userOrder)) {
+                    console.log('Suppression du comment id :', req.params.comid);
+                    models.Comment
+                    .findOne({
+                        where: { id: req.params.comid }
+                    })
+                    .then((commentFind) => {
+                        console.log(commentFind)
+                        models.Comment
+                        .destroy({
+                            where: { id: commentFind.id }
+                        })
+                        .then(() => res.end())
+                        .catch(err => res.status(500).json(err))
+                        
+                    })
+                    .catch(err => res.status(500).json(err))
+                } else { console.log(userOrder); console.log(user.id);
+                    res.status(403).json('Utilisateur non autorisé à supprimer ce post') }
+                })
+                .catch(error => res.status(500).json(console.log(error)));
+            }
         

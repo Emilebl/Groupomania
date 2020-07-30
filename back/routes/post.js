@@ -12,5 +12,7 @@ router.delete("/:id", postCtrl.deletePost);
 router.get("/", auth, postCtrl.getAllPosts);
 router.get("/:id", auth, postCtrl.getOnePost);
 router.post("/:id/react", auth, postCtrl.reactToPost)
+router.post("/:id/comment", auth, postCtrl.commentPost)
+router.delete("/:id/comment/:comid", auth, postCtrl.deleteComment)
 
 module.exports = router; 

@@ -13,6 +13,7 @@ module.exports = (sequelize, DataTypes) => {
       // define association here
       models.User.hasMany(models.Post),
       models.User.hasMany(models.UserReact)
+      models.User.hasMany(models.Comment)
     }
   };
   User.init({
