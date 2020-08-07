@@ -27,6 +27,7 @@
             </div>
             <div class="form-example">
                 <input type="submit" value="S'inscrire !">
+                {{ error }}
             </div>
         </form>
     </div>
@@ -44,7 +45,9 @@ export default {
             email: '',
             password: '',
             bio: '',
-            inputFile: null
+            inputFile: null,
+
+            error: ''
         }
     },
     methods:{
@@ -60,9 +63,12 @@ export default {
             console.log(newUser)
             axios.post('http://localhost:3000/api/users/signup', newUser)
             .then(res => {
-                console.log(res)
+                console.log(res);
+                this.error= '';
+                this.$router.push('/login');
             }, err => {
-                console.log(err.response)
+                console.log(err.response);
+                this.error = err.response.data.error;
             })
         },
         uploadImage(e){
