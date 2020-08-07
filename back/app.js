@@ -1,5 +1,6 @@
 const express = require('express');
 const bodyParser = require('body-parser');
+const cors = require('cors')
 
 const postRoutes = require('./routes/post');
 const userRoutes = require('./routes/user');
@@ -7,6 +8,8 @@ const userRoutes = require('./routes/user');
 const path = require('path');
 
 const app = express();
+
+app.use(cors());
 
 app.use((req, res, next) => { // We declare all the headers to allow :
     res.setHeader('Access-Control-Allow-Origin', '*'); // Connection from any origin
