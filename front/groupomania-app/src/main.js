@@ -1,7 +1,7 @@
 import Vue from 'vue';
 import App from './App.vue';
 import VueRouter from 'vue-router';
-import Landing from './components/Landing.vue'
+import Wall from './components/Wall.vue'
 import Signup from './components/Signup.vue'
 import Login from './components/Login.vue'
 
@@ -10,7 +10,7 @@ Vue.config.productionTip = false
 Vue.use(VueRouter);
 
 const routes = [
-  {path: '/', component: Landing},
+  {path: '/', component: Wall},
   {path: '/signup', component: Signup},
   {path: '/login', component: Login}
 ]

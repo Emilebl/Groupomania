@@ -1,5 +1,6 @@
 <template>
     <div>
+        <AddPost />
         <div v-for="post in postList" :key="post.id">
             <h2>{{ post.title }}</h2>
             <h3>Par {{post.User.firstName}} {{post.User.lastName}}</h3>
@@ -15,9 +16,13 @@
 </template>
 <script>
 import axios from 'axios';
+import AddPost from './AddPost';
 
 export default {
-    name: 'Landing',
+    name: 'Wall',
+    components: {
+        AddPost
+    },
     data () {
         return {
             postList : []
