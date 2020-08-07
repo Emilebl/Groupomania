@@ -15,7 +15,7 @@
             </div>
             <div class="form-example">
                 <label for="password">Enter your password: </label>
-                <input type="password" v-model="password" name="password" id="password" required>
+                <input type="text" v-model="password" name="password" id="password" required>
             </div>
             <div class="form-example">
                 <label for="bio">Enter your bio: </label>
@@ -33,6 +33,8 @@
 </template>
 
 <script>
+import axios from 'axios';
+
 export default {
     name: 'Signup',
     data () {
@@ -56,6 +58,12 @@ export default {
                 inputFile: this.inputFile
             }
             console.log(newUser)
+            axios.post('http://localhost:3000/api/users/signup', newUser)
+            .then(res => {
+                console.log(res)
+            }, err => {
+                console.log(err.response)
+            })
         },
         uploadImage(e){
             const image = e.target.files[0];
