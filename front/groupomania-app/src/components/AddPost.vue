@@ -40,7 +40,7 @@ export default {
                 console.log(res);
                 this.title = '';
                 this.content = '';
-                this.$router.push('/');
+                // this.$router.push('/');
             }, err => {
                 console.log(err.response);
                 this.error = err.response.data.error;
