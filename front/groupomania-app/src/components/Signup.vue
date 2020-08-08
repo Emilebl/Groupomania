@@ -62,8 +62,8 @@ export default {
         register() {
             const userInfos = new FormData();
             userInfos.append('email', this.email);
-            userInfos.append('firstName', this.firstname);
-            userInfos.append('lastName', this.lastname);
+            userInfos.append('firstName', this.firstName);
+            userInfos.append('lastName', this.lastName);
             userInfos.append('password', this.password);
             userInfos.append('bio', this.bio);
             userInfos.append('inputFile', this.file);
