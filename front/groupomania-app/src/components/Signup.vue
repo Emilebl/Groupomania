@@ -60,15 +60,15 @@ export default {
         this.imgPreview = URL.createObjectURL(this.file);
         },
         register() {
-            const formData = new FormData();
-            formData.append('email', this.email);
-            formData.append('firstname', this.firstname);
-            formData.append('lastname', this.lastname);
-            formData.append('password', this.password);
-            formData.append('bio', this.bio);
-            formData.append('inputFile', this.file);
-            console.log(formData)
-            axios.post('http://localhost:3000/api/users/signup', formData, {headers: {'Content-Type': 'multipart/form-data'}})
+            const userInfos = new FormData();
+            userInfos.append('email', this.email);
+            userInfos.append('firstName', this.firstname);
+            userInfos.append('lastName', this.lastname);
+            userInfos.append('password', this.password);
+            userInfos.append('bio', this.bio);
+            userInfos.append('inputFile', this.file);
+            console.log(userInfos)
+            axios.post('http://localhost:3000/api/users/signup', userInfos, {headers: {'Content-Type': 'multipart/form-data'}})
             .then(res => {
                 console.log(res);
                 this.error= '';

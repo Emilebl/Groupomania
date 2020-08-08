@@ -54,6 +54,7 @@ export default {
                 console.log(res);
                 this.title = '';
                 this.content = '';
+                this.file = '';
                 // this.$router.push('/');
             }, err => {
                 console.log(err.response);

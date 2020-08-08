@@ -19,7 +19,7 @@ exports.signup = (req, res) => {
     else {
         attachmentURL == null
     };
-    console.log(email);
+    console.log(req.body);
     if (email == null || firstName == null || lastName == null || password == null) {
         res.status(400).json({ error: 'il manque un paramètre' })
     }
