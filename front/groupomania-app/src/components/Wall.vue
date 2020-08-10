@@ -1,35 +1,42 @@
 <template>
     <div>
+        <Header />
         <AddPost @newPost="remountWall" />
-        <div v-for="post in postList" :key="post.index">
-            <h2>{{ post.title }}</h2>
-            <h3>Par {{post.User.firstName}} {{post.User.lastName}}</h3>
-            <img v-bind:src="post.attachment" alt="" id="postImage">
-            <p>{{ post.content }}</p>
-            <span>Commentaires ({{ post.Comments.length }})</span>
-            <!-- <span>{{ post.UserReacts.true.length }} Likes </span>
-            <span>{{ post.UserReacts.false.length }} Dislikes </span> -->
-            <button @click="likePost(post.id)" >Like</button>
-            <button @click="dislikePost(post.id)" >Dislike</button>
+        <section class="post-list-container">
+        <div v-for="post in postList" :key="post.index" class="post-container">
+            <a v-bind:href="'/post/'+ post.id">
+                <h2>{{ post.title }}</h2>
+                <h3>Par {{post.User.firstName}} {{post.User.lastName}}</h3>
+                <img v-bind:src="post.attachment" alt="" class="post-image">
+                <p>{{ post.content }}</p>
+                <span>Commentaires ({{ post.Comments.length }})</span>
+                <!-- <span>{{ post.UserReacts.true.length }} Likes </span>
+                <span>{{ post.UserReacts.false.length }} Dislikes </span> -->
+                <button @click="likePost(post.id)" >Like</button>
+                <button @click="dislikePost(post.id)" >Dislike</button>
+            </a>
         </div>
-
-        <button @click="logout">Logout</button>
+        </section>
     </div>
 </template>
 <script>
 import axios from 'axios';
+import Header from './Header';
 import AddPost from './AddPost';
 
 export default {
     name: 'Wall',
     components: {
-        AddPost
+        AddPost,
+        Header
+
     },
     data () {
         return {
             postList : [],
             like : 1,
-            dislike : -1
+            dislike : -1,
+            singlePostUrl: 'http://localhost:3000/api/posts/',
         }
     },
     created() {
@@ -45,10 +52,6 @@ export default {
         })
     },
     methods: {
-        logout() {
-            localStorage.clear();
-            this.$router.push('/login');
-        },
         likePost(postId) {
             let reaction = {
                 like: this.like
@@ -88,7 +91,18 @@ export default {
 </script>
 
 <style>
-#postImage {
+.post-image {
     max-width: 500px;
+}
+
+.post-list-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.post-container {
+    border: 3px solid blue;
+    max-width: 65%;
 }
 </style>
