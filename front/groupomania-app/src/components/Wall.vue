@@ -1,10 +1,10 @@
 <template>
     <div>
-        <AddPost />
-        <div v-for="post in postList" :key="post.id">
+        <AddPost @newPost="remountWall" />
+        <div v-for="post in postList" :key="post.index">
             <h2>{{ post.title }}</h2>
             <h3>Par {{post.User.firstName}} {{post.User.lastName}}</h3>
-            <img src="" alt="">
+            <img v-bind:src="post.attachment" alt="" id="postImage">
             <p>{{ post.content }}</p>
             <span>Commentaires ({{ post.Comments.length }})</span>
             <!-- <span>{{ post.UserReacts.true.length }} Likes </span>
@@ -75,7 +75,20 @@ export default {
                 console.log(err.response);
                 this.error = err.response.data.error;
             })
+        },
+        remountWall() {
+            axios.get('http://localhost:3000/api/posts', {headers: {'Authorization': 'Bearer ' + localStorage.getItem('token')}})
+            .then(res => {
+            console.log(res);
+            this.postList = res.data;
+        })
         }
     }
 }
 </script>
+
+<style>
+#postImage {
+    max-width: 500px;
+}
+</style>

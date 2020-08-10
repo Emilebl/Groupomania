@@ -55,7 +55,8 @@ export default {
                 this.title = '';
                 this.content = '';
                 this.file = '';
-                // this.$router.push('/');
+                this.imgPreview = '';
+                this.$emit('newPost');
             }, err => {
                 console.log(err.response);
                 this.error = err.response.data.error;
