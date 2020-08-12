@@ -1,7 +1,7 @@
 <template>
     <div>
         <Header />
-        <AddPost @newPost="remountWall" />
+        <AddPost @newPost="recallWall" />
         <section class="post-list-container">
         <div v-for="post in postList" :key="post.index" class="post-container">
             <a v-bind:href="'/post/'+ post.id">
@@ -79,7 +79,7 @@ export default {
                 this.error = err.response.data.error;
             })
         },
-        remountWall() {
+        recallWall() {
             axios.get('http://localhost:3000/api/posts', {headers: {'Authorization': 'Bearer ' + localStorage.getItem('token')}})
             .then(res => {
             console.log(res);

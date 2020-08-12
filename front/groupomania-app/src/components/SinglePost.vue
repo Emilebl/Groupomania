@@ -11,7 +11,8 @@
             <span>{{ post.UserReacts.false.length }} Dislikes </span> -->
             <button @click="likePost(post.id)" >Like</button>
             <button @click="dislikePost(post.id)" >Dislike</button>
-        <!-- <form v-if="showUpdateForm">
+        <form @submit.prevent="updatePost" enctype="multipart/form-data" class="form-example">
+            
             <div>
                 <label for="title">Titre du post</label>
                 <input type="text" v-model="title" name="title" id="title" required>
@@ -28,11 +29,12 @@
                 <img v-if="imgPreview" :src="imgPreview" />
             </div>
             <div class="form-example">
-                <input type="submit" value="Publier !">
+                <input type="submit" value="Modifier !">
                 {{ error }}
             </div>
-        </form> -->
-        <!-- <button @click="toggleUpdateForm">Modifier la publication</button> -->
+        </form>
+        <button @click="deletePost">Supprimer le post</button>
+        {{ error }}
         </section>
     </div>
 </template>
@@ -52,6 +54,8 @@ export default {
             content: '',
             file: '',
             imgPreview: '',
+            userIdOrder: '',
+            AuthorisationToDelete:'',
 
             error: '',
 
@@ -68,6 +72,7 @@ export default {
         .then(res => {
             console.log(res);
             this.post = res.data;
+            this.userIdOrder = res.data.UserId
         })
     },
     methods: {
@@ -77,9 +82,10 @@ export default {
         },
         updatePost() {
             const formData = new FormData();
-            formData.append('title', this.title);
-            formData.append('content', this.content);
+            formData.append('newTitle', this.title);
+            formData.append('newContent', this.content);
             formData.append('inputFile', this.file);
+            formData.append('userIdOrder', this.userIdOrder);
             console.log(formData);
             axios.put('http://localhost:3000/api/posts/' +  this.$route.params.id, formData, {headers: {'Authorization': 'Bearer ' + localStorage.getItem('token')}})
             .then(res => {
@@ -88,7 +94,25 @@ export default {
                 this.content = '';
                 this.file = '';
                 this.imgPreview = '';
-                this.$emit('newPost');
+                this.recallSinglePost()
+            }, err => {
+                console.log(err.response);
+                this.error = err.response.data.error;
+            })
+        },
+        recallSinglePost() {
+            axios.get('http://localhost:3000/api/posts/' +  this.$route.params.id, {headers: {'Authorization': 'Bearer ' + localStorage.getItem('token')}})
+            .then(res => {
+            console.log(res);
+            this.post = res.data;
+            this.userIdOrder = res.data.UserId
+        })
+        },
+        deletePost() {
+            axios.delete('http://localhost:3000/api/posts/' +  this.$route.params.id, {headers: {'Authorization': 'Bearer ' + localStorage.getItem('token')}, data: {userIdOrder: this.userIdOrder}})
+            .then(res => {
+            console.log(res);
+            this.$router.push('/')
             }, err => {
                 console.log(err.response);
                 this.error = err.response.data.error;
@@ -110,6 +134,10 @@ export default {
     max-width: 500px;
 }
 
+#preview {
+    height: 50px;
+    width: 50px;
+}
 .post-container {
     border: 3px solid blue;
     max-width: 65%;
