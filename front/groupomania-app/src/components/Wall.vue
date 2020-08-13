@@ -10,8 +10,8 @@
                 <img v-bind:src="post.attachment" alt="" class="post-image">
                 <p>{{ post.content }}</p>
                 <span>Commentaires ({{ post.Comments.length }})</span>
-                <!-- <span>{{ post.UserReacts.true.length }} Likes </span>
-                <span>{{ post.UserReacts.false.length }} Dislikes </span> -->
+                <span>{{ displayLikes(post.UserReacts) }} Likes </span>
+                <span>{{ }} Dislikes </span>
                 <button @click="likePost(post.id)" >Like</button>
                 <button @click="dislikePost(post.id)" >Dislike</button>
             </a>
@@ -34,6 +34,9 @@ export default {
     data () {
         return {
             postList : [],
+            Reactions: [],
+            nbOfLikes: '',
+            nbOfDislikes: '',
             like : 1,
             dislike : -1,
             singlePostUrl: 'http://localhost:3000/api/posts/',
@@ -49,6 +52,9 @@ export default {
         .then(res => {
             console.log(res);
             this.postList = res.data;
+            // this.Reactions = res.data.UserReacts;
+            this.nbOfLikes = this.Reactions.filter(i => i.type === true).length;
+            this.nbOfDislikes = this.Reactions.filter(i => i.type === false).length;
         })
     },
     methods: {
@@ -59,6 +65,7 @@ export default {
             axios.post('http://localhost:3000/api/posts/'+ postId + '/react', reaction, {headers: {'Authorization': 'Bearer ' + localStorage.getItem('token')}})
             .then(res => {
                 console.log(res);
+                this.recallWall();
                 // this.$router.push('/');
             }, err => {
                 console.log(err.response);
@@ -73,6 +80,7 @@ export default {
             axios.post('http://localhost:3000/api/posts/'+ postId + '/react', reaction, {headers: {'Authorization': 'Bearer ' + localStorage.getItem('token')}})
             .then(res => {
                 console.log(res);
+                this.recallWall();
                 // this.$router.push('/');
             }, err => {
                 console.log(err.response);
@@ -84,7 +92,12 @@ export default {
             .then(res => {
             console.log(res);
             this.postList = res.data;
-        })
+            })
+        },
+        displayLikes(reactions) {
+            this.Reactions = reactions;
+            let nbOfLikes = this.Reactions.filter(i => i.type === true).length;
+            return nbOfLikes
         }
     }
 }

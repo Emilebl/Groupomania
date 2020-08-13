@@ -7,8 +7,8 @@
             <img v-bind:src="post.attachment" alt="" class="post-image">
             <p>{{ post.content }}</p>
             <span>Commentaires ({{ post.Comments.length }})</span>
-            <!-- <span>{{ post.UserReacts.true.length }} Likes </span>
-            <span>{{ post.UserReacts.false.length }} Dislikes </span> -->
+            <span>{{ nbOfLikes }} Likes </span>
+            <span>{{ nbOfDislikes }} Dislikes </span>
             <button @click="likePost(post.id)" >Like</button>
             <button @click="dislikePost(post.id)" >Dislike</button>
         <form @submit.prevent="updatePost" enctype="multipart/form-data" class="form-example">
@@ -50,12 +50,19 @@ export default {
     data () {
         return {
             post: [],
+            Reactions: [],
             title: '',
             content: '',
             file: '',
             imgPreview: '',
             userIdOrder: '',
+            nbOfLikes: '',
+            nbOfDislikes: '',
+
             AuthorisationToDelete:'',
+
+            like : 1,
+            dislike : -1,
 
             error: '',
 
@@ -72,7 +79,13 @@ export default {
         .then(res => {
             console.log(res);
             this.post = res.data;
-            this.userIdOrder = res.data.UserId
+            this.Reactions = res.data.UserReacts;
+            this.userIdOrder = res.data.UserId;
+            console.log(this.Reactions);
+            this.nbOfLikes = this.Reactions.filter(i => i.type === true).length;
+            this.nbOfDislikes = this.Reactions.filter(i => i.type === false).length;
+            console.log(this.nbOfLikes)
+            console.log(this.nbOfDislikes)
         })
     },
     methods: {
@@ -105,7 +118,12 @@ export default {
             .then(res => {
             console.log(res);
             this.post = res.data;
-            this.userIdOrder = res.data.UserId
+            this.Reactions = res.data.UserReacts;
+            this.userIdOrder = res.data.UserId;
+            this.nbOfLikes = this.Reactions.filter(i => i.type === true).length;
+            this.nbOfDislikes = this.Reactions.filter(i => i.type === false).length;
+            
+            
         })
         },
         deletePost() {
@@ -118,13 +136,42 @@ export default {
                 this.error = err.response.data.error;
             })
         },
-        toggleUpdateForm () {
-            if (!this.showUpdateForm) {
-                this.showUpdateForm === true
-            } else {
-                this.showUpdateForm === false
+        likePost(postId) {
+            let reaction = {
+                like: this.like
             }
+            axios.post('http://localhost:3000/api/posts/'+ postId + '/react', reaction, {headers: {'Authorization': 'Bearer ' + localStorage.getItem('token')}})
+            .then(res => {
+                console.log(res);
+                this.recallSinglePost()
+                // this.$router.push('/');
+            }, err => {
+                console.log(err.response);
+                this.error = err.response.data.error;
+            })
+
+        },
+        dislikePost(postId) {
+            let reaction = {
+                like: this.dislike
+            }
+            axios.post('http://localhost:3000/api/posts/'+ postId + '/react', reaction, {headers: {'Authorization': 'Bearer ' + localStorage.getItem('token')}})
+            .then(res => {
+                console.log(res);
+                this.recallSinglePost()
+                // this.$router.push('/');
+            }, err => {
+                console.log(err.response);
+                this.error = err.response.data.error;
+            })
         }
+        // toggleUpdateForm () {
+        //     if (!this.showUpdateForm) {
+        //         this.showUpdateForm === true
+        //     } else {
+        //         this.showUpdateForm === false
+        //     }
+        // }
     }
 }
 </script>
