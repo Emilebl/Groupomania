@@ -3,7 +3,7 @@
         <Header />
         <AddPost @newPost="recallWall" />
         <section class="post-list-container">
-            <div v-for="post in postList" :key="post.index" class="single-post-container">
+            <div v-for="post in postList" :key="post.UserReacts" class="single-post-container">
                 <SingleWallPost @newReaction="recallWall"
                 v-bind:title="post.title" 
                 v-bind:userFirstName="post.User.firstName"
@@ -102,7 +102,7 @@ export default {
             .then(res => {
             console.log(res);
             this.postList = res.data;
-            
+
             })
         },
         // displayLikes(reactions) {

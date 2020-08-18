@@ -49,8 +49,8 @@ export default {
             .then(res => {
                 console.log(res);
                 this.$emit('newReaction');
-                this.nbOfLikes = this.reactions.filter(i => i.type === true).length;
-                this.nbOfDislikes = this.reactions.filter(i => i.type === false).length;
+                // this.nbOfLikes = this.reactions.filter(i => i.type === true).length;
+                // this.nbOfDislikes = this.reactions.filter(i => i.type === false).length;
             }, err => {
                 console.log(err.response);
                 this.error = err.response.data.error;
