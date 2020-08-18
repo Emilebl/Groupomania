@@ -3,7 +3,19 @@
         <Header />
         <AddPost @newPost="recallWall" />
         <section class="post-list-container">
-        <div v-for="post in postList" :key="post.index" class="post-container">
+            <div v-for="post in postList" :key="post.index" class="single-post-container">
+                <SingleWallPost @newReaction="recallWall"
+                v-bind:title="post.title" 
+                v-bind:userFirstName="post.User.firstName"
+                v-bind:userLastName="post.User.lastName"
+                v-bind:imgUrl="post.attachment"
+                v-bind:content="post.content"
+                v-bind:comments="post.Comments"
+                v-bind:reactions="post.UserReacts"
+                v-bind:linkUrl="'/post/'+ post.id"
+                v-bind:postId="post.id"/>
+            </div>
+        <!-- <div v-for="post in postList" :key="post.index" class="post-container">
             <a v-bind:href="'/post/'+ post.id">
                 <h2>{{ post.title }}</h2>
                 <h3>Par {{post.User.firstName}} {{post.User.lastName}}</h3>
@@ -15,7 +27,7 @@
                 <button @click="likePost(post.id)" >Like</button>
                 <button @click="dislikePost(post.id)" >Dislike</button>
             </a>
-        </div>
+        </div> -->
         </section>
     </div>
 </template>
@@ -23,22 +35,20 @@
 import axios from 'axios';
 import Header from './Header';
 import AddPost from './AddPost';
+import SingleWallPost from './SingleWallPost';
 
 export default {
     name: 'Wall',
     components: {
         AddPost,
-        Header
+        Header,
+        SingleWallPost
 
     },
     data () {
         return {
             postList : [],
-            Reactions: [],
-            nbOfLikes: '',
-            nbOfDislikes: '',
-            like : 1,
-            dislike : -1,
+    
             singlePostUrl: 'http://localhost:3000/api/posts/',
         }
     },
@@ -53,8 +63,8 @@ export default {
             console.log(res);
             this.postList = res.data;
             // this.Reactions = res.data.UserReacts;
-            this.nbOfLikes = this.Reactions.filter(i => i.type === true).length;
-            this.nbOfDislikes = this.Reactions.filter(i => i.type === false).length;
+            // this.nbOfLikes = this.Reactions.filter(i => i.type === true).length;
+            // this.nbOfDislikes = this.Reactions.filter(i => i.type === false).length;
         })
     },
     methods: {
@@ -92,13 +102,14 @@ export default {
             .then(res => {
             console.log(res);
             this.postList = res.data;
+            
             })
         },
-        displayLikes(reactions) {
-            this.Reactions = reactions;
-            let nbOfLikes = this.Reactions.filter(i => i.type === true).length;
-            return nbOfLikes
-        }
+        // displayLikes(reactions) {
+        //     this.Reactions = reactions;
+        //     let nbOfLikes = this.Reactions.filter(i => i.type === true).length;
+        //     return nbOfLikes
+        // }
     }
 }
 </script>
@@ -114,7 +125,7 @@ export default {
     align-items: center;
 }
 
-.post-container {
+.single-post-container {
     border: 3px solid blue;
     max-width: 65%;
 }
