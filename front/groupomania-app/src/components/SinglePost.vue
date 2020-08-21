@@ -7,6 +7,14 @@
             <img v-bind:src="post.attachment" alt="" class="post-image">
             <p>{{ post.content }}</p>
             <span>Commentaires ({{ post.Comments.length }})</span>
+            <div>
+                <div v-for="comment in post.Comments" :key="comment">
+                    <p>{{ comment.User.firstName }} {{ comment.User.lastName }} a commenté:</p>
+                    <p>{{ comment.content }}</p>
+                    <button @click="deleteComment(comment.id, comment.User.id)">Supprimer</button>
+                    {{ error }}
+                </div>
+            </div>
             <span>{{ nbOfLikes }} Likes </span>
             <span>{{ nbOfDislikes }} Dislikes </span>
             <button @click="likePost(post.id)" >Like</button>
@@ -19,7 +27,7 @@
             </div>
             <div>
                 <label for="content">Contenu du post (texte)</label>
-                <input type="text" v-model="content" name="title" id="content" required>
+                <input type="text" v-model="content" name="content" id="content" required>
             </div>
             <div>
                 <label for="attachement">Join your image: </label>
@@ -36,6 +44,18 @@
         <button @click="deletePost">Supprimer le post</button>
         {{ error }}
         </section>
+        <div class="comment-form">
+        <form @submit.prevent="commentPost(post.id)">
+            <div>
+                <label for="comment">Contenu du commentaire</label>
+                <input type="text" v-model="comment" name="comment" id="comment" required>
+            </div>
+            <div>
+                <input type="submit" value="Poster le commentaire">
+                {{ error }}
+            </div>
+        </form>
+        </div>
     </div>
 </template>
 
@@ -58,6 +78,7 @@ export default {
             userIdOrder: '',
             nbOfLikes: '',
             nbOfDislikes: '',
+            comment: '',
 
             AuthorisationToDelete:'',
 
@@ -81,11 +102,16 @@ export default {
             this.post = res.data;
             this.Reactions = res.data.UserReacts;
             this.userIdOrder = res.data.UserId;
-            console.log(this.Reactions);
+            // console.log(this.Reactions);
             this.nbOfLikes = this.Reactions.filter(i => i.type === true).length;
             this.nbOfDislikes = this.Reactions.filter(i => i.type === false).length;
-            console.log(this.nbOfLikes)
-            console.log(this.nbOfDislikes)
+            // console.log(this.nbOfLikes)
+            // console.log(this.nbOfDislikes)
+            // if (this.post.Comments) {
+            //     this.post.Comments.forEach(comment => {
+                
+            //     });
+            // }
         })
     },
     methods: {
@@ -136,6 +162,16 @@ export default {
                 this.error = err.response.data.error;
             })
         },
+        deleteComment(commentId, commentUserId) {
+            axios.delete('http://localhost:3000/api/posts/' +  this.$route.params.id + '/comment/' + commentId, {headers: {'Authorization': 'Bearer ' + localStorage.getItem('token')}, data: {userIdOrder: commentUserId}})
+            .then(res => {
+            console.log(res);
+            this.recallSinglePost();
+            }, err => {
+                console.log(err.response);
+                this.error = err.response.data.error;
+            })
+        },
         likePost(postId) {
             let reaction = {
                 like: this.like
@@ -156,6 +192,20 @@ export default {
                 like: this.dislike
             }
             axios.post('http://localhost:3000/api/posts/'+ postId + '/react', reaction, {headers: {'Authorization': 'Bearer ' + localStorage.getItem('token')}})
+            .then(res => {
+                console.log(res);
+                this.recallSinglePost()
+                // this.$router.push('/');
+            }, err => {
+                console.log(err.response);
+                this.error = err.response.data.error;
+            })
+        },
+        commentPost(postId) {
+            let comment = {
+                content: this.comment
+            }
+            axios.post('http://localhost:3000/api/posts/'+ postId + '/comment', comment, {headers: {'Authorization': 'Bearer ' + localStorage.getItem('token')}})
             .then(res => {
                 console.log(res);
                 this.recallSinglePost()
@@ -188,5 +238,8 @@ export default {
 .post-container {
     border: 3px solid blue;
     max-width: 65%;
+}
+.comment-form {
+    border: 3px solid red;
 }
 </style>

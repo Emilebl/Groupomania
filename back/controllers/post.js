@@ -88,7 +88,7 @@ exports.getOnePost = (req, res) => {
         where: { id: req.params.id},
         include: [{
             model: models.User,
-            attributes: ['firstName', 'lastName', 'profilePic']
+            attributes: ['firstName', 'lastName', 'profilePic', 'id']
         },{
             model: models.UserReact,
             required: false,
@@ -97,10 +97,10 @@ exports.getOnePost = (req, res) => {
         },{
             model: models.Comment,
             required: false,
-            attributes: ['content'],
+            attributes: ['content', 'id'],
             include: [{
                 model: models.User,
-                attributes: ['firstName', 'lastName', 'profilePic']
+                attributes: ['firstName', 'lastName', 'profilePic', 'id']
             }]  
         }]
     })
@@ -454,7 +454,7 @@ exports.updatePost = (req, res) => {
                     })
                     .catch(err => res.status(500).json(err))
                 } else { console.log(userOrder); console.log(user.id);
-                    res.status(403).json('Utilisateur non autorisé à supprimer ce post') }
+                    res.status(403).json('Utilisateur non autorisé à supprimer ce commentaire') }
                 })
                 .catch(error => res.status(500).json(console.log(error)));
             }
