@@ -112,6 +112,10 @@ export default {
                 
             //     });
             // }
+        }, err => {
+            console.log(err.response);
+            this.$router.push('/login')
+            this.error = err.response.data.error;
         })
     },
     methods: {

@@ -34,6 +34,10 @@ export default {
         .then(res => {
             console.log(res);
             this.profileInfos = res.data;
+        }, err => {
+            console.log(err.response);
+            this.$router.push('/login')
+            this.error = err.response.data.error;
         })
     }
 }

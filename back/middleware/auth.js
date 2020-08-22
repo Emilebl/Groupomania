@@ -14,7 +14,8 @@ module.exports = (req, res, next) => {
 
         jwt.verify(token, 'RANDOM_TOKEN_SECRET', (err, user) => {
             if (err) {
-                return res.status(403);
+                // console.log(err);
+                return res.status(403).json(err);
             }
             next();
         });
