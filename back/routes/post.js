@@ -12,7 +12,7 @@ router.delete("/:id", auth, postCtrl.deletePost); // Front ok
 router.get("/", auth, postCtrl.getAllPosts); // Front ok
 router.get("/:id", auth, postCtrl.getOnePost); // Front ok
 router.post("/:id/react", auth, postCtrl.reactToPost) // Front ok
-router.post("/:id/comment", auth, postCtrl.commentPost)
-router.delete("/:id/comment/:comid", auth, postCtrl.deleteComment)
+router.post("/:id/comment", auth, postCtrl.commentPost) // Front ok
+router.delete("/:id/comment/:comid", auth, postCtrl.deleteComment) // Front ok
 
 module.exports = router; 

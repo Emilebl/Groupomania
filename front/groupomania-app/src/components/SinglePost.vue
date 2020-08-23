@@ -19,7 +19,7 @@
             <span>{{ nbOfDislikes }} Dislikes </span>
             <button @click="likePost(post.id)" >Like</button>
             <button @click="dislikePost(post.id)" >Dislike</button>
-        <form @submit.prevent="updatePost" enctype="multipart/form-data" class="form-example">
+        <form v-show="AuthorisationToDeleteOrModifyPost" @submit.prevent="updatePost" enctype="multipart/form-data" class="form-example">
             
             <div>
                 <label for="title">Titre du post</label>
@@ -41,7 +41,7 @@
                 {{ error }}
             </div>
         </form>
-        <button @click="deletePost">Supprimer le post</button>
+        <button v-show="AuthorisationToDeleteOrModifyPost" @click="deletePost">Supprimer le post</button>
         {{ error }}
         </section>
         <div class="comment-form">
@@ -80,7 +80,8 @@ export default {
             nbOfDislikes: '',
             comment: '',
 
-            AuthorisationToDelete:'',
+            AuthorisationToDeleteOrModifyPost:'',
+            
 
             like : 1,
             dislike : -1,
@@ -99,24 +100,30 @@ export default {
         axios.get('http://localhost:3000/api/posts/' +  this.$route.params.id, {headers: {'Authorization': 'Bearer ' + localStorage.getItem('token')}})
         .then(res => {
             console.log(res);
-            this.post = res.data;
-            this.Reactions = res.data.UserReacts;
-            this.userIdOrder = res.data.UserId;
-            // console.log(this.Reactions);
+            this.post = res.data.singlePost;
+            this.Reactions = res.data.singlePost.UserReacts;
+            this.userIdOrder = res.data.singlePost.UserId;
+            if (this.userIdOrder === res.data.userConnected) {
+                this.AuthorisationToDeleteOrModifyPost = true
+            }
+        
             this.nbOfLikes = this.Reactions.filter(i => i.type === true).length;
             this.nbOfDislikes = this.Reactions.filter(i => i.type === false).length;
-            // console.log(this.nbOfLikes)
-            // console.log(this.nbOfDislikes)
-            // if (this.post.Comments) {
-            //     this.post.Comments.forEach(comment => {
-                
-            //     });
-            // }
-        }, err => {
-            console.log(err.response);
-            this.$router.push('/login')
-            this.error = err.response.data.error;
+            
+        // }, err => {
+        //     console.log(err.response);
+        //     this.$router.push('/login')
+        //     this.error = err.response.data.error;
         })
+    },
+    computed: {
+        // toggleUpdateForm () {
+        //     if (!this.showUpdateForm) {
+        //         this.showUpdateForm === true
+        //     } else {
+        //         this.showUpdateForm === false
+        //     }
+        // }
     },
     methods: {
         selectFile() {
@@ -219,13 +226,6 @@ export default {
                 this.error = err.response.data.error;
             })
         }
-        // toggleUpdateForm () {
-        //     if (!this.showUpdateForm) {
-        //         this.showUpdateForm === true
-        //     } else {
-        //         this.showUpdateForm === false
-        //     }
-        // }
     }
 }
 </script>
