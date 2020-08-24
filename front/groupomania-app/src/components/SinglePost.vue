@@ -9,10 +9,18 @@
             <span>Commentaires ({{ post.Comments.length }})</span>
             <div>
                 <div v-for="comment in post.Comments" :key="comment">
-                    <p>{{ comment.User.firstName }} {{ comment.User.lastName }} a commenté:</p>
+                    <Comment @commentDeleted="recallSinglePost"
+                    v-bind:firstName="comment.User.firstName" 
+                    v-bind:lastName="comment.User.lastName"
+                    v-bind:content="comment.content"
+                    v-bind:commentId="comment.id"
+                    v-bind:userId="comment.User.id"
+                    v-bind:connectedUserId="connectedId"
+                    v-bind:postId="urlPostId" />
+                    <!-- <p>{{ comment.User.firstName }} {{ comment.User.lastName }} a commenté:</p>
                     <p>{{ comment.content }}</p>
-                    <button @click="deleteComment(comment.id, comment.User.id)">Supprimer</button>
-                    {{ error }}
+                    <button v-show="AuthorisationToDeleteComment" @click="deleteComment(comment.id, comment.User.id)">Supprimer</button>
+                    {{ error }} -->
                 </div>
             </div>
             <span>{{ nbOfLikes }} Likes </span>
@@ -62,10 +70,12 @@
 <script>
 import axios from 'axios';
 import Header from './Header';
+import Comment from './Comment';
 export default {
     name: 'SinglePost',
     components: {
-        Header
+        Header,
+        Comment
     },
     data () {
         return {
@@ -79,6 +89,8 @@ export default {
             nbOfLikes: '',
             nbOfDislikes: '',
             comment: '',
+            connectedId: '',
+            urlPostId: '',
 
             AuthorisationToDeleteOrModifyPost:'',
             
@@ -97,16 +109,18 @@ export default {
         }
     },
     mounted() {
-        axios.get('http://localhost:3000/api/posts/' +  this.$route.params.id, {headers: {'Authorization': 'Bearer ' + localStorage.getItem('token')}})
+        this.urlPostId = this.$route.params.id;
+        axios.get('http://localhost:3000/api/posts/' +  this.urlPostId, {headers: {'Authorization': 'Bearer ' + localStorage.getItem('token')}})
         .then(res => {
             console.log(res);
             this.post = res.data.singlePost;
             this.Reactions = res.data.singlePost.UserReacts;
             this.userIdOrder = res.data.singlePost.UserId;
-            if (this.userIdOrder === res.data.userConnected) {
+            this.connectedId = res.data.userConnected;
+            if (this.userIdOrder === this.connectedId) {
                 this.AuthorisationToDeleteOrModifyPost = true
             }
-        
+
             this.nbOfLikes = this.Reactions.filter(i => i.type === true).length;
             this.nbOfDislikes = this.Reactions.filter(i => i.type === false).length;
             
@@ -154,9 +168,9 @@ export default {
             axios.get('http://localhost:3000/api/posts/' +  this.$route.params.id, {headers: {'Authorization': 'Bearer ' + localStorage.getItem('token')}})
             .then(res => {
             console.log(res);
-            this.post = res.data;
-            this.Reactions = res.data.UserReacts;
-            this.userIdOrder = res.data.UserId;
+            this.post = res.data.singlePost;
+            this.Reactions = res.data.singlePost.UserReacts;
+            this.userIdOrder = res.data.singlePost.UserId;
             this.nbOfLikes = this.Reactions.filter(i => i.type === true).length;
             this.nbOfDislikes = this.Reactions.filter(i => i.type === false).length;
             
