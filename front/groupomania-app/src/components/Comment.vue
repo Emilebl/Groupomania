@@ -19,7 +19,8 @@ export default {
         commentId: Number,
         userId: Number,
         connectedUserId: Number,
-        postId: String
+        postId: String,
+        isAdmin: Boolean
     },
     data() {
         return {
@@ -28,7 +29,7 @@ export default {
         }
     },
     mounted() {
-        if (this.userId === this.connectedUserId) {
+        if (this.userId === this.connectedUserId || this.isAdmin === true) {
             this.AuthorisationToDeleteComment = true
         }
     },

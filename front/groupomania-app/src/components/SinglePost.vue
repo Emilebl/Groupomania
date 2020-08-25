@@ -16,7 +16,8 @@
                     v-bind:commentId="comment.id"
                     v-bind:userId="comment.User.id"
                     v-bind:connectedUserId="connectedId"
-                    v-bind:postId="urlPostId" />
+                    v-bind:postId="urlPostId"
+                    v-bind:isAdmin="isAdmin" />
                     <!-- <p>{{ comment.User.firstName }} {{ comment.User.lastName }} a commenté:</p>
                     <p>{{ comment.content }}</p>
                     <button v-show="AuthorisationToDeleteComment" @click="deleteComment(comment.id, comment.User.id)">Supprimer</button>
