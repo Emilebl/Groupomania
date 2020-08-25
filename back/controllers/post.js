@@ -73,6 +73,15 @@ exports.getAllPosts = (req, res) => {
         order: [['createdAt', 'DESC']]
     })
     .then(posts => {
+        // let userConnectedId = utils.getUserId(req.headers.authorization);
+        // models.User.findOne({
+        //     where: { id: userConnectedId},
+        //     attributes: ['id', 'email', 'firstName', 'lastName', 'profilePic', 'bio', 'isAdmin']
+        // })
+        // .then(user => {
+        //     res.status(200).json(user)
+        // })
+        // .catch(err => res.status(500).json(err))
         if (posts.length > null) {
             res.status(200).json(posts)
         } else {

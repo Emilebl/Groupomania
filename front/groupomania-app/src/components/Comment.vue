@@ -19,11 +19,12 @@ export default {
         commentId: Number,
         userId: Number,
         connectedUserId: Number,
-        postId: Number
+        postId: String
     },
     data() {
         return {
-            AuthorisationToDeleteComment: ''
+            AuthorisationToDeleteComment: '',
+            error: ''
         }
     },
     mounted() {

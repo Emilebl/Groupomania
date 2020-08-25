@@ -33,6 +33,7 @@
                 {{ error }}
             </div>
         </form>
+        <a v-bind:href="loginUrl">Déjà un compte ?</a>
     </div>
 </template>
 
@@ -50,6 +51,8 @@ export default {
             bio: '',
             file: '',
             imgPreview: '',
+
+            loginUrl: '/login',
 
             error: ''
         }

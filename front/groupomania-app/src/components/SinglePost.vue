@@ -92,6 +92,8 @@ export default {
             connectedId: '',
             urlPostId: '',
 
+            isAdmin: '',
+
             AuthorisationToDeleteOrModifyPost:'',
             
 
@@ -109,6 +111,7 @@ export default {
         }
     },
     mounted() {
+        this.getUserConnectedInfos();
         this.urlPostId = this.$route.params.id;
         axios.get('http://localhost:3000/api/posts/' +  this.urlPostId, {headers: {'Authorization': 'Bearer ' + localStorage.getItem('token')}})
         .then(res => {
@@ -117,7 +120,7 @@ export default {
             this.Reactions = res.data.singlePost.UserReacts;
             this.userIdOrder = res.data.singlePost.UserId;
             this.connectedId = res.data.userConnected;
-            if (this.userIdOrder === this.connectedId) {
+            if (this.userIdOrder === this.connectedId || this.isAdmin === true) {
                 this.AuthorisationToDeleteOrModifyPost = true
             }
 
@@ -237,6 +240,18 @@ export default {
                 // this.$router.push('/');
             }, err => {
                 console.log(err.response);
+                this.error = err.response.data.error;
+            })
+        },
+        getUserConnectedInfos() {
+            axios.get('http://localhost:3000/api/users/me', {headers: {'Authorization': 'Bearer ' + localStorage.getItem('token')}})
+            .then(res => {
+                console.log(res);
+                this.profileInfos = res.data;
+                this.isAdmin = res.data.isAdmin;
+            }, err => {
+                console.log(err.response);
+                this.$router.push('/login')
                 this.error = err.response.data.error;
             })
         }

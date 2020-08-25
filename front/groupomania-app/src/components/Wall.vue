@@ -60,6 +60,7 @@ export default {
     mounted() {
         axios.get('http://localhost:3000/api/posts', {headers: {'Authorization': 'Bearer ' + localStorage.getItem('token')}})
         .then(res => {
+            console.log(res);
             this.postList = res.data;
             // this.Reactions = res.data.UserReacts;
             // this.nbOfLikes = this.Reactions.filter(i => i.type === true).length;

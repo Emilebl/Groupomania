@@ -1,5 +1,6 @@
 <template>
-    <div><form action="" @submit.prevent="login" class="form-example">
+    <div>
+        <form action="" @submit.prevent="login" class="form-example">
             <div class="form-example">
                 <label for="email">Enter your email: </label>
                 <input type="email" v-model="email" name="email" id="email" required>
@@ -12,7 +13,9 @@
                 <input type="submit" value="Se connecter !">
                 {{ error }}
             </div>
-        </form></div>
+        </form>
+        <a v-bind:href="signupUrl">Pas encore de compte ?</a>
+    </div>
 </template>
 <script>
 import axios from 'axios';
@@ -23,6 +26,7 @@ export default {
         return {
             email: '',
             password: '',
+            signupUrl: '/signup',
 
             error: ''
         }
