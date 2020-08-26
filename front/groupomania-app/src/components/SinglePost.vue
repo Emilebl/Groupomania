@@ -93,6 +93,7 @@ export default {
             connectedId: '',
             urlPostId: '',
 
+            profileInfos: [],
             isAdmin: '',
 
             AuthorisationToDeleteOrModifyPost:'',

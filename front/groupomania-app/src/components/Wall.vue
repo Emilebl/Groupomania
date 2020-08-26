@@ -1,7 +1,10 @@
 <template>
     <div>
         <Header />
-        <AddPost @newPost="recallWall" />
+        <AddPost @newPost="recallWall"
+        v-bind:firstName="profileInfos.firstName"
+        v-bind:lastName="profileInfos.lastName"
+        v-bind:profilePicUrl="profileInfos.profilePic" />
         <section class="post-list-container">
             <div v-for="post in postList" :key="post.UserReacts" class="single-post-container">
                 <SingleWallPost @newReaction="recallWall"
@@ -48,6 +51,8 @@ export default {
     data () {
         return {
             postList : [],
+
+            profileInfos: [],
     
             singlePostUrl: 'http://localhost:3000/api/posts/',
         }
@@ -58,6 +63,7 @@ export default {
         }
     },
     mounted() {
+        this.getUserConnectedInfos();
         axios.get('http://localhost:3000/api/posts', {headers: {'Authorization': 'Bearer ' + localStorage.getItem('token')}})
         .then(res => {
             console.log(res);
@@ -109,6 +115,18 @@ export default {
 
             })
         },
+        getUserConnectedInfos() {
+            axios.get('http://localhost:3000/api/users/me', {headers: {'Authorization': 'Bearer ' + localStorage.getItem('token')}})
+            .then(res => {
+                console.log(res);
+                this.profileInfos = res.data;
+                this.isAdmin = res.data.isAdmin;
+            }, err => {
+                console.log(err.response);
+                this.$router.push('/login')
+                this.error = err.response.data.error;
+            })
+        }
         // displayLikes(reactions) {
         //     this.Reactions = reactions;
         //     let nbOfLikes = this.Reactions.filter(i => i.type === true).length;

@@ -1,5 +1,9 @@
 <template>
-    <div>
+    <div class="add-post-form">
+        <div>
+            <img v-bind:src="profilePicUrl" class="add-post-user-pp" alt="user-photo-de-profil-ajout-post">
+            <span> Que voulez vous publier, {{ firstName }} {{ lastName }}  ? </span>
+        </div>
         <form action="" @submit.prevent="addPost" enctype="multipart/form-data" class="form-example">
             <div class="form-example">
                 <label for="title">Titre du post</label>
@@ -28,6 +32,11 @@
 import axios from 'axios';
 export default {
     name: 'AddPost',
+    props: {
+        firstName: String,
+        lastName: String,
+        profilePicUrl: String
+    },
     data () {
         return {
             title: '',
@@ -67,6 +76,19 @@ export default {
 </script>
 
 <style>
+.add-post-user-pp {
+    width: 10%;
+    height: auto;
+}
+
+.add-post-form {
+    width: 70%;
+    height: 250px;
+    border: 2px solid black;
+    display: flex;
+    flex-direction: column;
+}
+
 #preview {
     height: 50px;
     width: 50px;
