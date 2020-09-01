@@ -2,7 +2,7 @@
     <div class="add-post-form">
         <div>
             <img v-bind:src="profilePicUrl" class="add-post-user-pp" alt="user-photo-de-profil-ajout-post">
-            <span> Que voulez vous publier, {{ firstName }} {{ lastName }}  ? </span>
+            <span> Quoi de neuf, {{ firstName }} ? </span>
         </div>
         <form action="" @submit.prevent="addPost" enctype="multipart/form-data" class="form-example">
             <div class="form-example">
@@ -84,6 +84,8 @@ export default {
 .add-post-form {
     width: 70%;
     height: 250px;
+    margin: 2%;
+    padding: 1%;
     border: 2px solid black;
     display: flex;
     flex-direction: column;

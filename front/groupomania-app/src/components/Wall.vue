@@ -1,16 +1,18 @@
 <template>
     <div>
         <Header />
+        <div class="wall-container">
         <AddPost @newPost="recallWall"
         v-bind:firstName="profileInfos.firstName"
         v-bind:lastName="profileInfos.lastName"
         v-bind:profilePicUrl="profileInfos.profilePic" />
         <section class="post-list-container">
-            <div v-for="post in postList" :key="post.UserReacts" class="single-post-container">
+            <div v-for="post in postList" :key="`${post.id}-${post.UserReacts.filter(i => i.type === true).length}-${post.UserReacts.filter(i => i.type === false).length}`" class="single-post-container">
                 <SingleWallPost @newReaction="recallWall"
                 v-bind:title="post.title" 
                 v-bind:userFirstName="post.User.firstName"
                 v-bind:userLastName="post.User.lastName"
+                v-bind:userProfilePic="post.User.profilePic"
                 v-bind:imgUrl="post.attachment"
                 v-bind:content="post.content"
                 v-bind:comments="post.Comments"
@@ -32,6 +34,7 @@
             </a>
         </div> -->
         </section>
+        </div>
     </div>
 </template>
 <script>
@@ -67,10 +70,9 @@ export default {
         axios.get('http://localhost:3000/api/posts', {headers: {'Authorization': 'Bearer ' + localStorage.getItem('token')}})
         .then(res => {
             console.log(res);
-            this.postList = res.data;
-            // this.Reactions = res.data.UserReacts;
-            // this.nbOfLikes = this.Reactions.filter(i => i.type === true).length;
-            // this.nbOfDislikes = this.Reactions.filter(i => i.type === false).length;
+            const resData = res.data;
+            this.postList = resData;
+        
         }, err => {
             console.log(err.response);
             this.$router.push('/login')
@@ -141,14 +143,25 @@ export default {
     max-width: 500px;
 }
 
-.post-list-container {
+.wall-container {
     display: flex;
     flex-direction: column;
     align-items: center;
 }
 
+.post-list-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+}
+
 .single-post-container {
-    border: 3px solid blue;
-    max-width: 65%;
+    background-color: rgb(177, 204, 255);
+    border: 1px solid grey;
+    border-radius: 3px;
+    width: 75%;
+    margin-bottom: 1.5%;
+    position: relative;
 }
 </style>
