@@ -3,7 +3,7 @@
         <h1><router-link to="/"><img id="groupomania_logo" src="@/assets/icon-left-font-monochrome-white.svg" alt="groupomania-logo"></router-link></h1>
         <nav>
             <button class="header-button" id="mon_profil_button" @click="goToProfile"><font-awesome-icon :icon="['fas', 'user']" /> Mon Profil</button>
-            <button class="header-button" id="logout_button" @click="logout"><font-awesome-icon :icon="['fas', 'sign-out-alt']" /> Logout</button>
+            <button class="header-button" id="logout_button" @click="logout"><font-awesome-icon :icon="['fas', 'sign-out-alt']" /> Deconnexion</button>
         </nav>
     </header>
 </template>
@@ -35,16 +35,18 @@ header {
 }
 
 #groupomania_logo {
-    width: 80%;
+    width: 82%;
 }
 
-/* #mon_profil_button {
-    text-decoration: none;
-    color: white;
-    padding: 10px;
-    border: 2px solid white;
-    border-radius: 10px;
-} */
+nav {
+    /* border: solid 1px black; */
+    width: 40%;
+    height: auto;
+    padding: 1%;
+    display: flex;
+    justify-content: space-between;
+}
+
 
 .header-button {
   background-color: #42f5b0; /* Green */
@@ -52,18 +54,89 @@ header {
   border: none;
   border-radius: 10px;
   padding: 15px 32px;
-  margin-right: 10px;
-  height: 100%;
-  font-size: 1.5em;
+  width: 45%;
+  height: 50%;
+  font-size: 1.4em;
   cursor: pointer;
   
-
   text-align: center;
   text-decoration: none;
   display: inline-block;
 
 }
 
+@media (max-width: 1200px) {
+  
+  .header-button {
+    font-size: 1.35em;
+    padding: none;
+  }
+
+  
+}
+
+
+@media (max-width: 1024px) {
+  nav {
+    width: 50%;
+    justify-content: flex-start
+    }
+    
+  .header-button {
+    font-size: 1.2em;
+    padding: none;
+  }
+
+  #mon_profil_button {
+      margin-right: 6%;
+  }
+
+  
+}
+
+
+@media (max-width: 768px) {
+  nav {
+    flex-direction: column;
+    align-items: center;
+    padding: none;
+    
+    
+  }
+  .header-button {
+    font-size: 1.05em;
+    width: 100%;
+    height: 100%;
+    padding: none;
+  }
+
+  #mon_profil_button {
+      margin-bottom: 8px;
+      margin-right: 0%;
+  }
+
+  #logout_button {
+      margin-top: 8px;
+  }
+}
+
+@media (max-width: 480px) {
+
+    nav {
+    width: 60%;
+    }
+    #groupomania_logo {
+        width: 82%;
+        margin-left: -12%;
+    }
+    .header-button {
+    font-size: 0.8em;
+    width: 100%;
+    height: 100%;
+    padding: 5px 15px;
+    margin-top: 5px;
+    }
+}
 
 
 </style>

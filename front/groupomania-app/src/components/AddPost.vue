@@ -17,8 +17,8 @@
                 <label for="attachement">Join your image: </label>
                 <input type="file" ref="file" @change="selectFile" name="attachement" id="attachement">
             </div>
-            <div id="preview">
-                <img v-if="imgPreview" :src="imgPreview" />
+            <div >
+                <img id="preview" v-if="imgPreview" :src="imgPreview" />
             </div>
             <div class="form-example">
                 <input type="submit" value="Publier !">
@@ -92,7 +92,7 @@ export default {
 }
 
 #preview {
-    height: 50px;
-    width: 50px;
+
+    height: auto;
 }
 </style>

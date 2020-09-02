@@ -16,7 +16,7 @@
                 
             </div>
         </div>
-        <button class="go-to-singlepost-button" @click="goToSinglePost"> Voir le post</button>
+        <button class="go-to-singlepost-button" @click="goToSinglePost">Voir le post</button>
     </div>
 </template>
 
@@ -90,6 +90,8 @@ export default {
 <style>
 .single-post-wallsinglepost {
     display: flex;
+    justify-content: flex-start;
+    position: relative;
 }
 
 .user-infos-wallsinglepost {
@@ -97,7 +99,7 @@ export default {
     flex-direction: column;
     justify-content: space-between;
     align-items: center;
-    /* border: 1px solid black; */
+    border: 1px solid green;
     width: 15%;
     height: 100%;
     padding: 2%;
@@ -105,17 +107,28 @@ export default {
 }
 
 .post-infos-wallsinglepost {
-    padding-left: 15%;
+    border: 1px solid blue;
+    text-align: left;
+    width: 60%;
 }
 
+.post-image  {
+    float: center;
+    width: 80%;
+    height: auto;
+    object-fit: cover;
+
+}
 .creator-name-wallsinglepost {
     font-size: 1.3em;
     font-style: italic;
 }
 
 .user-profile-pic-wallsinglepost {
-    width: 70%;
-    height: auto;
+    float: left;
+    width:  100px;
+    height: 100px;
+    object-fit: cover;
     border-radius: 50%;
 }
 
@@ -124,16 +137,16 @@ export default {
   color: #7842f5;
   border: none;
   border-radius: 10px;
-  padding: 15px 32px;
+  padding: 2%;
   margin-right: 10px;
-  height: 100%;
+  height: 10%;
   font-size: 1em;
   cursor: pointer;
+  position: absolute;
+  bottom: 5%;
+  right: 1%;
   
-/* 
-  text-align: center;
-  text-decoration: none;
-  display: inline-block; */
+
 }
 
 </style>
