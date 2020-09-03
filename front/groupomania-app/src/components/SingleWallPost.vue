@@ -1,22 +1,27 @@
 <template>
     <div class="single-post-wallsinglepost">
-        <div class="user-infos-wallsinglepost">
-            <img v-bind:src="userProfilePic" alt="photo-de-profil-du-createur-du-post" class="user-profile-pic-wallsinglepost">
-            <span class="creator-name-wallsinglepost">{{userFirstName}} {{userLastName}}</span>
-        </div>
+        
         <div class="post-infos-wallsinglepost">
+            <div class="user-infos-wallsinglepost">
+                <img v-bind:src="userProfilePic" alt="photo-de-profil-du-createur-du-post" class="user-profile-pic-wallsinglepost">
+                <span class="creator-name-wallsinglepost">{{userFirstName}} {{userLastName}}</span>
+            </div>
             <h2>{{ title }}</h2>
-            <p>{{ content }}</p>
+            <p class="post-content-wallsinglepost">{{ content }}</p>
             <img v-bind:src="imgUrl" alt="" class="post-image">
             <div class="reaction-infos-wallsinglepost">
-                <p><span>{{ comments.length }} Commentaires <font-awesome-icon :icon="['fas', 'comments']" /></span></p>
-                <span>{{ nbOfLikes }} <button class="like-button-singlewallpost" @click="likePost(postId)" ><font-awesome-icon :icon="['fas', 'thumbs-up']" /></button> </span>
-                <span>{{ nbOfDislikes }} <button class="dislike-button-singlewallpost" @click="dislikePost(postId)" ><font-awesome-icon :icon="['fas', 'thumbs-down']" /></button> </span>
+                <p>
+                    <span>{{ comments.length }} Commentaires <font-awesome-icon :icon="['fas', 'comments']" /></span>
+                </p>
+                <p>
+                    <span>{{ nbOfLikes }} <button class="like-button-singlewallpost reaction-button-singlewallpost" @click="likePost(postId)" ><font-awesome-icon :icon="['fas', 'thumbs-up']" /></button></span>
+                    <span>{{ nbOfDislikes }} <button class="dislike-button-singlewallpost reaction-button-singlewallpost" @click="dislikePost(postId)" ><font-awesome-icon :icon="['fas', 'thumbs-down']" /></button></span>
+                </p>
                 
                 
             </div>
         </div>
-        <button class="go-to-singlepost-button" @click="goToSinglePost">Voir le post</button>
+        <button class="go-to-singlepost-button" @click="goToSinglePost">Détails du post</button>
     </div>
 </template>
 
@@ -90,47 +95,86 @@ export default {
 <style>
 .single-post-wallsinglepost {
     display: flex;
-    justify-content: flex-start;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
     position: relative;
+    font-weight: bolder;
+    padding-top: 3%;
+    padding-bottom: 3%;
+    
 }
 
 .user-infos-wallsinglepost {
     display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    align-items: center;
-    border: 1px solid green;
-    width: 15%;
-    height: 100%;
-    padding: 2%;
-    
+    align-items: flex-start;
+}
+
+.user-profile-pic-wallsinglepost {
+    float: left;
+    width:  75px;
+    height: 75px;
+    object-fit: cover;
+    border-radius: 50%;
+}
+
+.creator-name-wallsinglepost {
+    font-size: 1.3em;
+    color: #4287f5;
+    margin-left: 4%;
+    /* font-style: italic; */
 }
 
 .post-infos-wallsinglepost {
-    border: 1px solid blue;
+    /* border: 1px solid blue; */
     text-align: left;
-    width: 60%;
+    width: 75%;
+    
+}
+
+h2 {
+    text-align: center;
+    text-decoration: underline;
+    
+}
+
+.post-content-wallsinglepost {
+    font-size: 1.2em;
+    font-weight: lighter;
 }
 
 .post-image  {
-    float: center;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    border-radius: 3px;
     width: 80%;
     height: auto;
     object-fit: cover;
 
 }
-.creator-name-wallsinglepost {
-    font-size: 1.3em;
-    font-style: italic;
+
+.reaction-infos-wallsinglepost {
+    display: flex;
+    justify-content: space-around;
+    font-size: 1.5em;
+    color: #557596;
 }
 
-.user-profile-pic-wallsinglepost {
-    float: left;
-    width:  100px;
-    height: 100px;
-    object-fit: cover;
-    border-radius: 50%;
+.reaction-button-singlewallpost {
+    border: none;
+    font-size: 1em;
+    cursor: pointer;
 }
+
+.like-button-singlewallpost {
+    color: green;
+}
+
+.dislike-button-singlewallpost {
+    color: red;
+}
+
 
 .go-to-singlepost-button {
   background-color: #42f5b0; /* Green */
@@ -139,14 +183,41 @@ export default {
   border-radius: 10px;
   padding: 2%;
   margin-right: 10px;
-  height: 10%;
+  width: auto;
+  height: 1%;
   font-size: 1em;
+  font-weight: bolder;
   cursor: pointer;
-  position: absolute;
+  /* position: absolute;
   bottom: 5%;
-  right: 1%;
+  right: 1%; */
   
+}
 
+@media (max-width: 480px) {
+    .single-post-wallsinglepost {
+        padding-left: 3%;
+        padding-right: 3%;
+    }
+
+    .post-infos-wallsinglepost {
+        width: 100%;
+    }
+
+    .go-to-singlepost-button {
+        height: 5%;
+        width: auto;
+    }
+    .reaction-infos-wallsinglepost {
+        font-size: 1.2em;
+        color: #557596;
+    }
+
+    .reaction-button-singlewallpost {
+        border: none;
+        font-size: 1em;
+        cursor: pointer;
+    }
 }
 
 </style>

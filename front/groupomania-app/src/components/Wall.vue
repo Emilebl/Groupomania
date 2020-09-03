@@ -139,9 +139,6 @@ export default {
 </script>
 
 <style>
-.post-image {
-    max-width: 500px;
-}
 
 .wall-container {
     display: flex;
@@ -157,11 +154,17 @@ export default {
 }
 
 .single-post-container {
-    background-color: rgb(177, 204, 255);
-    border: 1px solid grey;
-    border-radius: 3px;
+    background-color: #e5eef7;
+    border-radius: 10px;
     width: 75%;
-    margin-bottom: 1.5%;
+    margin-bottom: 3%;
     position: relative;
+}
+
+@media (max-width: 480px) {
+
+    .single-post-container {
+        width: 95%;
+    }
 }
 </style>
