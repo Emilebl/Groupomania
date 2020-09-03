@@ -1,15 +1,27 @@
 <template>
-    <div>
+    <div class="single-post-page">
         <Header />
-        <section class="post-container">
-            <h2>{{ post.title }}</h2>
-            <h3>Par {{post.User.firstName}} {{post.User.lastName}}</h3>
-            <img v-bind:src="post.attachment" alt="" class="post-image">
-            <p>{{ post.content }}</p>
-            <span>Commentaires ({{ post.Comments.length }})</span>
-            <div>
-                <div v-for="comment in post.Comments" :key="comment">
+        <section class="post-container-singlepost">
+            <div class="post-infos-singlepost">
+                <div class="user-infos-singlepost">
+                    <img v-bind:src="post.User.profilePic" alt="photo-de-profil-du-createur-du-post" class="user-profile-pic-singlepost">
+                    <span class="creator-name-singlepost">{{post.User.firstName}} {{post.User.lastName}}</span>
+                </div>
+                <h2>{{ post.title }}</h2>
+                <p class="post-content-singlepost">{{ post.content }}</p>
+                <img v-bind:src="post.attachment" alt="" class="post-image-singlepost">
+                <div class="reaction-infos-singlepost">
+                    <p>
+                        <span>{{ post.Comments.length }} Commentaires <font-awesome-icon :icon="['fas', 'comments']" /></span>
+                    </p>
+                    <p>
+                        <span>{{ nbOfLikes }} <button class="like-button-singlepost reaction-button-singlepost" @click="likePost(post.id)" ><font-awesome-icon :icon="['fas', 'thumbs-up']" /></button></span>
+                        <span>{{ nbOfDislikes }} <button class="dislike-button-singlepost reaction-button-singlepost" @click="dislikePost(post.id)" ><font-awesome-icon :icon="['fas', 'thumbs-down']" /></button></span>
+                    </p>
+                </div>
+                <div class="comment-list" v-for="comment in post.Comments" :key="comment">
                     <Comment @commentDeleted="recallSinglePost"
+                    v-bind:profilePic="comment.User.profilePic"
                     v-bind:firstName="comment.User.firstName" 
                     v-bind:lastName="comment.User.lastName"
                     v-bind:content="comment.content"
@@ -23,35 +35,33 @@
                     <button v-show="AuthorisationToDeleteComment" @click="deleteComment(comment.id, comment.User.id)">Supprimer</button>
                     {{ error }} -->
                 </div>
-            </div>
-            <span>{{ nbOfLikes }} Likes </span>
-            <span>{{ nbOfDislikes }} Dislikes </span>
-            <button @click="likePost(post.id)" >Like</button>
-            <button @click="dislikePost(post.id)" >Dislike</button>
-        <form v-show="AuthorisationToDeleteOrModifyPost" @submit.prevent="updatePost" enctype="multipart/form-data" class="form-example">
+                <form class="modify-post-form" v-show="AuthorisationToDeleteOrModifyPost" @submit.prevent="updatePost" enctype="multipart/form-data">
+                    <div>
+                        <label for="title">Titre du post</label>
+                        <input type="text" v-model="title" name="title" id="title" required>
+                    </div>
+                    <div>
+                        <label for="content">Contenu du post (texte)</label>
+                        <input type="text" v-model="content" name="content" id="content" required>
+                    </div>
+                    <div>
+                        <label for="attachement">Join your image: </label>
+                        <input type="file" ref="file" @change="selectFile" name="attachement" id="attachement">
+                    </div>
+                    <div id="preview">
+                        <img v-if="imgPreview" :src="imgPreview" />
+                    </div>
+                    <div class="form-example">
+                        <input type="submit" value="Modifier !">
+                        {{ error }}
+                    </div>
+                    <button v-show="AuthorisationToDeleteOrModifyPost" @click="deletePost">Supprimer le post</button>
+                        {{ error }}
+                </form>
             
-            <div>
-                <label for="title">Titre du post</label>
-                <input type="text" v-model="title" name="title" id="title" required>
+                
             </div>
-            <div>
-                <label for="content">Contenu du post (texte)</label>
-                <input type="text" v-model="content" name="content" id="content" required>
-            </div>
-            <div>
-                <label for="attachement">Join your image: </label>
-                <input type="file" ref="file" @change="selectFile" name="attachement" id="attachement">
-            </div>
-            <div id="preview">
-                <img v-if="imgPreview" :src="imgPreview" />
-            </div>
-            <div class="form-example">
-                <input type="submit" value="Modifier !">
-                {{ error }}
-            </div>
-        </form>
-        <button v-show="AuthorisationToDeleteOrModifyPost" @click="deletePost">Supprimer le post</button>
-        {{ error }}
+    
         </section>
         <div class="comment-form">
         <form @submit.prevent="commentPost(post.id)">
@@ -262,19 +272,135 @@ export default {
 </script>
 
 <style>
-.post-image {
-    max-width: 500px;
-}
 
 #preview {
     height: 50px;
     width: 50px;
 }
-.post-container {
-    border: 3px solid blue;
-    max-width: 65%;
+
+
+.single-post-page {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
+
+.post-container-singlepost {
+    background-color: #e5eef7;
+    border-radius: 10px;
+    width: 75%;
+    margin-bottom: 3%;
+    margin-top: 3%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+    position: relative;
+    font-weight: bolder;
+    padding-top: 3%;
+    padding-bottom: 3%;
+    
+}
+
+.user-infos-singlepost {
+    display: flex;
+    align-items: flex-start;
+}
+
+.user-profile-pic-singlepost {
+    float: left;
+    width:  75px;
+    height: 75px;
+    object-fit: cover;
+    border-radius: 50%;
+}
+
+.creator-name-singlepost {
+    font-size: 1.3em;
+    color: #4287f5;
+    margin-left: 4%;
+    /* font-style: italic; */
+}
+
+.post-infos-singlepost {
+    /* border: 1px solid blue; */
+    text-align: left;
+    width: 75%;
+}
+
+h2 {
+    text-align: center;
+    text-decoration: underline;
+    
+}
+
+.post-content-singlepost {
+    font-size: 1.2em;
+    font-weight: lighter;
+}
+
+.post-image-singlepost  {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    border-radius: 3px;
+    width: 80%;
+    height: auto;
+    object-fit: cover;
+
+}
+
+.reaction-infos-singlepost {
+    display: flex;
+    justify-content: space-around;
+    font-size: 1.5em;
+    color: #557596;
+}
+
+.reaction-button-singlepost {
+    background: none;
+    border: none;
+    font-size: 1em;
+    cursor: pointer;
+}
+
+.like-button-singlepost {
+    color: green;
+}
+
+.dislike-button-singlepost {
+    color: red;
+}
+
+.comment-list {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
 .comment-form {
     border: 3px solid red;
+}
+
+@media (max-width: 480px) {
+    .post-container-singlepost {
+        padding-left: 3%;
+        padding-right: 3%;
+        width: 85%;
+    }
+
+    .post-infos-singlepost {
+        width: 100%;
+    }
+
+    .reaction-infos-singlepost {
+        font-size: 1.2em;
+    }
+
+    .reaction-button-singlepost {
+        border: none;
+        font-size: 1em;
+        cursor: pointer;
+    }
 }
 </style>

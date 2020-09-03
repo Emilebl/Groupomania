@@ -1,6 +1,5 @@
 <template>
     <div class="single-post-wallsinglepost">
-        
         <div class="post-infos-wallsinglepost">
             <div class="user-infos-wallsinglepost">
                 <img v-bind:src="userProfilePic" alt="photo-de-profil-du-createur-du-post" class="user-profile-pic-wallsinglepost">
@@ -129,7 +128,6 @@ export default {
     /* border: 1px solid blue; */
     text-align: left;
     width: 75%;
-    
 }
 
 h2 {
