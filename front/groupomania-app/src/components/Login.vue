@@ -1,20 +1,21 @@
 <template>
-    <div>
-        <form action="" @submit.prevent="login" class="form-example">
-            <div class="form-example">
-                <label for="email">Enter your email: </label>
+    <div class="form-container">
+        <h2 class="form-title">Connexion</h2>
+        <form action="" @submit.prevent="login" id="form" class="validate">
+            <div class="form-field">
+                <label for="email">Email</label>
                 <input type="email" v-model="email" name="email" id="email" required>
             </div>
-            <div class="form-example">
-                <label for="password">Enter your password: </label>
+            <div class="form-field">
+                <label for="password">Mot de passe</label>
                 <input type="text" v-model="password" name="password" id="password" required>
             </div>
-            <div class="form-example">
+            <div class="form-field" id="login-button-container">
                 <input type="submit" value="Se connecter !">
                 {{ error }}
             </div>
         </form>
-        <a v-bind:href="signupUrl">Pas encore de compte ?</a>
+        <a id="signup-to-login" v-bind:href="signupUrl">Pas encore de compte ?</a>
     </div>
 </template>
 <script>
@@ -53,3 +54,10 @@ export default {
     }
 }
 </script>
+
+<style>
+#login-button-container {
+    display: flex;
+    justify-content: center;
+}
+</style>

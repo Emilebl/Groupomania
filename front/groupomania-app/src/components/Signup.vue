@@ -1,39 +1,74 @@
 <template>
-    <div>
-        <form action="" @submit.prevent="register" enctype="multipart/form-data" class="form-example">
-            <div class="form-example">
-                <label for="firstName">Enter your first name: </label>
-                <input type="text" v-model="firstName" name="firstName" id="firstName" required>
+    <div class="form-container">
+        <h2 class="form-title">Inscription</h2>
+        <form @submit.prevent="register" enctype="multipart/form-data" action="" id="form" class="validate">
+            <div class="form-field">
+                <label for="Prenom">Prénom</label>
+                <input type="text" v-model="firstName" name="Prenom" id="Prenom" placeholder="votre prénom..." required />
             </div>
-            <div class="form-example">
-                <label for="lastName">Enter your last name: </label>
-                <input type="text" v-model="lastName" name="lastName" id="lastName" required>
+            <div class="form-field">
+                <label for="Nom">Nom</label>
+                <input type="text" v-model="lastName" name="Nom" id="Nom" placeholder="votre nom..." required />
             </div>
-            <div class="form-example">
+            <div class="form-field">
+                <label for="email-input">Email</label>
+                <input type="email" v-model="email" name="email-input" id="email-input" placeholder="example@domain.com" required />
+            </div>
+            <div class="form-field">
+                <label for="password-input">Password</label>
+                <input type="password" v-model="password" name="password-input" id="password-input" required />
+            </div>
+            <div class="form-field">
+                <label for="bio">Bio</label>
+                <textarea v-model="bio" name="bio" id="bio" placeholder="votre bio..." />
+            </div>
+            <div class="form-field">
+                <label for="profilePic">Photo</label>
+                <input type="file" ref="file" @change="selectFile" name="profilePic" id="profilePic">
+            </div>
+            <div class="form-field" id="signup-preview-container">
+                <label v-if="imgPreview" for="preview">Aperçu de votre photo:</label>
+                <img id="signup-preview" v-if="imgPreview" :src="imgPreview" />
+            </div>
+            <div class="form-field" id="signup-button-container">
+                <input type="submit" value="S'inscrire !" />
+                {{ error }}
+            </div>
+        </form>
+        <!-- <form action="" @submit.prevent="register" enctype="multipart/form-data" class="form-class">
+            <div class="form-class">
+                <label for="Prénom"></label>
+                <input type="text" v-model="firstName" name="Prénom" id="firstName" placeholder="Prénom" required>
+            </div>
+            <div class="form-class">
+                <label for="Nom">Enter your last name: </label>
+                <input type="text" v-model="lastName" name="Nom" id="lastName" placeholder="Nom" required>
+            </div>
+            <div class="form-class">
                 <label for="email">Enter your email: </label>
-                <input type="email" v-model="email" name="email" id="email" required>
+                <input type="email" v-model="email" name="email" id="email" placeholder="Email" required>
             </div>
-            <div class="form-example">
+            <div class="form-class">
                 <label for="password">Enter your password: </label>
-                <input type="text" v-model="password" name="password" id="password" required>
+                <input type="password" v-model="password" name="password" id="password" placeholder="Mot de Passe" required>
             </div>
-            <div class="form-example">
+            <div class="form-class">
                 <label for="bio">Enter your bio: </label>
-                <input type="text" v-model="bio" name="bio" id="bio">
+                <input type="text" v-model="bio" name="bio" placeholder="Bio" id="bio">
             </div>
-            <div class="form-example">
+            <div class="form-class">
                 <label for="profilePic">Join your profile picture: </label>
                 <input type="file" ref="file" @change="selectFile" name="profilePic" id="profilePic">
             </div>
             <div id="preview">
                 <img v-if="imgPreview" :src="imgPreview" />
             </div>
-            <div class="form-example">
+            <div class="form-class">
                 <input type="submit" value="S'inscrire !">
                 {{ error }}
             </div>
-        </form>
-        <a v-bind:href="loginUrl">Déjà un compte ?</a>
+        </form> -->
+        <a id="signup-to-login" v-bind:href="loginUrl">Déjà un compte ?</a>
     </div>
 </template>
 
@@ -96,20 +131,34 @@ export default {
 </script>
 
 <style>
-form.form-example {
-    display: table;
+#profilePic {
+    border: none;
 }
 
-div.form-example {
-    display: table-row;
+#signup-preview {
+   width:  200px;
+   height: 200px;
+   object-fit: cover;
+   border-radius: 50%;
+   margin-left: auto;
+   margin-right: auto;
 }
 
-label, input {
-    display: table-cell;
-    margin-bottom: 10px;
+#signup-button-container {
+    display: flex;
+    justify-content: center;
 }
 
-label {
-    padding-right: 10px;
+
+#signup-to-login {
+    background-color: #42f5b0; /* Green */
+    color: #7842f5;
+    border: none;
+    text-decoration: none;
+    font-weight: bolder;
+    border-radius: 10px;
+    padding: 15px 32px;
+    margin-top: 3%;
 }
+
 </style>

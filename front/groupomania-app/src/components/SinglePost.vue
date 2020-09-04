@@ -1,6 +1,5 @@
 <template>
     <div class="single-post-page">
-        <Header />
         <section class="post-container-singlepost">
             <div class="post-infos-singlepost">
                 <div class="user-infos-singlepost">
@@ -80,12 +79,10 @@
 
 <script>
 import axios from 'axios';
-import Header from './Header';
 import Comment from './Comment';
 export default {
     name: 'SinglePost',
     components: {
-        Header,
         Comment
     },
     data () {
@@ -272,12 +269,6 @@ export default {
 </script>
 
 <style>
-
-#preview {
-    height: 50px;
-    width: 50px;
-}
-
 
 .single-post-page {
     display: flex;

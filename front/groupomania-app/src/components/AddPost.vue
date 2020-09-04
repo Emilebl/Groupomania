@@ -1,24 +1,24 @@
 <template>
-    <div class="add-post-form">
+    <div class="form-container">
         <div>
             <img v-bind:src="profilePicUrl" class="add-post-user-pp" alt="user-photo-de-profil-ajout-post">
             <span> Quoi de neuf, {{ firstName }} ? </span>
         </div>
-        <form action="" @submit.prevent="addPost" enctype="multipart/form-data" class="form-example">
-            <div class="form-example">
+        <form action="" @submit.prevent="addPost" enctype="multipart/form-data" id="form" class="validate">
+            <div class="form-field">
                 <label for="title">Titre du post</label>
                 <input type="text" v-model="title" name="title" id="title" required>
             </div>
-            <div class="form-example">
+            <div class="form-field">
                 <label for="content">Contenu du post (texte)</label>
-                <input type="text" v-model="content" name="title" id="content" required>
+                <textarea v-model="content" name="title" id="content" required  />
             </div>
-            <div class="form-example">
+            <div class="form-field">
                 <label for="attachement">Join your image: </label>
                 <input type="file" ref="file" @change="selectFile" name="attachement" id="attachement">
             </div>
             <div >
-                <img id="preview" v-if="imgPreview" :src="imgPreview" />
+                <img id="post-preview" v-if="imgPreview" :src="imgPreview" />
             </div>
             <div class="form-example">
                 <input type="submit" value="Publier !">
@@ -91,8 +91,4 @@ export default {
     flex-direction: column;
 }
 
-#preview {
-
-    height: auto;
-}
 </style>

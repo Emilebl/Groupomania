@@ -1,6 +1,5 @@
 <template>
     <div>
-        <Header />
         <div class="wall-container">
         <AddPost @newPost="recallWall"
         v-bind:firstName="profileInfos.firstName"
@@ -39,7 +38,6 @@
 </template>
 <script>
 import axios from 'axios';
-import Header from './Header';
 import AddPost from './AddPost';
 import SingleWallPost from './SingleWallPost';
 
@@ -47,7 +45,6 @@ export default {
     name: 'Wall',
     components: {
         AddPost,
-        Header,
         SingleWallPost
 
     },

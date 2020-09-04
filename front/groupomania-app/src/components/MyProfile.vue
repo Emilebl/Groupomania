@@ -120,9 +120,5 @@ export default {
     max-width: 500px;
 }
 
-#preview {
-    height: 50px;
-    width: 50px;
-}
 
 </style>
