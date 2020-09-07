@@ -38,7 +38,7 @@ export default {
 <style>
 header {
     background-color: #4287f5;
-    width: 100%;
+    width: 98%;
     border-radius: 5px;
     display: flex;
     justify-content: space-between;

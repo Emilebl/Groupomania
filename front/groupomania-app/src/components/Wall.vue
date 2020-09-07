@@ -1,5 +1,6 @@
 <template>
     <div>
+        <!-- <Header /> -->
         <div class="wall-container">
         <AddPost @newPost="recallWall"
         v-bind:firstName="profileInfos.firstName"
@@ -38,12 +39,14 @@
 </template>
 <script>
 import axios from 'axios';
+// import Header from './Header';
 import AddPost from './AddPost';
 import SingleWallPost from './SingleWallPost';
 
 export default {
     name: 'Wall',
     components: {
+        // Header,
         AddPost,
         SingleWallPost
 
@@ -60,10 +63,11 @@ export default {
     created() {
         if (localStorage.getItem('token') === null) {
             this.$router.push('/login')
+        } else {
+            this.getUserConnectedInfos();
         }
     },
     mounted() {
-        this.getUserConnectedInfos();
         axios.get('http://localhost:3000/api/posts', {headers: {'Authorization': 'Bearer ' + localStorage.getItem('token')}})
         .then(res => {
             console.log(res);
@@ -72,7 +76,7 @@ export default {
         
         }, err => {
             console.log(err.response);
-            this.$router.push('/login')
+            // this.$router.push('/login')
             this.error = err.response.data.error;
         })
     },

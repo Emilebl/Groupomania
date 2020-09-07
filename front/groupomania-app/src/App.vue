@@ -13,7 +13,6 @@ export default {
   components: {
     Header
   }
-  
 }
 </script>
 
@@ -28,6 +27,7 @@ export default {
   display: flex;
   flex-direction: column;
   align-items: center;
+  
 }
 
 body {
@@ -102,7 +102,6 @@ input {
   border: 2px solid #aaa;
   border-radius: 2px;
 }
-
 
 .error-message {
     flex: 0 0 100%;

@@ -6,7 +6,7 @@
         </div>
         <form action="" @submit.prevent="addPost" enctype="multipart/form-data" id="form" class="validate">
             <div class="form-field">
-                <label for="title">Titret</label>
+                <label for="title">Titre</label>
                 <input type="text" v-model="title" name="title" id="title" required>
             </div>
             <div class="form-field">
@@ -90,7 +90,7 @@ export default {
 }
 
 #post-preview {
-   width:  300px;
+   width:  40%;
    height: auto;
    object-fit: cover;
    border-radius: 2%;

@@ -1,5 +1,6 @@
 <template>
     <div class="single-post-page">
+        <!-- <Header /> -->
         <section class="post-container-singlepost">
             <div class="post-infos-singlepost">
                 <div class="user-infos-singlepost singlepost-elements">
@@ -18,7 +19,7 @@
                         <span class="dislike-span-singlepost">{{ nbOfDislikes }} <button class="dislike-button-singlepost reaction-button-singlepost" @click="dislikePost(post.id)" ><font-awesome-icon :icon="['fas', 'thumbs-down']" /></button></span>
                     </p>
                 </div>
-                <div class="comment-list" v-for="comment in post.Comments" :key="comment">
+                <div class="comment-list" v-for="comment in post.Comments" :key="comment.id">
                     <Comment @commentDeleted="recallSinglePost"
                     v-bind:profilePic="comment.User.profilePic"
                     v-bind:firstName="comment.User.firstName" 
@@ -68,8 +69,9 @@
                     <label for="attachement">Image: </label>
                     <input type="file" ref="file" @change="selectFile" name="attachement" id="modify-post-pic">
                 </div>
-                <div id="preview">
-                    <img v-if="imgPreview" :src="imgPreview" />
+                <div class="form-field" id="post-preview-container">
+                    <label v-if="imgPreview" for="preview">Aperçu de l'image:</label>
+                    <img id="post-preview" v-if="imgPreview" :src="imgPreview" />
                 </div>
                 <div>
                     <input type="submit" value="Modifier !">
@@ -79,17 +81,17 @@
                     {{ error }}
             </form>
         </div>
-            
-        
     </div>
 </template>
 
 <script>
 import axios from 'axios';
+// import Header from './Header';
 import Comment from './Comment';
 export default {
     name: 'SinglePost',
     components: {
+        // Header,
         Comment
     },
     data () {
@@ -124,30 +126,27 @@ export default {
     created() {
         if (localStorage.getItem('token') === null) {
             this.$router.push('/login')
+        } else {
+            this.getUserConnectedInfos();
+            this.urlPostId = this.$route.params.id;
+            axios.get('http://localhost:3000/api/posts/' +  this.urlPostId, {headers: {'Authorization': 'Bearer ' + localStorage.getItem('token')}})
+            .then(res => {
+                console.log(res);
+                this.post = res.data.singlePost;
+                this.Reactions = res.data.singlePost.UserReacts;
+                this.userIdOrder = res.data.singlePost.UserId;
+                this.connectedId = res.data.userConnected;
+                if (this.userIdOrder === this.connectedId || this.isAdmin === true) {
+                    this.AuthorisationToDeleteOrModifyPost = true
+                }
+
+                this.nbOfLikes = this.Reactions.filter(i => i.type === true).length;
+                this.nbOfDislikes = this.Reactions.filter(i => i.type === false).length;
+            })
         }
     },
     mounted() {
-        this.getUserConnectedInfos();
-        this.urlPostId = this.$route.params.id;
-        axios.get('http://localhost:3000/api/posts/' +  this.urlPostId, {headers: {'Authorization': 'Bearer ' + localStorage.getItem('token')}})
-        .then(res => {
-            console.log(res);
-            this.post = res.data.singlePost;
-            this.Reactions = res.data.singlePost.UserReacts;
-            this.userIdOrder = res.data.singlePost.UserId;
-            this.connectedId = res.data.userConnected;
-            if (this.userIdOrder === this.connectedId || this.isAdmin === true) {
-                this.AuthorisationToDeleteOrModifyPost = true
-            }
-
-            this.nbOfLikes = this.Reactions.filter(i => i.type === true).length;
-            this.nbOfDislikes = this.Reactions.filter(i => i.type === false).length;
-            
-        // }, err => {
-        //     console.log(err.response);
-        //     this.$router.push('/login')
-        //     this.error = err.response.data.error;
-        })
+        
     },
     computed: {
         // toggleUpdateForm () {
@@ -252,6 +251,7 @@ export default {
             axios.post('http://localhost:3000/api/posts/'+ postId + '/comment', comment, {headers: {'Authorization': 'Bearer ' + localStorage.getItem('token')}})
             .then(res => {
                 console.log(res);
+                this.comment = '';
                 this.recallSinglePost()
                 // this.$router.push('/');
             }, err => {

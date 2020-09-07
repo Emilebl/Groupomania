@@ -1,32 +1,36 @@
 <template>
-    <div>
-        <Header />
-        <div>
-            <h1>{{profileInfos.firstName}} {{profileInfos.lastName}}</h1>
-            <img v-bind:src="profileInfos.profilePic" alt="" id="myProfileImage">
-            <p>{{profileInfos.bio}}</p>
-            <p>{{profileInfos.email}}</p>
+    <div class="myprofile-component">
+        <!-- <Header /> -->
+        <div class="profile-infos-container">
+            <h2 >Informations du profil</h2>
+            <p class="profile-infos-element"><span class="profile-infos-span">Nom: </span>{{profileInfos.lastName}}</p>
+            <p class="profile-infos-element"><span class="profile-infos-span">Prénom: </span>{{profileInfos.firstName}}</p>
+            <p class="profile-infos-element"><span class="profile-infos-span">Photo de Profil: </span><img v-bind:src="profileInfos.profilePic" alt="" id="myProfileImage"></p>
+            <p class="profile-infos-element"><span class="profile-infos-span">Bio: </span>{{profileInfos.bio}}</p>
+            <p class="profile-infos-element"><span class="profile-infos-span">E-mail: </span>{{profileInfos.email}}</p>
         </div>
-        <div>
-            <form @submit.prevent="updateProfile" enctype="multipart/form-data" class="form-example">
-                <div>
+        <div class="form-container">
+            <h2>Modifications du profil</h2>
+            <form @submit.prevent="updateProfile" enctype="multipart/form-data" id="form" class="validate">
+                <div class="form-field">
                     <label for="firstName">Nouveau Prénom</label>
                     <input type="text" v-model="firstName" name="firstName" id="firstName">
                 </div>
-                <div>
+                <div class="form-field">
                     <label for="lastName">Nouveau Nom de famille</label>
                     <input type="text" v-model="lastName" name="lastName" id="lastName">
                 </div>
-                <div>
+                <div class="form-field">
                     <label for="bio">Nouvelle Bio</label>
-                    <input type="text" v-model="bio" name="bio" id="bio">
+                    <textarea v-model="bio" name="bio" id="bio" />
                 </div>
-                <div>
+                <div class="form-field">
                     <label for="attachement">Nouvelle photo de profil </label>
-                    <input type="file" ref="file" @change="selectFile" name="attachement" id="attachement">
+                    <input type="file" ref="file" @change="selectFile" name="attachement" id="modify-profile-pic">
                 </div>
-                <div id="preview">
-                    <img v-if="imgPreview" :src="imgPreview" />
+                <div class="form-field" id="post-preview-container">
+                    <label v-if="imgPreview" for="preview">Aperçu de l'image:</label>
+                    <img id="post-preview" v-if="imgPreview" :src="imgPreview" />
                 </div>
                 <div class="form-example">
                     <input type="submit" value="Modifier le profil !">
@@ -39,12 +43,12 @@
 
 <script>
 import axios from 'axios';
-import Header from './Header';
+// import Header from './Header';
 export default {
     name: 'MyProfile',
-    components : {
-        Header
-    },
+    // components : {
+    //     Header
+    // },
     data () {
         return {
             profileInfos: '',
@@ -116,9 +120,56 @@ export default {
 </script>
 
 <style>
-.post-image {
-    max-width: 500px;
+
+.profile-infos-container {
+    border: solid 0.5px grey;
+    background-color: #e5eef7;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 3%;
+    padding-top: 3%;
+    padding-bottom: 3%;
+}
+.profile-infos-element {
+    /* border: green solid 1px; */
+    min-width: 30%;
+    margin-top: 1%;
+    display: flex;
+    justify-content: space-between;
 }
 
+.profile-infos-span {
+    font-weight: bolder;
+}
+
+#myProfileImage {
+   width:  200px;
+   height: auto;
+   object-fit: cover;
+   border-radius: 2%;
+   margin-left: auto;
+   margin-right: auto;
+}
+
+#modify-profile-pic {
+    border: none;
+}
+
+.myprofile-component {
+    width: 95%;
+}
+@media (max-width: 768px) {
+    .profile-infos-element {
+    /* border: green solid 1px; */
+        width: 80%;
+    }
+
+    #myProfileImage {
+        width:  150px;
+        margin-left: 5%;
+    }
+}
 
 </style>
