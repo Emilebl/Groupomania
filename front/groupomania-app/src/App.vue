@@ -50,11 +50,25 @@ body {
   padding: 0;
 }
 
+h2 {
+  font-size: 1.6em;
+}
+
+h3 {
+  text-align: center;
+  font-size: 1.5em;
+  margin-bottom: 3%;
+}
+
+h4 {
+  font-size: 1.2em ;
+}
+
 /* Styling for forms  */
 
 #form {
   max-width: 100%;
-  padding: 2rem;
+  padding: 1.5rem;
   box-sizing: border-box;
   background: rgb(223, 223, 223);
   border-radius: 5px;
@@ -62,6 +76,10 @@ body {
 
 .form-title {
   margin-bottom: 3%;
+  display: flex;
+  justify-content: flex-start;
+  align-items: flex-end;
+  border-bottom: indigo;
 }
 
 .form-field {
@@ -69,7 +87,7 @@ body {
   flex-wrap: wrap;
   margin: 0 0 1rem 0;
 }
-label, input {
+label, input, textarea {
   width: 62%;
   padding: 0.5rem;
   box-sizing: border-box;
@@ -85,14 +103,6 @@ input {
   border-radius: 2px;
 }
 
-#post-preview {
-   width:  300px;
-   height: auto;
-   object-fit: cover;
-   border-radius: 2%;
-   margin-left: auto;
-   margin-right: auto;
-}
 
 .error-message {
     flex: 0 0 100%;

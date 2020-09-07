@@ -1,23 +1,21 @@
 <template>
     <div class="single-post-wallsinglepost">
         <div class="post-infos-wallsinglepost">
-            <div class="user-infos-wallsinglepost">
+            <div class="user-infos-wallsinglepost wallsinglepost-elements">
                 <img v-bind:src="userProfilePic" alt="photo-de-profil-du-createur-du-post" class="user-profile-pic-wallsinglepost">
                 <span class="creator-name-wallsinglepost">{{userFirstName}} {{userLastName}}</span>
             </div>
-            <h2>{{ title }}</h2>
-            <p class="post-content-wallsinglepost">{{ content }}</p>
-            <img v-bind:src="imgUrl" alt="" class="post-image">
-            <div class="reaction-infos-wallsinglepost">
+            <h3 class="wallsinglepost-elements">{{ title }}</h3>
+            <p class="post-content-wallsinglepost wallsinglepost-elements">{{ content }}</p>
+            <img v-bind:src="imgUrl" alt="" class="post-image wallsinglepost-elements">
+            <div class="reaction-infos-wallsinglepost wallsinglepost-elements">
                 <p>
                     <span>{{ comments.length }} Commentaires <font-awesome-icon :icon="['fas', 'comments']" /></span>
                 </p>
-                <p>
-                    <span>{{ nbOfLikes }} <button class="like-button-singlewallpost reaction-button-singlewallpost" @click="likePost(postId)" ><font-awesome-icon :icon="['fas', 'thumbs-up']" /></button></span>
-                    <span>{{ nbOfDislikes }} <button class="dislike-button-singlewallpost reaction-button-singlewallpost" @click="dislikePost(postId)" ><font-awesome-icon :icon="['fas', 'thumbs-down']" /></button></span>
+                <p class="like-dislike-buttons wallsinglepost-elements">
+                    <span class="like-span-wallsinglepost">{{ nbOfLikes }} <button class="like-button-singlewallpost reaction-button-singlewallpost" @click="likePost(postId)" ><font-awesome-icon :icon="['fas', 'thumbs-up']" /></button></span>
+                    <span class="dislike-span-wallsinglepost">{{ nbOfDislikes }} <button class="dislike-button-singlewallpost reaction-button-singlewallpost" @click="dislikePost(postId)" ><font-awesome-icon :icon="['fas', 'thumbs-down']" /></button></span>
                 </p>
-                
-                
             </div>
         </div>
         <button class="go-to-singlepost-button" @click="goToSinglePost">Détails du post</button>
@@ -92,6 +90,10 @@ export default {
 </script>
 
 <style>
+
+.wallsinglepost-elements {
+    margin-bottom: 4%;
+}
 .single-post-wallsinglepost {
     display: flex;
     flex-direction: column;
@@ -130,11 +132,7 @@ export default {
     width: 75%;
 }
 
-h2 {
-    text-align: center;
-    text-decoration: underline;
-    
-}
+
 
 .post-content-wallsinglepost {
     font-size: 1.2em;
@@ -165,6 +163,14 @@ h2 {
     cursor: pointer;
 }
 
+.like-span-wallsinglepost {
+    color: green;
+}
+
+.dislike-span-wallsinglepost {
+    color: red;
+}
+
 .like-button-singlewallpost {
     color: green;
 }
@@ -190,6 +196,19 @@ h2 {
   bottom: 5%;
   right: 1%; */
   
+}
+@media (max-width: 768px) {
+    .reaction-infos-wallsinglepost {
+        font-size: 1.2em;
+        flex-direction: column-reverse;
+        align-items: center;
+    }
+
+    .like-dislike-buttons {
+        display: flex;
+        width: 40%;
+        justify-content: space-between;
+    }
 }
 
 @media (max-width: 480px) {

@@ -151,6 +151,7 @@ export default {
 }
 
 .single-post-container {
+    border: solid 0.5px grey;
     background-color: #e5eef7;
     border-radius: 10px;
     width: 75%;

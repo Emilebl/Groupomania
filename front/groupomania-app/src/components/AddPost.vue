@@ -1,26 +1,27 @@
 <template>
     <div class="form-container">
-        <div>
-            <img v-bind:src="profilePicUrl" class="add-post-user-pp" alt="user-photo-de-profil-ajout-post">
-            <span> Quoi de neuf, {{ firstName }} ? </span>
+        <div class="form-title">
+            <img v-bind:src="profilePicUrl" class="add-post-user-pp" alt="user-photo-de-profil-ajout-post"> 
+            <h2 >Créer un post</h2>
         </div>
         <form action="" @submit.prevent="addPost" enctype="multipart/form-data" id="form" class="validate">
             <div class="form-field">
-                <label for="title">Titre du post</label>
+                <label for="title">Titret</label>
                 <input type="text" v-model="title" name="title" id="title" required>
             </div>
             <div class="form-field">
-                <label for="content">Contenu du post (texte)</label>
+                <label for="content">Contenu (texte)</label>
                 <textarea v-model="content" name="title" id="content" required  />
             </div>
             <div class="form-field">
-                <label for="attachement">Join your image: </label>
-                <input type="file" ref="file" @change="selectFile" name="attachement" id="attachement">
+                <label for="attachement">Image</label>
+                <input type="file" ref="file" @change="selectFile" name="attachement" id="add-post-pic">
             </div>
-            <div >
+            <div class="form-field" id="post-preview-container">
+                <label v-if="imgPreview" for="preview">Aperçu de l'image:</label>
                 <img id="post-preview" v-if="imgPreview" :src="imgPreview" />
             </div>
-            <div class="form-example">
+            <div>
                 <input type="submit" value="Publier !">
                 {{ error }}
             </div>
@@ -77,8 +78,24 @@ export default {
 
 <style>
 .add-post-user-pp {
-    width: 10%;
-    height: auto;
+    float: left;
+    width:  75px;
+    height: 75px;
+    object-fit: cover;
+    border-radius: 50%;
+}
+
+#add-post-pic {
+    border: none;
+}
+
+#post-preview {
+   width:  300px;
+   height: auto;
+   object-fit: cover;
+   border-radius: 2%;
+   margin-left: auto;
+   margin-right: auto;
 }
 
 .add-post-form {

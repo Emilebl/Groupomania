@@ -102,7 +102,7 @@ export default {
     height: 30%;
     border: none;
     background: none;
-    color: #8c1c00;
+    color: #c00000;
     font-size: 1.2em;
     cursor: pointer;
 }
