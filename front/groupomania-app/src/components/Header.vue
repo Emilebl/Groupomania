@@ -13,15 +13,17 @@ export default {
     name: 'Header',
     data() {
       return {
-        alreadyConnected: true
+        
       }
     },
-    mounted() {
-      if(this.$route.path == "/signup" || this.$route.path == "/login" ) {
-        this.alreadyConnected === false
+    computed: {
+      alreadyConnected() {
+        if(this.$route.path == "/signup" || this.$route.path == "/login" ) {
+        return false
         } else {
-         this.alreadyConnected === true
+        return true
         }
+      }
     },
     methods: {
         logout() {

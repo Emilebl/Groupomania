@@ -30,10 +30,6 @@
                     v-bind:connectedUserId="connectedId"
                     v-bind:postId="urlPostId"
                     v-bind:isAdmin="isAdmin" />
-                    <!-- <p>{{ comment.User.firstName }} {{ comment.User.lastName }} a commenté:</p>
-                    <p>{{ comment.content }}</p>
-                    <button v-show="AuthorisationToDeleteComment" @click="deleteComment(comment.id, comment.User.id)">Supprimer</button>
-                    {{ error }} -->
                 </div>
                 <div class="form-container">
                     <form @submit.prevent="commentPost(post.id)" id="form" class="validate">
@@ -96,7 +92,15 @@ export default {
     },
     data () {
         return {
-            post: [],
+            post: {
+                User: {
+                    firstName: '',
+                    lastName: '',
+                    profilePic: '',
+                    id: '',
+                },
+                Comments: []
+            },
             Reactions: [],
             title: '',
             content: '',
@@ -143,7 +147,7 @@ export default {
                 if (this.userIdOrder === this.connectedId || this.isAdmin === true) {
                     this.AuthorisationToDeleteOrModifyPost = true
                 }
-
+                
                 this.nbOfLikes = this.Reactions.filter(i => i.type === true).length;
                 this.nbOfDislikes = this.Reactions.filter(i => i.type === false).length;
             })
@@ -151,15 +155,6 @@ export default {
     },
     mounted() {
         
-    },
-    computed: {
-        // toggleUpdateForm () {
-        //     if (!this.showUpdateForm) {
-        //         this.showUpdateForm === true
-        //     } else {
-        //         this.showUpdateForm === false
-        //     }
-        // }
     },
     methods: {
         selectFile() {
