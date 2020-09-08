@@ -38,7 +38,7 @@
                 <div class="form-container">
                     <form @submit.prevent="commentPost(post.id)" id="form" class="validate">
                         <div class="form-title"> 
-                            <h4>Ajouter un commentaire:</h4>
+                            <h3>Ajouter un commentaire:</h3>
                         </div>
                         <div class="form-field">
                             <label for="comment">Contenu</label>
@@ -52,7 +52,7 @@
                 </div>
             </div>
         </section>
-        <div v-show="AuthorisationToDeleteOrModifyPost" class="form-container">
+        <section v-show="AuthorisationToDeleteOrModifyPost" class="form-container">
             <div class="form-title"> 
                 <h2 >Modifier le post</h2>
             </div>
@@ -80,7 +80,7 @@
                 <button class="delete-post-button" v-show="AuthorisationToDeleteOrModifyPost" @click="deletePost">Supprimer le post</button>
                     {{ error }}
             </form>
-        </div>
+        </section>
     </div>
 </template>
 
@@ -313,8 +313,6 @@ export default {
     font-size: 1em;
     font-weight: bolder;
     cursor: pointer;
-    
-    
 }
 
 #modify-post-pic {

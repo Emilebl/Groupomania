@@ -1,5 +1,5 @@
 <template>
-    <div class="form-container">
+    <section class="form-container">
         <div class="form-title">
             <img v-bind:src="profilePicUrl" class="add-post-user-pp" alt="user-photo-de-profil-ajout-post"> 
             <h2 >Créer un post</h2>
@@ -26,7 +26,7 @@
                 {{ error }}
             </div>
         </form>
-    </div>
+    </section>
 </template>
 
 <script>

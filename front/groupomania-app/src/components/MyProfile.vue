@@ -1,15 +1,15 @@
 <template>
     <div class="myprofile-component">
         <!-- <Header /> -->
-        <div class="profile-infos-container">
+        <section class="profile-infos-container">
             <h2 >Informations du profil</h2>
             <p class="profile-infos-element"><span class="profile-infos-span">Nom: </span>{{profileInfos.lastName}}</p>
             <p class="profile-infos-element"><span class="profile-infos-span">Prénom: </span>{{profileInfos.firstName}}</p>
             <p class="profile-infos-element"><span class="profile-infos-span">Photo de Profil: </span><img v-bind:src="profileInfos.profilePic" alt="" id="myProfileImage"></p>
             <p class="profile-infos-element"><span class="profile-infos-span">Bio: </span>{{profileInfos.bio}}</p>
             <p class="profile-infos-element"><span class="profile-infos-span">E-mail: </span>{{profileInfos.email}}</p>
-        </div>
-        <div class="form-container">
+        </section>
+        <section class="form-container">
             <h2>Modifications du profil</h2>
             <form @submit.prevent="updateProfile" enctype="multipart/form-data" id="form" class="validate">
                 <div class="form-field">
@@ -36,8 +36,9 @@
                     <input type="submit" value="Modifier le profil !">
                     {{ error }}
                 </div>
+                <button class="delete-profile-button" @click="deleteProfile">Supprimer le Profil</button>
             </form>
-        </div>
+        </section>
     </div>
 </template>
 
@@ -126,6 +127,17 @@ export default {
                 this.$router.push('/login')
                 this.error = err.response.data.error;
             })
+        },
+        deleteProfile() {
+            axios.delete('http://localhost:3000/api/users/delete', {headers: {'Authorization': 'Bearer ' + localStorage.getItem('token')}})
+            .then(res => {
+            console.log(res);
+            localStorage.clear();
+            this.$router.push('/signup')
+            }, err => {
+                console.log(err.response);
+                this.error = err.response.data.error;
+            })
         }
 
     }
@@ -133,6 +145,19 @@ export default {
 </script>
 
 <style>
+.delete-profile-button {
+    background-color: #c00000;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    padding: 2%;
+    margin-top: 10%;
+    width: auto;
+    height: 1%;
+    font-size: 1em;
+    font-weight: bolder;
+    cursor: pointer;
+}
 
 .profile-infos-container {
     border: solid 0.5px grey;
