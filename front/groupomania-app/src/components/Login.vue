@@ -8,7 +8,7 @@
             </div>
             <div class="form-field">
                 <label for="password">Mot de passe</label>
-                <input type="text" v-model="password" name="password" id="password" required>
+                <input type="password" v-model="password" name="password" id="password" required>
             </div>
             <div class="form-field" id="login-button-container">
                 <input type="submit" value="Se connecter !">
@@ -29,27 +29,43 @@ export default {
             password: '',
             signupUrl: '/signup',
 
-            error: ''
+            error: '',
+
+            emailRGX: /^[a-z0-9._-]+@[a-z0-9.-]{2,}[.][a-z]{2,3}$/,
+            passwordRGX: /((?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,20})/
         }
     },
     methods: {
         login() {
-            let user = {
-                email: this.email,
-                password: this.password
-            }
-            axios.post('http://localhost:3000/api/users/login', user)
-            .then(res => {
-                console.log(res);
-                if (res.status === 200) {
-                    localStorage.setItem('token', res.data.token);
-                    this.$router.push('/');
+
+            let emailRESULT = this.emailRGX.test(this.email);
+            let passwordRESULT = this.passwordRGX.test(this.password);
+
+            if (emailRESULT == false) {
+                this.error = 'Email invalide'
+            } else if (passwordRESULT == false) {
+                this.error = 'Mot de passe invalide'
+            } else {
+                    let user = {
+                    email: this.email,
+                    password: this.password
                 }
-                // this.error= '';
-            }, err => {
-                console.log(err.response);
-                this.error = err.response.data.error;
-            })
+                axios.post('http://localhost:3000/api/users/login', user)
+                .then(res => {
+                    console.log(res);
+                    if (res.status === 200) {
+                        localStorage.setItem('token', res.data.token);
+                        this.$router.push('/');
+                    }
+                    // this.error= '';
+                }, err => {
+                    console.log(err.response);
+                    this.error = err.response.data.error;
+                })
+            }
+
+
+            
         }
     }
 }

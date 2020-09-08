@@ -120,6 +120,10 @@ export default {
 
             error: '',
 
+            TitleRGX: /^[\s\S]{0,50}$/,
+            ContentRGX: /^[\s\S]{0,300}$/,
+            CommentRGX: /^[\s\S]{0,100}$/,
+
             showUpdateForm: true,
         }
     },
@@ -163,24 +167,34 @@ export default {
             this.imgPreview = URL.createObjectURL(this.file);
         },
         updatePost() {
-            const formData = new FormData();
-            formData.append('newTitle', this.title);
-            formData.append('newContent', this.content);
-            formData.append('inputFile', this.file);
-            formData.append('userIdOrder', this.userIdOrder);
-            console.log(formData);
-            axios.put('http://localhost:3000/api/posts/' +  this.$route.params.id, formData, {headers: {'Authorization': 'Bearer ' + localStorage.getItem('token')}})
-            .then(res => {
-                console.log(res);
-                this.title = '';
-                this.content = '';
-                this.file = '';
-                this.imgPreview = '';
-                this.recallSinglePost()
-            }, err => {
-                console.log(err.response);
-                this.error = err.response.data.error;
-            })
+            let titleRESULT = this.TitleRGX.test(this.title);
+            let contentRESULT = this.ContentRGX.test(this.content);
+
+            if (titleRESULT == false) {
+                this.error = 'Titre trop long ! 50 Caractères maximum'
+            } else if (contentRESULT == false) {
+                this.error = 'Contenu trop long ! 300 Caractères maximum'
+            } else {
+                const formData = new FormData();
+                formData.append('newTitle', this.title);
+                formData.append('newContent', this.content);
+                formData.append('inputFile', this.file);
+                formData.append('userIdOrder', this.userIdOrder);
+                console.log(formData);
+                axios.put('http://localhost:3000/api/posts/' +  this.$route.params.id, formData, {headers: {'Authorization': 'Bearer ' + localStorage.getItem('token')}})
+                .then(res => {
+                    console.log(res);
+                    this.title = '';
+                    this.content = '';
+                    this.file = '';
+                    this.imgPreview = '';
+                    this.recallSinglePost()
+                }, err => {
+                    console.log(err.response);
+                    this.error = err.response.data.error;
+                })
+            }
+
         },
         recallSinglePost() {
             axios.get('http://localhost:3000/api/posts/' +  this.$route.params.id, {headers: {'Authorization': 'Bearer ' + localStorage.getItem('token')}})
@@ -245,19 +259,25 @@ export default {
             })
         },
         commentPost(postId) {
-            let comment = {
-                content: this.comment
+            let commentRESULT = this.CommentRGX.test(this.comment);
+
+            if (commentRESULT == false) {
+                this.error = 'Commentaire trop long ! 100 Caractères maximum'
+            } else {
+                let comment = {
+                    content: this.comment
+                }
+                axios.post('http://localhost:3000/api/posts/'+ postId + '/comment', comment, {headers: {'Authorization': 'Bearer ' + localStorage.getItem('token')}})
+                .then(res => {
+                    console.log(res);
+                    this.comment = '';
+                    this.recallSinglePost()
+                    // this.$router.push('/');
+                }, err => {
+                    console.log(err.response);
+                    this.error = err.response.data.error;
+                })
             }
-            axios.post('http://localhost:3000/api/posts/'+ postId + '/comment', comment, {headers: {'Authorization': 'Bearer ' + localStorage.getItem('token')}})
-            .then(res => {
-                console.log(res);
-                this.comment = '';
-                this.recallSinglePost()
-                // this.$router.push('/');
-            }, err => {
-                console.log(err.response);
-                this.error = err.response.data.error;
-            })
         },
         getUserConnectedInfos() {
             axios.get('http://localhost:3000/api/users/me', {headers: {'Authorization': 'Bearer ' + localStorage.getItem('token')}})

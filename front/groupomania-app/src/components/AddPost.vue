@@ -45,7 +45,10 @@ export default {
             file: '',
             imgPreview: '',
 
-            error: ''
+            error: '',
+            
+            TitleRGX: /^[\s\S]{0,50}$/,
+            ContentRGX: /^[\s\S]{0,300}$/
         }
     },
     methods: {
@@ -54,23 +57,32 @@ export default {
             this.imgPreview = URL.createObjectURL(this.file);
         },
         addPost() {
-            const formData = new FormData();
-            formData.append('title', this.title);
-            formData.append('content', this.content);
-            formData.append('inputFile', this.file);
-            console.log(formData);
-            axios.post('http://localhost:3000/api/posts/new', formData, {headers: {'Authorization': 'Bearer ' + localStorage.getItem('token')}})
-            .then(res => {
-                console.log(res);
-                this.title = '';
-                this.content = '';
-                this.file = '';
-                this.imgPreview = '';
-                this.$emit('newPost');
-            }, err => {
-                console.log(err.response);
-                this.error = err.response.data.error;
-            })
+            let titleRESULT = this.TitleRGX.test(this.title);
+            let contentRESULT = this.ContentRGX.test(this.content);
+
+            if (titleRESULT == false) {
+                this.error = 'Titre trop long ! 50 Caractères maximum'
+            } else if (contentRESULT == false) {
+                this.error = 'Contenu trop long ! 300 Caractères maximum'
+            } else {
+                const formData = new FormData();
+                formData.append('title', this.title);
+                formData.append('content', this.content);
+                formData.append('inputFile', this.file);
+                console.log(formData);
+                axios.post('http://localhost:3000/api/posts/new', formData, {headers: {'Authorization': 'Bearer ' + localStorage.getItem('token')}})
+                .then(res => {
+                    console.log(res);
+                    this.title = '';
+                    this.content = '';
+                    this.file = '';
+                    this.imgPreview = '';
+                    this.$emit('newPost');
+                }, err => {
+                    console.log(err.response);
+                    this.error = err.response.data.error;
+                })
+            }
         }
     }
 }

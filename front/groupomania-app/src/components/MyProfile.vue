@@ -58,7 +58,10 @@ export default {
             file: '',
             imgPreview: '',
 
-            error: ''
+            error: '',
+
+            nameRGX: /^[a-zA-Z ]+$/,
+            TextareaRGX: /^[\s\S]{0,100}$/
         }
     },
     created() {
@@ -83,25 +86,35 @@ export default {
             this.imgPreview = URL.createObjectURL(this.file);
         },
         updateProfile() {
-            const formData = new FormData();
-            formData.append('lastName', this.lastName);
-            formData.append('firstName', this.firstName);
-            formData.append('bio', this.bio);
-            formData.append('inputFile', this.file);
-            console.log(formData);
-            axios.put('http://localhost:3000/api/users/update', formData, {headers: {'Authorization': 'Bearer ' + localStorage.getItem('token')}})
-            .then(res => {
-                console.log(res);
-                this.lastName = '';
-                this.firstName = '';
-                this.bio = '';
-                this.file = '';
-                this.imgPreview = '';
-                this.recallProfile()
-            }, err => {
-                console.log(err.response);
-                this.error = err.response.data.error;
-            })
+            let firstNameRESULT = this.nameRGX.test(this.firstName);
+            let lastNameRESULT = this.nameRGX.test(this.lastName);
+            let bioRESULT = this.TextareaRGX.test(this.bio);
+
+            if (firstNameRESULT == false || lastNameRESULT == false) {
+                this.error = 'Veuillez rentrer un nom/prénom valide'
+            } else if (bioRESULT == false) {
+                this.error = 'Veuillez rentrer une bio valide (100 charactères maximum)'
+            } else {
+                const formData = new FormData();
+                formData.append('lastName', this.lastName);
+                formData.append('firstName', this.firstName);
+                formData.append('bio', this.bio);
+                formData.append('inputFile', this.file);
+                console.log(formData);
+                axios.put('http://localhost:3000/api/users/update', formData, {headers: {'Authorization': 'Bearer ' + localStorage.getItem('token')}})
+                .then(res => {
+                    console.log(res);
+                    this.lastName = '';
+                    this.firstName = '';
+                    this.bio = '';
+                    this.file = '';
+                    this.imgPreview = '';
+                    this.recallProfile()
+                }, err => {
+                    console.log(err.response);
+                    this.error = err.response.data.error;
+                })
+                }
         },
         recallProfile() {
             axios.get('http://localhost:3000/api/users/me', {headers: {'Authorization': 'Bearer ' + localStorage.getItem('token')}})

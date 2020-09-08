@@ -4,23 +4,23 @@
         <form @submit.prevent="register" enctype="multipart/form-data" action="" id="form" class="validate">
             <div class="form-field">
                 <label for="Prenom">Prénom</label>
-                <input type="text" v-model="firstName" name="Prenom" id="Prenom" placeholder="votre prénom..." required />
+                <input type="text" v-model="firstName" name="Prenom" id="prenom-signup" placeholder="votre prénom..." required />
             </div>
             <div class="form-field">
                 <label for="Nom">Nom</label>
-                <input type="text" v-model="lastName" name="Nom" id="Nom" placeholder="votre nom..." required />
+                <input type="text" v-model="lastName" name="Nom" id="nom-signup" placeholder="votre nom..." required />
             </div>
             <div class="form-field">
                 <label for="email-input">Email</label>
-                <input type="email" v-model="email" name="email-input" id="email-input" placeholder="example@domain.com" required />
+                <input type="email" v-model="email" name="email-input" id="email-signup" placeholder="example@domain.com" required />
             </div>
             <div class="form-field">
                 <label for="password-input">Password</label>
-                <input type="password" v-model="password" name="password-input" id="password-input" required />
+                <input type="password" v-model="password" name="password-input" id="password-signup" required />
             </div>
             <div class="form-field">
                 <label for="bio">Bio</label>
-                <textarea v-model="bio" name="bio" id="bio" placeholder="votre bio..." />
+                <textarea v-model="bio" name="bio" id="bio-signup" placeholder="votre bio..." />
             </div>
             <div class="form-field">
                 <label for="profilePic">Photo</label>
@@ -35,39 +35,7 @@
                 {{ error }}
             </div>
         </form>
-        <!-- <form action="" @submit.prevent="register" enctype="multipart/form-data" class="form-class">
-            <div class="form-class">
-                <label for="Prénom"></label>
-                <input type="text" v-model="firstName" name="Prénom" id="firstName" placeholder="Prénom" required>
-            </div>
-            <div class="form-class">
-                <label for="Nom">Enter your last name: </label>
-                <input type="text" v-model="lastName" name="Nom" id="lastName" placeholder="Nom" required>
-            </div>
-            <div class="form-class">
-                <label for="email">Enter your email: </label>
-                <input type="email" v-model="email" name="email" id="email" placeholder="Email" required>
-            </div>
-            <div class="form-class">
-                <label for="password">Enter your password: </label>
-                <input type="password" v-model="password" name="password" id="password" placeholder="Mot de Passe" required>
-            </div>
-            <div class="form-class">
-                <label for="bio">Enter your bio: </label>
-                <input type="text" v-model="bio" name="bio" placeholder="Bio" id="bio">
-            </div>
-            <div class="form-class">
-                <label for="profilePic">Join your profile picture: </label>
-                <input type="file" ref="file" @change="selectFile" name="profilePic" id="profilePic">
-            </div>
-            <div id="preview">
-                <img v-if="imgPreview" :src="imgPreview" />
-            </div>
-            <div class="form-class">
-                <input type="submit" value="S'inscrire !">
-                {{ error }}
-            </div>
-        </form> -->
+        
         <a id="signup-to-login" v-bind:href="loginUrl">Déjà un compte ?</a>
     </div>
 </template>
@@ -89,7 +57,12 @@ export default {
 
             loginUrl: '/login',
 
-            error: ''
+            error: '',
+
+            nameRGX: /^[a-zA-Z ]+$/,
+            emailRGX: /^[a-z0-9._-]+@[a-z0-9.-]{2,}[.][a-z]{2,3}$/,
+            passwordRGX: /((?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,20})/,
+            TextareaRGX: /^[\s\S]{0,100}$/
         }
     },
     methods:{
@@ -98,23 +71,41 @@ export default {
         this.imgPreview = URL.createObjectURL(this.file);
         },
         register() {
-            const userInfos = new FormData();
-            userInfos.append('email', this.email);
-            userInfos.append('firstName', this.firstName);
-            userInfos.append('lastName', this.lastName);
-            userInfos.append('password', this.password);
-            userInfos.append('bio', this.bio);
-            userInfos.append('inputFile', this.file);
-            console.log(userInfos)
-            axios.post('http://localhost:3000/api/users/signup', userInfos, {headers: {'Content-Type': 'multipart/form-data'}})
-            .then(res => {
-                console.log(res);
-                this.error= '';
-                this.$router.push('/login');
-            }, err => {
-                console.log(err.response);
-                this.error = err.response.data.error;
-            })
+            let firstNameRESULT = this.nameRGX.test(this.firstName);
+            let lastNameRESULT = this.nameRGX.test(this.lastName);
+            let emailRESULT = this.emailRGX.test(this.email);
+            let passwordRESULT = this.passwordRGX.test(this.password);
+            let bioRESULT = this.TextareaRGX.test(this.bio);
+
+            if (firstNameRESULT == false || lastNameRESULT == false) {
+                this.error = 'Veuillez rentrer un nom/prénom valide'
+            } else if (emailRESULT == false) {
+                this.error = 'Veuillez rentrer un mail valide'
+            } else if (passwordRESULT == false) {
+                this.error = 'Veuillez rentrer un mot de passe valide: entre 6 et 20 caractères, au moins 1 majuscule, 1 minuscule et 1 chiffre'
+            } else if (bioRESULT == false) {
+                this.error = 'Veuillez rentrer une bio valide (100 charactères maximum)'
+            } else {
+                const userInfos = new FormData();
+                userInfos.append('email', this.email);
+                userInfos.append('firstName', this.firstName);
+                userInfos.append('lastName', this.lastName);
+                userInfos.append('password', this.password);
+                userInfos.append('bio', this.bio);
+                userInfos.append('inputFile', this.file);
+                console.log(userInfos)
+                axios.post('http://localhost:3000/api/users/signup', userInfos, {headers: {'Content-Type': 'multipart/form-data'}})
+                .then(res => {
+                    console.log(res);
+                    this.error= '';
+                    this.$router.push('/login');
+                }, err => {
+                    console.log(err.response);
+                    this.error = err.response.data.error;
+                })
+            }
+
+            
         },
         // uploadImage(e){
         //     const image = e.target.files[0];
