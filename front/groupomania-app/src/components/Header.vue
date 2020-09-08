@@ -39,6 +39,7 @@ export default {
 header {
     background-color: #4287f5;
     width: 98%;
+    padding: 1%;
     border-radius: 5px;
     display: flex;
     justify-content: space-between;
@@ -66,7 +67,7 @@ nav {
   border: none;
   border-radius: 10px;
   padding: 15px 32px;
-  width: 45%;
+  width: 46%;
   height: 50%;
   font-size: 1.4em;
   cursor: pointer;
