@@ -105,8 +105,8 @@ exports.getUserProfile = (req, res) => {
         attributes: ['id', 'email', 'firstName', 'lastName', 'profilePic', 'bio', 'isAdmin'],
         where: { id: id }
     })
-        .then(user => res.status(200).json(user))
-        .catch(error => res.status(500).json(error))
+    .then(user => res.status(200).json(user))
+    .catch(error => res.status(500).json(error))
 };
 
 //modification d'un profil
