@@ -37,7 +37,6 @@ export default {
     },
     methods: {
         login() {
-
             let emailRESULT = this.emailRGX.test(this.email);
             let passwordRESULT = this.passwordRGX.test(this.password);
 
@@ -57,7 +56,6 @@ export default {
                         localStorage.setItem('token', res.data.token);
                         this.$router.push('/');
                     }
-                    // this.error= '';
                 }, err => {
                     console.log(err.response);
                     this.error = err.response.data.error;

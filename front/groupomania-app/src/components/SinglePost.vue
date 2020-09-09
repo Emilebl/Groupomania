@@ -186,7 +186,6 @@ export default {
                     this.error = err.response.data.error;
                 })
             }
-
         },
         recallSinglePost() {
             axios.get('http://localhost:3000/api/posts/' +  this.$route.params.id, {headers: {'Authorization': 'Bearer ' + localStorage.getItem('token')}})
@@ -197,9 +196,7 @@ export default {
             this.userIdOrder = res.data.singlePost.UserId;
             this.nbOfLikes = this.Reactions.filter(i => i.type === true).length;
             this.nbOfDislikes = this.Reactions.filter(i => i.type === false).length;
-            
-            
-        })
+            })
         },
         deletePost() {
             axios.delete('http://localhost:3000/api/posts/' +  this.$route.params.id, {headers: {'Authorization': 'Bearer ' + localStorage.getItem('token')}, data: {userIdOrder: this.userIdOrder}})
@@ -229,12 +226,10 @@ export default {
             .then(res => {
                 console.log(res);
                 this.recallSinglePost()
-                // this.$router.push('/');
             }, err => {
                 console.log(err.response);
                 this.error = err.response.data.error;
             })
-
         },
         dislikePost(postId) {
             let reaction = {
@@ -244,7 +239,6 @@ export default {
             .then(res => {
                 console.log(res);
                 this.recallSinglePost()
-                // this.$router.push('/');
             }, err => {
                 console.log(err.response);
                 this.error = err.response.data.error;
@@ -264,7 +258,6 @@ export default {
                     console.log(res);
                     this.comment = '';
                     this.recallSinglePost()
-                    // this.$router.push('/');
                 }, err => {
                     console.log(err.response);
                     this.error = err.response.data.error;
@@ -352,11 +345,9 @@ export default {
     font-size: 1.3em;
     color: #4287f5;
     margin-left: 4%;
-    /* font-style: italic; */
 }
 
 .post-infos-singlepost {
-    /* border: 1px solid blue; */
     text-align: left;
     width: 75%;
 }

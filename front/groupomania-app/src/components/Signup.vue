@@ -103,20 +103,8 @@ export default {
                     this.error = err.response.data.error;
                 })
             }
-
-            
-        },
-        // uploadImage(e){
-        //     const image = e.target.files[0];
-        //     const reader = new FileReader();
-        //     reader.readAsDataURL(image);
-        //     reader.onload = e =>{
-        //         this.inputFile = e.target.result;
-        //         console.log(this.inputFile);
-        //     };
-        // }
+        }
     }
-    
 }
 </script>
 

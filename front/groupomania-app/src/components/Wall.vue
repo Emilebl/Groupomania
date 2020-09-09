@@ -24,6 +24,7 @@
         </div>
     </div>
 </template>
+
 <script>
 import axios from 'axios';
 import AddPost from './AddPost';
@@ -34,7 +35,6 @@ export default {
     components: {
         AddPost,
         SingleWallPost
-
     },
     data () {
         return {
@@ -63,7 +63,6 @@ export default {
         
         }, err => {
             console.log(err.response);
-            // this.$router.push('/login')
             this.error = err.response.data.error;
         })
     },
@@ -76,7 +75,6 @@ export default {
             .then(res => {
                 console.log(res);
                 this.recallWall();
-                // this.$router.push('/');
             }, err => {
                 console.log(err.response);
                 this.error = err.response.data.error;
@@ -91,7 +89,6 @@ export default {
             .then(res => {
                 console.log(res);
                 this.recallWall();
-                // this.$router.push('/');
             }, err => {
                 console.log(err.response);
                 this.error = err.response.data.error;
@@ -110,11 +107,6 @@ export default {
             .then(res => {
                 console.log(res);
                 this.profileInfos = res.data;
-                // if (res.data.profilePic == null) {
-                //     this.userProfilePic = '../assets/default-profile-pics.png'
-                // } else {
-                //     this.userProfilePic = res.data.profilePic
-                // }
                 this.isAdmin = res.data.isAdmin;
             }, err => {
                 console.log(err.response);
@@ -122,11 +114,6 @@ export default {
                 this.error = err.response.data.error;
             })
         }
-        // displayLikes(reactions) {
-        //     this.Reactions = reactions;
-        //     let nbOfLikes = this.Reactions.filter(i => i.type === true).length;
-        //     return nbOfLikes
-        // }
     }
 }
 </script>

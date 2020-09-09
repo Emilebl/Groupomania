@@ -11,11 +11,6 @@
 <script>
 export default {
     name: 'Header',
-    data() {
-      return {
-        
-      }
-    },
     computed: {
       alreadyConnected() {
         if(this.$route.path == "/signup" || this.$route.path == "/login" ) {
@@ -62,7 +57,6 @@ nav {
     justify-content: space-between;
 }
 
-
 .header-button {
   background-color: #42f5b0; /* Green */
   color: #7842f5;
@@ -86,8 +80,6 @@ nav {
     font-size: 1.35em;
     padding: none;
   }
-
-  
 }
 
 
@@ -95,7 +87,7 @@ nav {
   nav {
     width: 50%;
     justify-content: flex-start
-    }
+  }
     
   .header-button {
     font-size: 1.2em;
@@ -105,8 +97,6 @@ nav {
   #mon_profil_button {
       margin-right: 6%;
   }
-
-  
 }
 
 
@@ -115,8 +105,6 @@ nav {
     flex-direction: column;
     align-items: center;
     padding: none;
-    
-    
   }
   .header-button {
     font-size: 1.05em;
@@ -152,6 +140,5 @@ nav {
     margin-top: 5px;
     }
 }
-
 
 </style>

@@ -32,7 +32,6 @@ export default {
         return {
             AuthorisationToDeleteComment: '',
             error: ''
-
         }
     },
     mounted() {

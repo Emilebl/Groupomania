@@ -134,7 +134,6 @@ export default {
                 this.error = err.response.data.error;
             })
         }
-
     }
 }
 </script>
@@ -166,7 +165,6 @@ export default {
     padding-bottom: 3%;
 }
 .profile-infos-element {
-    /* border: green solid 1px; */
     min-width: 30%;
     margin-top: 1%;
     display: flex;
@@ -199,7 +197,6 @@ export default {
 }
 @media (max-width: 768px) {
     .profile-infos-element {
-    /* border: green solid 1px; */
         width: 80%;
     }
 

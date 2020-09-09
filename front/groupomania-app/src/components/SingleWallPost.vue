@@ -59,13 +59,10 @@ export default {
             .then(res => {
                 console.log(res);
                 this.$emit('newReaction');
-                // this.nbOfLikes = this.reactions.filter(i => i.type === true).length;
-                // this.nbOfDislikes = this.reactions.filter(i => i.type === false).length;
             }, err => {
                 console.log(err.response);
                 this.error = err.response.data.error;
             })
-
         },
         dislikePost(postId) {
             let reaction = {
@@ -75,8 +72,6 @@ export default {
             .then(res => {
                 console.log(res);
                 this.$emit('newReaction');
-                // this.nbOfLikes = this.reactions.filter(i => i.type === true).length;
-                // this.nbOfDislikes = this.reactions.filter(i => i.type === false).length;
             }, err => {
                 console.log(err.response);
                 this.error = err.response.data.error;
@@ -123,11 +118,10 @@ export default {
     font-size: 1.3em;
     color: #4287f5;
     margin-left: 4%;
-    /* font-style: italic; */
+    
 }
 
 .post-infos-wallsinglepost {
-    /* border: 1px solid blue; */
     text-align: left;
     width: 75%;
 }
@@ -181,7 +175,7 @@ export default {
 
 
 .go-to-singlepost-button {
-  background-color: #42f5b0; /* Green */
+  background-color: #42f5b0;
   color: #7842f5;
   border: none;
   border-radius: 10px;
