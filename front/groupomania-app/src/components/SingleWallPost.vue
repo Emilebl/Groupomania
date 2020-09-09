@@ -5,7 +5,7 @@
                 <img v-bind:src="userProfilePic" alt="photo-de-profil-du-createur-du-post" class="user-profile-pic-wallsinglepost">
                 <span class="creator-name-wallsinglepost">{{userFirstName}} {{userLastName}}</span>
             </div>
-            <h3 class="wallsinglepost-elements">{{ title }}</h3>
+            <h2 class="wallsinglepost-elements">{{ title }}</h2>
             <p class="post-content-wallsinglepost wallsinglepost-elements">{{ content }}</p>
             <img v-bind:src="imgUrl" alt="" class="post-image wallsinglepost-elements">
             <div class="reaction-infos-wallsinglepost wallsinglepost-elements">
@@ -192,9 +192,6 @@ export default {
   font-size: 1em;
   font-weight: bolder;
   cursor: pointer;
-  /* position: absolute;
-  bottom: 5%;
-  right: 1%; */
   
 }
 @media (max-width: 768px) {

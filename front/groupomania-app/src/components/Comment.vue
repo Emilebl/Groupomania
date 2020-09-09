@@ -7,7 +7,6 @@
                 <p class="comment-content">{{ content }}</p>
             </div>
         </div>
-        
         <button class="delete-comment-button" v-show="AuthorisationToDeleteComment" @click="deleteComment(commentId, userId)"><font-awesome-icon :icon="['fas', 'trash']" /></button>
         {{ error }}
     </div>

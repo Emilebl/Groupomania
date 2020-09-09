@@ -2,7 +2,7 @@
     <section class="form-container">
         <div class="form-title">
             <img v-bind:src="profilePicUrl" class="add-post-user-pp" alt="user-photo-de-profil-ajout-post"> 
-            <h2 >Créer un post</h2>
+            <h1>Créer un post</h1>
         </div>
         <form action="" @submit.prevent="addPost" enctype="multipart/form-data" id="form" class="validate">
             <div class="form-field">

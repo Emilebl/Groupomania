@@ -1,8 +1,7 @@
 <template>
     <div class="myprofile-component">
-        <!-- <Header /> -->
         <section class="profile-infos-container">
-            <h2 >Informations du profil</h2>
+            <h1 >Informations du profil</h1>
             <p class="profile-infos-element"><span class="profile-infos-span">Nom: </span>{{profileInfos.lastName}}</p>
             <p class="profile-infos-element"><span class="profile-infos-span">Prénom: </span>{{profileInfos.firstName}}</p>
             <p class="profile-infos-element"><span class="profile-infos-span">Photo de Profil: </span><img v-bind:src="profileInfos.profilePic" alt="" id="myProfileImage"></p>
@@ -10,7 +9,7 @@
             <p class="profile-infos-element"><span class="profile-infos-span">E-mail: </span>{{profileInfos.email}}</p>
         </section>
         <section class="form-container">
-            <h2>Modifications du profil</h2>
+            <h1 class="modify-profile-title">Modifications du profil</h1>
             <form @submit.prevent="updateProfile" enctype="multipart/form-data" id="form" class="validate">
                 <div class="form-field">
                     <label for="firstName">Nouveau Prénom</label>
@@ -44,12 +43,8 @@
 
 <script>
 import axios from 'axios';
-// import Header from './Header';
 export default {
     name: 'MyProfile',
-    // components : {
-    //     Header
-    // },
     data () {
         return {
             profileInfos: '',
@@ -189,6 +184,10 @@ export default {
    border-radius: 2%;
    margin-left: auto;
    margin-right: auto;
+}
+
+.modify-profile-title {
+    margin-bottom: 3%;
 }
 
 #modify-profile-pic {

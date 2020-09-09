@@ -53,17 +53,17 @@ body {
   padding: 0;
 }
 
-h2 {
+h1 {
   font-size: 1.6em;
 }
 
-h3 {
+h2 {
   text-align: center;
   font-size: 1.5em;
   margin-bottom: 3%;
 }
 
-h4 {
+h3 {
   font-size: 1.2em ;
 }
 

@@ -1,6 +1,6 @@
 <template>
     <header>
-        <h1><router-link to="/"><img id="groupomania_logo" src="@/assets/icon-left-font-monochrome-white.svg" alt="groupomania-logo"></router-link></h1>
+        <router-link to="/"><img id="groupomania_logo" src="@/assets/icon-left-font-monochrome-white.svg" alt="groupomania-logo"></router-link>
         <nav v-show="alreadyConnected">
             <button class="header-button" id="mon_profil_button" @click="goToProfile"><font-awesome-icon :icon="['fas', 'user']" /> Mon Profil</button>
             <button class="header-button" id="logout_button" @click="logout"><font-awesome-icon :icon="['fas', 'sign-out-alt']" /> Deconnexion</button>

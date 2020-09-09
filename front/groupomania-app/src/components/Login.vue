@@ -1,6 +1,6 @@
 <template>
     <div class="form-container">
-        <h2 class="form-title">Connexion</h2>
+        <h1 class="form-title">Connexion</h1>
         <form action="" @submit.prevent="login" id="form" class="validate">
             <div class="form-field">
                 <label for="email">Email</label>
@@ -63,9 +63,6 @@ export default {
                     this.error = err.response.data.error;
                 })
             }
-
-
-            
         }
     }
 }

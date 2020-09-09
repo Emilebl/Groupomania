@@ -1,6 +1,6 @@
 <template>
     <div class="form-container">
-        <h2 class="form-title">Inscription</h2>
+        <h1 class="form-title">Inscription</h1>
         <form @submit.prevent="register" enctype="multipart/form-data" action="" id="form" class="validate">
             <div class="form-field">
                 <label for="Prenom">Prénom</label>
@@ -35,7 +35,6 @@
                 {{ error }}
             </div>
         </form>
-        
         <a id="signup-to-login" v-bind:href="loginUrl">Déjà un compte ?</a>
     </div>
 </template>

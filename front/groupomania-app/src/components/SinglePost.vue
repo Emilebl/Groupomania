@@ -1,13 +1,12 @@
 <template>
     <div class="single-post-page">
-        <!-- <Header /> -->
         <section class="post-container-singlepost">
             <div class="post-infos-singlepost">
                 <div class="user-infos-singlepost singlepost-elements">
                     <img v-bind:src="post.User.profilePic" alt="photo-de-profil-du-createur-du-post" class="user-profile-pic-singlepost">
                     <span class="creator-name-singlepost">{{post.User.firstName}} {{post.User.lastName}}</span>
                 </div>
-                <h2 class="singlepost-elements">{{ post.title }}</h2>
+                <h1 class="singlepost-elements">{{ post.title }}</h1>
                 <p class="post-content-singlepost singlepost-elements">{{ post.content }}</p>
                 <img v-bind:src="post.attachment" alt="" class="post-image-singlepost singlepost-elements">
                 <div class="reaction-infos-singlepost singlepost-elements">
@@ -34,7 +33,7 @@
                 <div class="form-container">
                     <form @submit.prevent="commentPost(post.id)" id="form" class="validate">
                         <div class="form-title"> 
-                            <h3>Ajouter un commentaire:</h3>
+                            <h2 class="comment-form-title">Ajouter un commentaire:</h2>
                         </div>
                         <div class="form-field">
                             <label for="comment">Contenu</label>
@@ -50,7 +49,7 @@
         </section>
         <section v-show="AuthorisationToDeleteOrModifyPost" class="form-container">
             <div class="form-title"> 
-                <h2 >Modifier le post</h2>
+                <h1>Modifier le post</h1>
             </div>
             <form id="form" class="validate" @submit.prevent="updatePost" enctype="multipart/form-data">
                 <div class="form-field">
@@ -82,12 +81,10 @@
 
 <script>
 import axios from 'axios';
-// import Header from './Header';
 import Comment from './Comment';
 export default {
     name: 'SinglePost',
     components: {
-        // Header,
         Comment
     },
     data () {
@@ -432,9 +429,11 @@ export default {
     text-align: center;
 }
 
-.comment-form {
-    border: 3px solid red;
+.comment-form-title {
+    font-size: 1.2em;
 }
+
+
 
 @media (max-width: 768px) {
     .reaction-infos-singlepost {
