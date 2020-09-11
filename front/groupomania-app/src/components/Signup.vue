@@ -24,7 +24,7 @@
             </div>
             <div class="form-field">
                 <label for="profilePic">Photo</label>
-                <input type="file" ref="file" @change="selectFile" name="profilePic" id="profilePic">
+                <input type="file" ref="file" @change="selectFile" name="profilePic" id="profilePic" required>
             </div>
             <div class="form-field" id="signup-preview-container">
                 <label v-if="imgPreview" for="preview">Aperçu de votre photo:</label>
