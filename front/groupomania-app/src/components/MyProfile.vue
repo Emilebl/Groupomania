@@ -56,7 +56,7 @@ export default {
 
             error: '',
 
-            nameRGX: /^[a-zA-ZÀ-ÿ ]+$/,
+            nameRGX: /^$|^[a-zA-ZÀ-ÿ ]+$/,
             TextareaRGX: /^[\s\S]{0,100}$/
         }
     },

@@ -14,7 +14,7 @@ Avec MySQL, créer la database "groupomania_development" avec la commande
 CREATE DATABASE groupomania_development CHARACTER SET 'utf8';
 ```
 
-Importer ensuite le backup de la BDD en éxecutant le fichier backupBDD.sql fourni à la racine du projet.
+Importer ensuite le backup de la BDD en éxecutant le fichier bdd_groupomania.sql fourni à la racine du projet.
 
 Pour cela, éxecuter la commande
 ```
