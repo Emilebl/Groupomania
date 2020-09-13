@@ -1,4 +1,5 @@
 <template>
+    <!-- This component will display the informations of ONE single post -->
     <div class="single-post-page">
         <section class="post-container-singlepost">
             <div class="post-infos-singlepost">
@@ -11,14 +12,21 @@
                 <img v-bind:src="post.attachment" alt="" class="post-image-singlepost singlepost-elements">
                 <div class="reaction-infos-singlepost singlepost-elements">
                     <p class="singlepost-elements">
+                        <!-- Here we display the number of comments -->
                         <span>{{ post.Comments.length }} Commentaires <font-awesome-icon :icon="['fas', 'comments']" /></span>
                     </p>
                     <p class="like-dislike-buttons singlepost-elements">
+                        <!-- Here we display the number of likes and dislikes on the post,
+                        and the buttons that will add/remove likes/dislikes when clicked -->
                         <span class="like-span-singlepost">{{ nbOfLikes }} <button class="like-button-singlepost reaction-button-singlepost" @click="likePost(post.id)" ><font-awesome-icon :icon="['fas', 'thumbs-up']" /></button> </span>
                         <span class="dislike-span-singlepost">{{ nbOfDislikes }} <button class="dislike-button-singlepost reaction-button-singlepost" @click="dislikePost(post.id)" ><font-awesome-icon :icon="['fas', 'thumbs-down']" /></button></span>
                     </p>
                 </div>
+                <!-- We use the "v-for" to create a <div> for each element from the array "Comments" -->
                 <div class="comment-list" v-for="comment in post.Comments" :key="comment.id">
+                    <!-- Each time this <div> is created it will insert the component "Comment" 
+                    which displays all the comments of ONE post
+                    we will also pass it informations to update the component's props -->
                     <Comment @commentDeleted="recallSinglePost"
                     v-bind:profilePic="comment.User.profilePic"
                     v-bind:firstName="comment.User.firstName" 
@@ -30,6 +38,7 @@
                     v-bind:postId="urlPostId"
                     v-bind:isAdmin="isAdmin" />
                 </div>
+                <!-- This div contains the form to add a new comment -->
                 <div class="form-container">
                     <form @submit.prevent="commentPost(post.id)" id="form" class="validate">
                         <div class="form-title"> 
@@ -47,6 +56,8 @@
                 </div>
             </div>
         </section>
+        <!-- This section contains a form to modify the post, and a button to delete the post
+        It will only appear if "AuthorisationToDeleteOrModifyPost" returns true -->
         <section v-show="AuthorisationToDeleteOrModifyPost" class="form-container">
             <div class="form-title"> 
                 <h1>Modifier le post</h1>
@@ -89,6 +100,8 @@ export default {
     },
     data () {
         return {
+            // Here we declare the post informations as empty strings, they will be filled
+            // with the data received from the calls to the backend
             post: {
                 User: {
                     firstName: '',
@@ -113,21 +126,25 @@ export default {
             profileInfos: [],
             isAdmin: '',
 
+            // This will be returning 'true' or 'false' depending on the connected user's rights on the post
             AuthorisationToDeleteOrModifyPost:'',
             
-
+            // Storing data that contains the value sent in the body of the like/dislike request
             like : 1,
             dislike : -1,
 
             error: '',
-
+            // REGEX for the post title, content, and the comment content
             TitleRGX: /^[\s\S]{0,50}$/,
             ContentRGX: /^[\s\S]{0,300}$/,
             CommentRGX: /^[\s\S]{0,100}$/,
 
-            showUpdateForm: true,
+            // showUpdateForm: true,
         }
     },
+    // When this component is created, the app will redirect to the /login page if the localstorage has no token
+    // if else, this will call the backend to get informations about the currently connected user
+    // it will also call the backend to get the data of a specific post (specified in the url)
     created() {
         if (localStorage.getItem('token') === null) {
             this.$router.push('/login')
@@ -141,23 +158,26 @@ export default {
                 this.Reactions = res.data.singlePost.UserReacts;
                 this.userIdOrder = res.data.singlePost.UserId;
                 this.connectedId = res.data.userConnected;
+                // If the user connected is also the creator of the post on the current page
+                // OR if the user connected is and Admin
+                // "AuthorisationToDeleteOrModifyPost" will return true and the modify/delete section will appear
                 if (this.userIdOrder === this.connectedId || this.isAdmin === true) {
                     this.AuthorisationToDeleteOrModifyPost = true
                 }
-                
+                // Here we filter the Reactions array to differenciate the ones that are likes OR dislikes
+                // and store their respective number in the data
                 this.nbOfLikes = this.Reactions.filter(i => i.type === true).length;
                 this.nbOfDislikes = this.Reactions.filter(i => i.type === false).length;
             })
         }
     },
-    mounted() {
-        
-    },
     methods: {
+        // Method that shows a preview image when a file is selected
         selectFile() {
             this.file = this.$refs.file.files[0];
             this.imgPreview = URL.createObjectURL(this.file);
         },
+        // Method that sends the form informations to the backend to modify a specific post
         updatePost() {
             let titleRESULT = this.TitleRGX.test(this.title);
             let contentRESULT = this.ContentRGX.test(this.content);
@@ -187,6 +207,7 @@ export default {
                 })
             }
         },
+        // Method that makes a new axios call to get data from a specific post
         recallSinglePost() {
             axios.get('http://localhost:3000/api/posts/' +  this.$route.params.id, {headers: {'Authorization': 'Bearer ' + localStorage.getItem('token')}})
             .then(res => {
@@ -198,6 +219,7 @@ export default {
             this.nbOfDislikes = this.Reactions.filter(i => i.type === false).length;
             })
         },
+        // Method that request to the backend to delete a specific post
         deletePost() {
             axios.delete('http://localhost:3000/api/posts/' +  this.$route.params.id, {headers: {'Authorization': 'Bearer ' + localStorage.getItem('token')}, data: {userIdOrder: this.userIdOrder}})
             .then(res => {
@@ -208,16 +230,7 @@ export default {
                 this.error = err.response.data.error;
             })
         },
-        deleteComment(commentId, commentUserId) {
-            axios.delete('http://localhost:3000/api/posts/' +  this.$route.params.id + '/comment/' + commentId, {headers: {'Authorization': 'Bearer ' + localStorage.getItem('token')}, data: {userIdOrder: commentUserId}})
-            .then(res => {
-            console.log(res);
-            this.recallSinglePost();
-            }, err => {
-                console.log(err.response);
-                this.error = err.response.data.error;
-            })
-        },
+        // Method that makes an axios call to the backend to create a new LIKE on the post
         likePost(postId) {
             let reaction = {
                 like: this.like
@@ -231,6 +244,7 @@ export default {
                 this.error = err.response.data.error;
             })
         },
+        // Method that makes an axios call to the backend to create a new DISLIKE on the post
         dislikePost(postId) {
             let reaction = {
                 like: this.dislike
@@ -244,6 +258,7 @@ export default {
                 this.error = err.response.data.error;
             })
         },
+        // Method that send the comment form infos to create a new comment
         commentPost(postId) {
             let commentRESULT = this.CommentRGX.test(this.comment);
 
@@ -264,6 +279,7 @@ export default {
                 })
             }
         },
+        // Method that will execute an axios call to get informations about the currently connected user
         getUserConnectedInfos() {
             axios.get('http://localhost:3000/api/users/me', {headers: {'Authorization': 'Bearer ' + localStorage.getItem('token')}})
             .then(res => {
@@ -272,6 +288,7 @@ export default {
                 this.isAdmin = res.data.isAdmin;
             }, err => {
                 console.log(err.response);
+                // if the response is an error (token expired), we are redirected to the login page
                 this.$router.push('/login')
                 this.error = err.response.data.error;
             })

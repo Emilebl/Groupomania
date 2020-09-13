@@ -11,6 +11,7 @@
             <img v-bind:src="imgUrl" alt="" class="post-image wallsinglepost-elements">
             <div class="reaction-infos-wallsinglepost wallsinglepost-elements">
                 <p>
+                    <!-- Here we display the number of comments -->
                     <span>{{ comments.length }} Commentaires <font-awesome-icon :icon="['fas', 'comments']" /></span>
                 </p>
                 <p class="like-dislike-buttons wallsinglepost-elements">

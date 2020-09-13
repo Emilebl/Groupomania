@@ -1,4 +1,5 @@
 <template>
+    <!-- This element displays a single comment inside the comment list -->
     <div class="comment-container">
         <div class="comment-user-infos">
             <img v-bind:src="profilePic" alt="photo-de-profil-du-commenteur" class="comment-user-profile-pic">
@@ -7,6 +8,7 @@
                 <p class="comment-content">{{ content }}</p>
             </div>
         </div>
+        <!-- This button to delete the comment is only shown if "AuthorisationToDeleteComment" returns 'true' -->
         <button class="delete-comment-button" v-show="AuthorisationToDeleteComment" @click="deleteComment(commentId, userId)"><font-awesome-icon :icon="['fas', 'trash']" /></button>
         {{ error }}
     </div>
@@ -17,6 +19,7 @@ import axios from 'axios';
 
 export default {
     Name: 'Comment',
+    // These are the props whose values have been transmitted by the parent component
     props: {
         profilePic: String,
         firstName: String,
@@ -30,16 +33,21 @@ export default {
     },
     data() {
         return {
+            // This will be returning 'true' or 'false' depending on the connected user's rights on the comment
             AuthorisationToDeleteComment: '',
             error: ''
         }
     },
     mounted() {
+        // If the user connected is also the creator of the comment
+        // OR if the user connected is and Admin
+        // "AuthorisationToDeleteComment" will return true and the delete button will appear
         if (this.userId === this.connectedUserId || this.isAdmin === true) {
             this.AuthorisationToDeleteComment = true
         }
     },
     methods: {
+        // Method that sends to the backend a request to delete a specific comment
         deleteComment(commentId, commentUserId) {
             axios.delete('http://localhost:3000/api/posts/' +  this.postId + '/comment/' + commentId, {headers: {'Authorization': 'Bearer ' + localStorage.getItem('token')}, data: {userIdOrder: commentUserId}})
             .then(res => {

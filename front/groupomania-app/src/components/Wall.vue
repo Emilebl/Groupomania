@@ -14,7 +14,7 @@
                 <div v-for="post in postList" :key="`${post.id}-${post.UserReacts.filter(i => i.type === true).length}-${post.UserReacts.filter(i => i.type === false).length}`" class="single-post-container">
                     <!-- Each time this <div> is created it will insert the component "SingleWallPost" 
                     which displays all the elements of ONE post
-                    we will also pass in informations to update the component's props -->
+                    we will also pass it informations to update the component's props -->
                     <SingleWallPost @newReaction="recallWall"
                     v-bind:title="post.title" 
                     v-bind:userFirstName="post.User.firstName"
@@ -97,6 +97,7 @@ export default {
                 this.isAdmin = res.data.isAdmin;
             }, err => {
                 console.log(err.response);
+                // if the response is an error (token expired), we are redirected to the login page
                 this.$router.push('/login')
                 this.error = err.response.data.error;
             })
