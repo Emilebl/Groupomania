@@ -25,17 +25,21 @@ export default {
     name: 'Login',
     data () {
         return {
+            // Data to catch what the user will write in the form inputs, using v-model
             email: '',
             password: '',
             signupUrl: '/signup',
 
             error: '',
-
+            
+            // Regex for the inputs
             emailRGX: /^[a-z0-9._-]+@[a-z0-9.-]{2,}[.][a-z]{2,3}$/,
             passwordRGX: /((?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,20})/
         }
     },
     methods: {
+        // Function that sends the form infos to the backend to Login the user
+        // and that sets the given token to the localstorage
         login() {
             let emailRESULT = this.emailRGX.test(this.email);
             let passwordRESULT = this.passwordRGX.test(this.password);

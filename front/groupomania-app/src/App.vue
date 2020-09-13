@@ -7,6 +7,9 @@
 </template>
 
 <script>
+
+// Header and Footer are displayed on every page of the app
+
 import Header from './components/Header';
 import Footer from './components/Footer';
 
@@ -20,6 +23,9 @@ export default {
 </script>
 
 <style>
+
+/* Styling for general elements  */
+
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;

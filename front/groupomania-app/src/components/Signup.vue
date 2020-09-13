@@ -46,6 +46,7 @@ export default {
     name: 'Signup',
     data () {
         return {
+            // Data to catch what the user will write in the form inputs, using v-model
             firstName: '',
             lastName: '',
             email: '',
@@ -58,6 +59,7 @@ export default {
 
             error: '',
 
+            // Regex for the inputs
             nameRGX: /^[a-zA-ZÀ-ÿ ]+$/,
             emailRGX: /^[a-z0-9._-]+@[a-z0-9.-]{2,}[.][a-z]{2,3}$/,
             passwordRGX: /((?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,20})/,
@@ -65,10 +67,12 @@ export default {
         }
     },
     methods:{
+        // Function that shows a preview image when a file is selected
         selectFile() {
         this.file = this.$refs.file.files[0];
         this.imgPreview = URL.createObjectURL(this.file);
         },
+        // Function that sends the form infos to the backend to create a new user, and redirects to /login page
         register() {
             let firstNameRESULT = this.nameRGX.test(this.firstName);
             let lastNameRESULT = this.nameRGX.test(this.lastName);
@@ -138,5 +142,4 @@ export default {
     padding: 15px 32px;
     margin-top: 3%;
 }
-
 </style>
