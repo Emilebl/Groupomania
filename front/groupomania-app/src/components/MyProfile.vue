@@ -1,5 +1,6 @@
 <template>
     <div class="myprofile-component">
+        <!-- This section displays the profile informations about the currently connected user -->
         <section class="profile-infos-container">
             <h1 >Informations du profil</h1>
             <p class="profile-infos-element"><span class="profile-infos-span">Nom: </span>{{profileInfos.lastName}}</p>
@@ -8,6 +9,7 @@
             <p class="profile-infos-element"><span class="profile-infos-span">Bio: </span>{{profileInfos.bio}}</p>
             <p class="profile-infos-element"><span class="profile-infos-span">E-mail: </span>{{profileInfos.email}}</p>
         </section>
+        <!-- This section contains a form to modify infos on the profile -->
         <section class="form-container">
             <h1 class="modify-profile-title">Modifications du profil</h1>
             <form @submit.prevent="updateProfile" enctype="multipart/form-data" id="form" class="validate">
@@ -35,6 +37,7 @@
                     <input type="submit" value="Modifier le profil !">
                     {{ error }}
                 </div>
+                <!-- This button deletes the profile when clicked -->
                 <button class="delete-profile-button" @click="deleteProfile">Supprimer le Profil</button>
             </form>
         </section>
@@ -47,6 +50,7 @@ export default {
     name: 'MyProfile',
     data () {
         return {
+            // These datas will reflect what is written in the form inputs, using v-model
             profileInfos: '',
             firstName: '',
             lastName: '',
@@ -56,15 +60,18 @@ export default {
 
             error: '',
 
+            // REGEX for the name inputs, and the bio input
             nameRGX: /^$|^[a-zA-ZÀ-ÿ ]+$/,
             TextareaRGX: /^[\s\S]{0,100}$/
         }
     },
+    // When this component is created, the app will redirect to the /login page if the localstorage has no token
     created() {
         if (localStorage.getItem('token') === null) {
             this.$router.push('/login')
         }
     },
+    // When mounted, it will call the backend to get the profile informations of the connected user
     mounted() {
         axios.get('http://localhost:3000/api/users/me', {headers: {'Authorization': 'Bearer ' + localStorage.getItem('token')}})
         .then(res => {
@@ -72,15 +79,18 @@ export default {
             this.profileInfos = res.data;
         }, err => {
             console.log(err.response);
+            // if the response is an error (token expired), we are redirected to the login page
             this.$router.push('/login')
             this.error = err.response.data.error;
         })
     },
     methods: {
+        // Method that shows a preview image when a file is selected
         selectFile() {
             this.file = this.$refs.file.files[0];
             this.imgPreview = URL.createObjectURL(this.file);
         },
+        // Method that sends the form informations to the backend to modify the profile
         updateProfile() {
             let firstNameRESULT = this.nameRGX.test(this.firstName);
             let lastNameRESULT = this.nameRGX.test(this.lastName);
@@ -112,6 +122,7 @@ export default {
                 })
                 }
         },
+        // Method that makes a new axios call to get the profile infos
         recallProfile() {
             axios.get('http://localhost:3000/api/users/me', {headers: {'Authorization': 'Bearer ' + localStorage.getItem('token')}})
             .then(res => {
@@ -123,6 +134,7 @@ export default {
                 this.error = err.response.data.error;
             })
         },
+        // Method that makes a axios request to delete the profile
         deleteProfile() {
             axios.delete('http://localhost:3000/api/users/delete', {headers: {'Authorization': 'Bearer ' + localStorage.getItem('token')}})
             .then(res => {
