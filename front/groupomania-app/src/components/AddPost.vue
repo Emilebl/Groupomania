@@ -1,4 +1,5 @@
 <template>
+    <!-- This section contains the form to create a new post -->
     <section class="form-container">
         <div class="form-title">
             <img v-bind:src="profilePicUrl" class="add-post-user-pp" alt="user-photo-de-profil-ajout-post"> 
@@ -33,6 +34,7 @@
 import axios from 'axios';
 export default {
     name: 'AddPost',
+    // These are the props whose values have been transmitted by the parent component
     props: {
         firstName: String,
         lastName: String,
@@ -40,22 +42,26 @@ export default {
     },
     data () {
         return {
+            // These data will reflect what is written in the form inputs, using v-model
             title: '',
             content: '',
             file: '',
             imgPreview: '',
 
             error: '',
-            
+
+            // Regex for the post title, and post content
             TitleRGX: /^[\s\S]{0,50}$/,
             ContentRGX: /^[\s\S]{0,300}$/
         }
     },
     methods: {
+        // Method that shows a preview image when a file is selected
         selectFile() {
             this.file = this.$refs.file.files[0];
             this.imgPreview = URL.createObjectURL(this.file);
         },
+        // Method that will send the form infos to the backend to create a new post
         addPost() {
             let titleRESULT = this.TitleRGX.test(this.title);
             let contentRESULT = this.ContentRGX.test(this.content);
@@ -77,6 +83,7 @@ export default {
                     this.content = '';
                     this.file = '';
                     this.imgPreview = '';
+                    // When post creation has succeed, it will emit a new event to the parent component
                     this.$emit('newPost');
                 }, err => {
                     console.log(err.response);

@@ -67,12 +67,12 @@ export default {
         }
     },
     methods:{
-        // Function that shows a preview image when a file is selected
+        // Method that shows a preview image when a file is selected
         selectFile() {
         this.file = this.$refs.file.files[0];
         this.imgPreview = URL.createObjectURL(this.file);
         },
-        // Function that sends the form infos to the backend to create a new user, and redirects to /login page
+        // Method that sends the form infos to the backend to create a new user, and redirects to /login page
         register() {
             let firstNameRESULT = this.nameRGX.test(this.firstName);
             let lastNameRESULT = this.nameRGX.test(this.lastName);

@@ -1,4 +1,5 @@
 <template>
+    <!-- This component will display the informations of a single post inside the list of the wall component -->
     <div class="single-post-wallsinglepost">
         <div class="post-infos-wallsinglepost">
             <div class="user-infos-wallsinglepost wallsinglepost-elements">
@@ -13,11 +14,14 @@
                     <span>{{ comments.length }} Commentaires <font-awesome-icon :icon="['fas', 'comments']" /></span>
                 </p>
                 <p class="like-dislike-buttons wallsinglepost-elements">
+                    <!-- Here we display the number of likes and dislikes on the post,
+                    and the buttons that will add/remove likes/dislikes when clicked -->
                     <span class="like-span-wallsinglepost">{{ nbOfLikes }} <button class="like-button-singlewallpost reaction-button-singlewallpost" @click="likePost(postId)" ><font-awesome-icon :icon="['fas', 'thumbs-up']" /></button></span>
                     <span class="dislike-span-wallsinglepost">{{ nbOfDislikes }} <button class="dislike-button-singlewallpost reaction-button-singlewallpost" @click="dislikePost(postId)" ><font-awesome-icon :icon="['fas', 'thumbs-down']" /></button></span>
                 </p>
             </div>
         </div>
+        <!-- This button redirects to the page of a specific post, where the comments are displayed and can be created -->
         <button class="go-to-singlepost-button" @click="goToSinglePost">Détails du post</button>
     </div>
 </template>
@@ -26,6 +30,7 @@
 import axios from 'axios';
 export default {
     name: 'SingleWallPost',
+    // These are the props whose values have been transmitted by the parent component
     props: {
         title: String,
         userFirstName: String,
@@ -40,17 +45,22 @@ export default {
     },
     data() {
         return {
+            // Declaring empty strings that will be filled with the number of likes and dislikes on the post
             nbOfLikes: '',
             nbOfDislikes: '',
+            // Storing data that contains the value sent in the body of the like/dislike request
             like : 1,
             dislike : -1,
         }
     },
+    // When mounted, the component will filter the array of reactions on the post
+    // To differenciate the ones that are likes OR dislikes, and store their respective number in the data
     mounted() {
         this.nbOfLikes = this.reactions.filter(i => i.type === true).length;
         this.nbOfDislikes = this.reactions.filter(i => i.type === false).length;
     },
     methods: {
+        // Method that makes an axios call to the backend to create a new LIKE on the post
         likePost(postId) {
             let reaction = {
                 like: this.like
@@ -58,12 +68,14 @@ export default {
             axios.post('http://localhost:3000/api/posts/'+ postId + '/react', reaction, {headers: {'Authorization': 'Bearer ' + localStorage.getItem('token')}})
             .then(res => {
                 console.log(res);
+                // When the like creation has succeed, it will emit a new event to the parent component
                 this.$emit('newReaction');
             }, err => {
                 console.log(err.response);
                 this.error = err.response.data.error;
             })
         },
+        // Method that makes an axios call to the backend to create a new DISLIKE on the post
         dislikePost(postId) {
             let reaction = {
                 like: this.dislike
@@ -71,12 +83,14 @@ export default {
             axios.post('http://localhost:3000/api/posts/'+ postId + '/react', reaction, {headers: {'Authorization': 'Bearer ' + localStorage.getItem('token')}})
             .then(res => {
                 console.log(res);
+                // When the dislike creation has succeed, it will emit a new event to the parent component
                 this.$emit('newReaction');
             }, err => {
                 console.log(err.response);
                 this.error = err.response.data.error;
             })
         },
+        // Method that redirects to the single post page, where you can see the post comments and add some
         goToSinglePost() {
             this.$router.push(this.linkUrl);
         }
