@@ -14,6 +14,7 @@ export default {
             year: ''
         }
     },
+    // When the component is mounted, this function will get the current year and store its value in "year"
     mounted() {
         this.year = new Date().getFullYear();
     }
