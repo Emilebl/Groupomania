@@ -12,6 +12,10 @@
 export default {
     name: 'Header',
     computed: {
+      // Computed property that returns 'true' or 'false' depending on which page the app is on
+      // if the url is "/signup" of "/login", it will return 'false' and the <nav> will not show
+      // if the url is something else, it will return true and the <nav> will show
+      // (see "v-show" on the <nav> tag in html)
       alreadyConnected() {
         if(this.$route.path == "/signup" || this.$route.path == "/login" ) {
         return false
@@ -21,10 +25,13 @@ export default {
       }
     },
     methods: {
+        // Function that logs out the user by clearing the localstorage
+        // and redirecting the user to the /login page
         logout() {
             localStorage.clear();
             this.$router.push('/login');
         },
+        // Redirects the user to the /me page
         goToProfile() {
             this.$router.push('/me');
         }
@@ -49,7 +56,6 @@ header {
 }
 
 nav {
-    /* border: solid 1px black; */
     width: 40%;
     height: auto;
     padding: 1%;
@@ -58,7 +64,7 @@ nav {
 }
 
 .header-button {
-  background-color: #42f5b0; /* Green */
+  background-color: #42f5b0;
   color: #7842f5;
   border: none;
   border-radius: 10px;
