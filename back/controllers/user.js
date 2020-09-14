@@ -7,7 +7,7 @@ let verifyInput = require('../utils/verifyInput')
 
 // Signup / User Creation
 exports.signup = (req, res) => {
-    // Recuperation of the request parameters
+    // Recuperation of the request body
     let email = req.body.email;
     let firstName = req.body.firstName;
     let lastName = req.body.lastName;
@@ -70,7 +70,7 @@ exports.signup = (req, res) => {
 
 // User login
 exports.login = (req, res) => {
-    // Recuperation of the request parameters
+    // Recuperation of the request body
     let email = req.body.email;
     let password = req.body.password;
 
@@ -107,7 +107,7 @@ exports.login = (req, res) => {
 
 // Get informations from the User profile
 exports.getUserProfile = (req, res) => {
-    // Recuperation of the request parameters
+    // Recuperation of the request body
     let id = utils.getUserId(req.headers.authorization)
     // Find the user that has the same id as the one from the current token (in the request header)
     models.User.findOne({
@@ -123,7 +123,7 @@ exports.updateProfile = (req, res) => {
     
     // We take the id from the current token (in the request header)
     let userId = utils.getUserId(req.headers.authorization);
-    // Recuperation of the request parameters
+    // Recuperation of the request body
     const lastName = req.body.lastName;
     const firstName = req.body.firstName;
     const bio = req.body.bio;

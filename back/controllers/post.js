@@ -4,29 +4,33 @@ let utils = require('../utils/jwtUtils');
 const fs = require('fs');
 const post = require('../models/post');
 
-//Création d'un message
+// Create a post
 exports.createPost = (req, res) => {
-    //Declaration de l'url de l'image
+    // Declaration of the imageURl variable
     let attachmentURL
-    //identifier qui créé le message
+    // Identify the post creator by finding the user that has the same id as the one from the token
     let id = utils.getUserId(req.headers.authorization)
     models.User.findOne({
         attributes: ['id', 'firstName', 'lastName'],
         where: { id: id }
     })
     .then(user => {
+        // if user found
         if (user !== null) {
-            //Récupération du corps du post
+            // Recuperation of the request body
             let title = req.body.title;
             let content = req.body.content;
+            // The attachment can be null
             if (req.file != undefined) {
                 attachmentURL = `${req.protocol}://${req.get('host')}/images/${req.file.filename}`;
             }
             else {
                 attachmentURL == null
             };
+            // If the request contains only empty fields, we send this error message
             if ((title == 'null' && content == 'null' && attachmentURL == null)) {
                 res.status(400).json({ error: 'Rien à publier' })
+            // Else we create the post
             } else {
                 models.Post.create({
                     title: title,
@@ -39,18 +43,20 @@ exports.createPost = (req, res) => {
                 })
                 .catch((err) => {
                     res.status(500).json(err)
-                    console.log('ici')
                 })
             };
         } else {
+            // If user not found we send an error
             res.status(400).json(error);
         }
     })
     .catch(error => res.status(500).json(error));
 },
 
-//Afficher les posts sur le mur
+// Get all posts
 exports.getAllPosts = (req, res) => {
+    // Get every post from the data base
+    // Including specific informations of the post creator, the post reactions and the post comments
     models.Post.findAll({
         include: [{
             model: models.User,
@@ -72,9 +78,11 @@ exports.getAllPosts = (req, res) => {
         }],
         order: [['createdAt', 'DESC']]
     })
+    // If the number of posts is not null, we send the list in the response
     .then(posts => {
         if (posts.length > null) {
             res.status(200).json(posts)
+            // else, we send this error message
         } else {
             res.status(404).json({ error: 'Pas de post à afficher' })
         }
@@ -82,8 +90,10 @@ exports.getAllPosts = (req, res) => {
     .catch(err => res.status(500).json(err))
 },
 
-//Afficher un post spécifique
+// Get one specific post
 exports.getOnePost = (req, res) => {
+    // We find the post that has the same id as the one in the request parameters
+    // Including specific informations of the post creator, the post reactions and the post comments
     models.Post.findOne({
         where: { id: req.params.id},
         include: [{
@@ -104,6 +114,9 @@ exports.getOnePost = (req, res) => {
             }]  
         }]
     })
+    // We send 2 objects in the response: 
+    // the infos of the connected user
+    // and the found post infos
     .then(post => {
         let userConnectedId = utils.getUserId(req.headers.authorization);
         let postAndUserInfo = {
@@ -115,24 +128,27 @@ exports.getOnePost = (req, res) => {
     .catch(err => res.status(500).json(err))
 },
 
-//Modification d'un post
+// Modify one post
 exports.updatePost = (req, res) => {
-    //récupération de l'id du demandeur pour vérification
+    // We retrieve the id of the post creator
     let userOrder = req.body.userIdOrder;
-    //Declaration de l'url de l'image
+    // Declaration of the image url variable
     let attachmentURL
-    //identifier qui créé le message
+    // We find the user that is currently connected
     let id = utils.getUserId(req.headers.authorization)
     models.User.findOne({
         attributes: ['id', 'email', 'firstName', 'lastName', 'isAdmin'],
         where: { id: id }
     })
     .then(user => {
-        console.log(user)
+        // If the user is also the creator of the post we want to modify
+        // OR if the user is set as an admin in the database
+        // We modify the post
         if (user && (user.isAdmin == true || user.id == userOrder)) {
-             //Récupération du corps du post
+             // Recuperation of the request body
             let title = req.body.newTitle;
             let content = req.body.newContent;
+            // We allow the attachment to be null
             if (req.file != undefined) {
                 attachmentURL = `${req.protocol}://${req.get('host')}/images/${req.file.filename}`;
                 console.log(attachmentURL)
@@ -141,6 +157,7 @@ exports.updatePost = (req, res) => {
             else {
                 attachmentURL == null
             };
+            // We modify the post with the new informations. If a field was not filled in the request it will stay the same as before
             models.Post.update({
                 title: (title ? title : post.title),
                 content: (content ? content : post.content),
@@ -148,28 +165,31 @@ exports.updatePost = (req, res) => {
             },
             { where: { id: req.params.id }}
             )
-            .then(() => {res.status(201).json({confirmation: 'post modifié avec succès'})})
+            .then(() => {res.status(201).json({confirmation: 'Post modifié avec succès'})})
             .catch((err) => {res.status(500).json(err)})
-         } else {
+        // If the connected user is neither the post creator or an admin
+        // The modification is not allowed and we send this error message
+        } else {
             res.status(401).json({ error: 'Utilisateur non autorisé à modifier ce post' })
-         }
+        }
     })
     .catch(() => res.status(500).json(error));
 },
     
-//Suppression d'un post
+// Delete a post
 exports.deletePost = (req, res) => {
-//req => userId, postId, user.isAdmin
+    //  Recuperation of the request body
     let userOrder = req.body.userIdOrder;
-    console.log(userOrder);
-    //identification du demandeur
+    // Identification of the user currently connected
     let id = utils.getUserId(req.headers.authorization)
     models.User.findOne({
         attributes: ['id', 'email', 'firstName','lastName', 'isAdmin'],
         where: { id: id }
     })
     .then(user => {
-        //Vérification que le demandeur est soit l'admin soit le poster (vérif aussi sur le front)
+        // If the user is also the creator of the post we want to delete
+        // OR if the user is set as an admin in the database
+        // We delete the post
         if (user && (user.isAdmin == true || user.id == userOrder)) {
             console.log('Suppression du post id :', req.params.id);
             models.Post
@@ -177,10 +197,8 @@ exports.deletePost = (req, res) => {
                 where: { id: req.params.id }
             })
             .then((postFind) => {
-                console.log(postFind)
                 if (postFind.attachment) {
                     const filename = postFind.attachment.split('/images/')[1];
-                    console.log(filename);
                     fs.unlink(`images/${filename}`, () => {
                         models.Post
                         .destroy({
@@ -200,23 +218,31 @@ exports.deletePost = (req, res) => {
                 }
             })
             .catch(err => res.status(500).json(err))
-        } else { console.log(userOrder); console.log(user.id);
-            res.status(403).json('Utilisateur non autorisé à supprimer ce post') }
+        // If the connected user is neither the post creator or an admin
+        // The deletion is not allowed and we send this error message
+        } else {
+        res.status(403).json('Utilisateur non autorisé à supprimer ce post') }
     })
     .catch(error => res.status(500).json(console.log(error)));
 },
-        
+
+// React to a post (Like or Dislike)
 exports.reactToPost = (req, res, next) => {
     
-    console.log(req.body.like)
+    // We identify the currently connected user
 
     let userId = utils.getUserId(req.headers.authorization)
 
     models.UserReact.findOne({where: {PostId: req.params.id, UserId: userId}})
+
+    // If a reaction exists with the connected user id AND the id of the post being reacted to
+    // We toggle the reaction
+    // If not we create a new reaction
     .then(userAlreadyReacted => {
         if (userAlreadyReacted) return toggleReact();
         addReact();
-        // Declarations of functions
+    
+    // Declarations of functions
 
     // Function that modifies the already existing reaction
     function toggleReact() {
@@ -291,7 +317,7 @@ exports.reactToPost = (req, res, next) => {
 },
 
 exports.commentPost = (req, res) => {
-    //identify who creates the comment
+    // Identify the currently connected user
     let id = utils.getUserId(req.headers.authorization)
     models.User.findOne({
         attributes: ['id', 'firstName', 'lastName'],
@@ -299,11 +325,13 @@ exports.commentPost = (req, res) => {
     })
     .then(user => {
         if (user !== null) {
-            //Récupération du corps du post
+            // Recuperation of the request body
             let content = req.body.content;
             let postId = req.params.id;
+            // if the field is empty, we send this error message
             if (content == 'null' ) {
                 res.status(400).json({ error: 'Rien à commenter' })
+            // if not we create the comment
             } else {
             models.Comment.create({
                 content: content,
@@ -315,7 +343,6 @@ exports.commentPost = (req, res) => {
                 })
                 .catch((err) => {
                     res.status(500).json(err)
-                    console.log('ici')
                 })
             };
         } else {
@@ -326,17 +353,19 @@ exports.commentPost = (req, res) => {
 },
 
 exports.deleteComment = (req, res) => {
-    //req => userId, postId, user.isAdmin
+    // We recuperate the request body
     let userOrder = req.body.userIdOrder;
-    console.log(userOrder);
-    //identification du demandeur
+    
+    // Identification of the currently connected user
     let id = utils.getUserId(req.headers.authorization)
     models.User.findOne({
         attributes: ['id', 'email', 'firstName','lastName', 'isAdmin'],
         where: { id: id }
     })
     .then(user => {
-        //Vérification que le demandeur est soit l'admin soit le posteur (vérif aussi sur le front)
+        // If the user is also the creator of the comment we want to delete
+        // OR if the user is set as an admin in the database
+        // We delete the comment
         if (user && (user.isAdmin == true || user.id == userOrder)) {
             console.log('Suppression du comment id :', req.params.comid);
             models.Comment
@@ -344,7 +373,6 @@ exports.deleteComment = (req, res) => {
                 where: { id: req.params.comid }
             })
             .then((commentFind) => {
-                console.log(commentFind)
                 models.Comment
                 .destroy({
                     where: { id: commentFind.id }
@@ -353,7 +381,9 @@ exports.deleteComment = (req, res) => {
                 .catch(err => res.status(500).json(err))
             })
             .catch(err => res.status(500).json(err))
-        } else { console.log(userOrder); console.log(user.id);
+        // If the connected user is neither the comment creator or an admin
+        // The deletion is not allowed and we send this error message
+        } else {
         res.status(403).json('Utilisateur non autorisé à supprimer ce commentaire') }
     })
     .catch(error => res.status(500).json(console.log(error)));
