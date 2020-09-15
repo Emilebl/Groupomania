@@ -65,11 +65,11 @@
             <form id="form" class="validate" @submit.prevent="updatePost" enctype="multipart/form-data">
                 <div class="form-field">
                     <label for="title">Titre du post</label>
-                    <input type="text" v-model="title" name="title" id="title" required>
+                    <input type="text" v-model="title" name="title" id="title">
                 </div>
                 <div class="form-field">
                     <label for="content">Contenu du post (texte)</label>
-                    <input type="text" v-model="content" name="content" id="content" required>
+                    <input type="text" v-model="content" name="content" id="content">
                 </div>
                 <div class="form-field">
                     <label for="attachement">Image: </label>
@@ -84,7 +84,7 @@
                     {{ error }}
                 </div>
                 <button class="delete-post-button" v-show="AuthorisationToDeleteOrModifyPost" @click="deletePost">Supprimer le post</button>
-                    {{ error }}
+                    {{ deleteError }}
             </form>
         </section>
     </div>
@@ -134,6 +134,7 @@ export default {
             dislike : -1,
 
             error: '',
+            deleteError: '',
             // REGEX for the post title, content, and the comment content
             TitleRGX: /^[\s\S]{0,50}$/,
             ContentRGX: /^[\s\S]{0,300}$/,
@@ -227,7 +228,7 @@ export default {
             this.$router.push('/')
             }, err => {
                 console.log(err.response);
-                this.error = err.response.data.error;
+                this.deleteError = err.response.data.error;
             })
         },
         // Method that makes an axios call to the backend to create a new LIKE on the post
