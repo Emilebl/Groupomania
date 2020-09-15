@@ -1,14 +1,14 @@
 // Imports
 const jwt = require('jsonwebtoken');
 
-// Exportation de la fonction d'authentification
+// Authentification
 module.exports = (req, res, next) => {
-    // Récupération du token dans les paramètres
+    // We recuperate the token in the request headers
     const authHeader = req.headers.authorization;
 
-    // Si l'utilisateur possède une autorisation,
-    // on déclare le token et on le vérifie, s'il n'y a pas
-    // d'erreur, on le next, sinon on renvoie un statut 403
+    // If the user has a session token,
+    // We verify that it is not expired
+    // if it is we send back a 403 error
     if (authHeader) {
         const token = authHeader.split(' ')[1];
 
@@ -20,7 +20,7 @@ module.exports = (req, res, next) => {
             next();
         });
     }
-    // Sinon, on renvoie le statut 401 Unauthorized
+    // If there is no token in the headers, the access is denied
     else {
         res.status(401).json({error:"accès non authorisé"});
     }

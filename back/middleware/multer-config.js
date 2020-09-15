@@ -1,7 +1,7 @@
-// Importation des packages
+// Import
 const multer = require('multer');
 
-// Déclaration des formats autorisés
+// Declaration of the allowed formats
 const MIME_TYPES = {
 	'image/jpg': 'jpg',
 	'image/jpeg': 'jpg',
@@ -9,9 +9,8 @@ const MIME_TYPES = {
 	'image/gif': 'gif',
 };
 
-// Déclaration de storage qui permet de sauvegarder les images
-// en leur indiquant la destination, et en changeant le nom
-// de l'image ainsi que l'extension
+// Declaration of the storage to place the images
+// indicating the destination and changing their names and extension
 const storage = multer.diskStorage({
 	destination: (req, file, callback) => {
 		callback(null, 'images');

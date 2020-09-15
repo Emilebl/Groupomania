@@ -1,9 +1,10 @@
-/*Gestion de jwt*/
+// This file handles the jsonwebtoken creation and decoding
 
 //import
 let jwt = require('jsonwebtoken')
 
 module.exports = {
+  // Token creation
   tokenSign : 'RANDOM_TOKEN_SECRET',
   generateToken: function (user) {
     return jwt.sign({
@@ -15,6 +16,7 @@ module.exports = {
         expiresIn: '12h'
       })
   },
+  // Token decoding to retrieve the id
   getUserId: function (data) {
     if (data.length > 1) {
       let token = data.split(' ')[1];
