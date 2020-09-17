@@ -26,14 +26,14 @@ CREATE TABLE `comments` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `postId` int(11) NOT NULL,
   `userId` int(11) NOT NULL,
-  `content` varchar(255) DEFAULT NULL,
+  `content` varchar(255) NOT NULL,
   `createdAt` datetime NOT NULL,
   `updatedAt` datetime NOT NULL,
   PRIMARY KEY (`id`),
   KEY `postId` (`postId`),
   KEY `userId` (`userId`),
   CONSTRAINT `comments_ibfk_1` FOREIGN KEY (`postId`) REFERENCES `posts` (`id`) ON DELETE CASCADE,
-  CONSTRAINT `comments_ibfk_2` FOREIGN KEY (`userId`) REFERENCES `users` (`id`)
+  CONSTRAINT `comments_ibfk_2` FOREIGN KEY (`userId`) REFERENCES `users` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=43 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -64,7 +64,7 @@ CREATE TABLE `posts` (
   `updatedAt` datetime NOT NULL,
   PRIMARY KEY (`id`),
   KEY `userId` (`userId`),
-  CONSTRAINT `posts_ibfk_1` FOREIGN KEY (`userId`) REFERENCES `users` (`id`)
+  CONSTRAINT `posts_ibfk_1` FOREIGN KEY (`userId`) REFERENCES `users` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=31 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -120,7 +120,7 @@ CREATE TABLE `userreacts` (
   KEY `postId` (`postId`),
   KEY `userId` (`userId`),
   CONSTRAINT `userreacts_ibfk_1` FOREIGN KEY (`postId`) REFERENCES `posts` (`id`) ON DELETE CASCADE,
-  CONSTRAINT `userreacts_ibfk_2` FOREIGN KEY (`userId`) REFERENCES `users` (`id`)
+  CONSTRAINT `userreacts_ibfk_2` FOREIGN KEY (`userId`) REFERENCES `users` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=182 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
