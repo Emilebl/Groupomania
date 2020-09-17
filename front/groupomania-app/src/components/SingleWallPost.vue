@@ -153,7 +153,7 @@ export default {
     margin-left: auto;
     margin-right: auto;
     border-radius: 3px;
-    width: 80%;
+    width: 70%;
     height: auto;
     object-fit: cover;
 

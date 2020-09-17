@@ -126,6 +126,7 @@ export default {
         recallProfile() {
             axios.get('http://localhost:3000/api/users/me', {headers: {'Authorization': 'Bearer ' + localStorage.getItem('token')}})
             .then(res => {
+                window.scrollTo(0,0);
                 console.log(res);
                 this.profileInfos = res.data;
             }, err => {

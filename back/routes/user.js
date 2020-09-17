@@ -1,7 +1,7 @@
 // Imports
 const express = require('express');
 const router = express.Router();
-const bouncer = require ("express-bouncer")(9000, 600000, 3);
+const bouncer = require ('express-bouncer')(9000, 600000, 3);
 const userCtrl = require('../controllers/user');
 const auth = require('../middleware/auth');
 const multer = require('../middleware/multer-config');

@@ -1,6 +1,6 @@
 <template>
     <header>
-        <router-link to="/"><img id="groupomania_logo" src="@/assets/icon-left-font-monochrome-white.svg" alt="groupomania-logo"></router-link>
+        <router-link to="/" @click="scrollToTop"><img id="groupomania_logo" src="@/assets/icon-left-font-monochrome-white.svg" alt="groupomania-logo"></router-link>
         <nav v-show="alreadyConnected">
             <button class="header-button" id="mon_profil_button" @click="goToProfile"><font-awesome-icon :icon="['fas', 'user']" /> Mon Profil</button>
             <button class="header-button" id="logout_button" @click="logout"><font-awesome-icon :icon="['fas', 'sign-out-alt']" /> Deconnexion</button>
@@ -28,12 +28,15 @@ export default {
         // Function that logs out the user by clearing the localstorage
         // and redirecting the user to the /login page
         logout() {
-            localStorage.clear();
-            this.$router.push('/login');
+          localStorage.clear();
+          this.$router.push('/login');
         },
         // Redirects the user to the /me page
         goToProfile() {
-            this.$router.push('/me');
+          this.$router.push('/me');
+        },
+        scrollToTop() {
+          window.scrollTo(0,0);
         }
     }
 }
@@ -41,6 +44,9 @@ export default {
 
 <style>
 header {
+    position: sticky;
+    top: 0;
+    z-index:200;
     background-color: #4287f5;
     width: 98%;
     padding: 1%;
