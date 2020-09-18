@@ -196,6 +196,7 @@ export default {
                 console.log(formData);
                 axios.put('http://localhost:3000/api/posts/' +  this.$route.params.id, formData, {headers: {'Authorization': 'Bearer ' + localStorage.getItem('token')}})
                 .then(res => {
+                    window.scrollTo(0,0);
                     console.log(res);
                     this.title = '';
                     this.content = '';
@@ -212,7 +213,6 @@ export default {
         recallSinglePost() {
             axios.get('http://localhost:3000/api/posts/' +  this.$route.params.id, {headers: {'Authorization': 'Bearer ' + localStorage.getItem('token')}})
             .then(res => {
-            window.scrollTo(0,0);
             console.log(res);
             this.post = res.data.singlePost;
             this.Reactions = res.data.singlePost.UserReacts;
