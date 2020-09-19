@@ -7,16 +7,16 @@
         </div>
         <form action="" @submit.prevent="addPost" enctype="multipart/form-data" id="form" class="validate">
             <div class="form-field">
-                <label for="title">Titre</label>
-                <input type="text" v-model="title" name="title" id="title" required>
+                <label for="titre">Titre</label>
+                <input type="text" v-model="title" name="titre" id="title" required>
             </div>
             <div class="form-field">
-                <label for="content">Contenu (texte)</label>
-                <textarea v-model="content" name="title" id="content" required  />
+                <label for="contenu">Contenu (texte)</label>
+                <textarea v-model="content" name="contenu" id="content" required  />
             </div>
             <div class="form-field">
-                <label for="attachement">Image</label>
-                <input type="file" ref="file" @change="selectFile" name="attachement" id="add-post-pic">
+                <label for="image">Image</label>
+                <input type="file" ref="file" @change="selectFile" name="image" id="add-post-pic">
             </div>
             <div class="form-field" id="post-preview-container">
                 <label v-if="imgPreview" for="preview">Aperçu de l'image:</label>

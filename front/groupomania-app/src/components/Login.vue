@@ -7,8 +7,8 @@
                 <input type="email" v-model="email" name="email" id="email" required>
             </div>
             <div class="form-field">
-                <label for="password">Mot de passe</label>
-                <input type="password" v-model="password" name="password" id="password" required>
+                <label for="mot-de-passe">Mot de passe</label>
+                <input type="password" v-model="password" name="mot-de-passe" id="password" required>
             </div>
             <div class="form-field" id="login-button-container">
                 <input type="submit" value="Se connecter !">

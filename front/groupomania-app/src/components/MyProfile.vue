@@ -3,8 +3,8 @@
         <!-- This section displays the profile informations about the currently connected user -->
         <section class="profile-infos-container">
             <h1 >Informations du profil</h1>
-            <p class="profile-infos-element"><span class="profile-infos-span">Nom: </span>{{profileInfos.lastName}}</p>
             <p class="profile-infos-element"><span class="profile-infos-span">Prénom: </span>{{profileInfos.firstName}}</p>
+            <p class="profile-infos-element"><span class="profile-infos-span">Nom: </span>{{profileInfos.lastName}}</p>
             <p class="profile-infos-element"><span class="profile-infos-span">Photo de Profil: </span><img v-bind:src="profileInfos.profilePic" alt="" id="myProfileImage"></p>
             <p class="profile-infos-element"><span class="profile-infos-span">Bio: </span>{{profileInfos.bio}}</p>
             <p class="profile-infos-element"><span class="profile-infos-span">E-mail: </span>{{profileInfos.email}}</p>
@@ -14,24 +14,24 @@
             <h1 class="modify-profile-title">Modifications du profil</h1>
             <form @submit.prevent="updateProfile" enctype="multipart/form-data" id="form" class="validate">
                 <div class="form-field">
-                    <label for="firstName">Nouveau Prénom</label>
-                    <input type="text" v-model="firstName" name="firstName" id="firstName">
+                    <label for="Prenom">Nouveau Prénom</label>
+                    <input type="text" v-model="firstName" name="Prenom" id="firstName">
                 </div>
                 <div class="form-field">
-                    <label for="lastName">Nouveau Nom de famille</label>
-                    <input type="text" v-model="lastName" name="lastName" id="lastName">
+                    <label for="Nom">Nouveau Nom de famille</label>
+                    <input type="text" v-model="lastName" name="Nom" id="lastName">
                 </div>
                 <div class="form-field">
                     <label for="bio">Nouvelle Bio</label>
                     <textarea v-model="bio" name="bio" id="bio" />
                 </div>
                 <div class="form-field">
-                    <label for="attachement">Nouvelle photo de profil </label>
-                    <input type="file" ref="file" @change="selectFile" name="attachement" id="modify-profile-pic">
+                    <label for="photo-de-profil">Nouvelle photo de profil </label>
+                    <input type="file" ref="file" @change="selectFile" name="photo-de-profil" id="modify-profile-pic">
                 </div>
                 <div class="form-field" id="post-preview-container">
-                    <label v-if="imgPreview" for="preview">Aperçu de l'image:</label>
-                    <img id="post-preview" v-if="imgPreview" :src="imgPreview" />
+                    <label v-if="imgPreview" for="aperçu-photo">Aperçu de l'image:</label>
+                    <img id="post-preview" v-if="imgPreview" :src="imgPreview" alt="aperçu-de-la-photo-de-profil" />
                 </div>
                 <div class="form-example">
                     <input type="submit" value="Modifier le profil !">

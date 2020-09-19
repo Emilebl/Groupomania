@@ -2,7 +2,7 @@
     <!-- This element displays a single comment inside the comment list -->
     <div class="comment-container">
         <div class="comment-user-infos">
-            <img v-bind:src="profilePic" alt="photo-de-profil-du-commenteur" class="comment-user-profile-pic">
+            <img v-bind:src="profilePic" alt="photo-de-profil-du-créateur-du-commentaire" class="comment-user-profile-pic">
             <div class="comment-text-area">
                 <span class="comment-creator-name" >{{ firstName }} {{ lastName }}</span> a commenté:
                 <p class="comment-content">{{ content }}</p>

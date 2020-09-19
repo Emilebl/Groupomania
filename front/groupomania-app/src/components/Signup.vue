@@ -4,31 +4,31 @@
         <form @submit.prevent="register" enctype="multipart/form-data" action="" id="form" class="validate">
             <div class="form-field">
                 <label for="Prenom">Prénom</label>
-                <input type="text" v-model="firstName" name="Prenom" id="prenom-signup" placeholder="votre prénom..." required />
+                <input type="text" v-model="firstName" name="Prenom" id="prenom-signup" required />
             </div>
             <div class="form-field">
                 <label for="Nom">Nom</label>
-                <input type="text" v-model="lastName" name="Nom" id="nom-signup" placeholder="votre nom..." required />
+                <input type="text" v-model="lastName" name="Nom" id="nom-signup" required />
             </div>
             <div class="form-field">
-                <label for="email-input">Email</label>
-                <input type="email" v-model="email" name="email-input" id="email-signup" placeholder="example@domain.com" required />
+                <label for="email">Email</label>
+                <input type="email" v-model="email" name="email" id="email-signup" required />
             </div>
             <div class="form-field">
-                <label for="password-input">Password</label>
-                <input type="password" v-model="password" name="password-input" id="password-signup" required />
+                <label for="mot-de-passe">Password</label>
+                <input type="password" v-model="password" name="mot-de-passe" id="password-signup" required />
             </div>
             <div class="form-field">
                 <label for="bio">Bio</label>
-                <textarea v-model="bio" name="bio" id="bio-signup" placeholder="votre bio..." />
+                <textarea v-model="bio" name="bio" id="bio-signup" placeholder="(facultatif)"  />
             </div>
             <div class="form-field">
-                <label for="profilePic">Photo</label>
-                <input type="file" ref="file" @change="selectFile" name="profilePic" id="profilePic" required>
+                <label for="photo-de-profil">Photo</label>
+                <input type="file" ref="file" @change="selectFile" name="photo-de-profil" id="profilePic" required>
             </div>
             <div class="form-field" id="signup-preview-container">
-                <label v-if="imgPreview" for="preview">Aperçu de votre photo:</label>
-                <img id="signup-preview" v-if="imgPreview" :src="imgPreview" />
+                <label v-if="imgPreview" for="aperçu-photo">Aperçu de votre photo:</label>
+                <img id="signup-preview" v-if="imgPreview" :src="imgPreview" alt="aperçu-de-la-photo-de-profil" />
             </div>
             <div class="form-field" id="signup-button-container">
                 <input type="submit" value="S'inscrire !" />

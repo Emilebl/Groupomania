@@ -9,7 +9,7 @@
                 </div>
                 <h1 class="singlepost-elements">{{ post.title }}</h1>
                 <p class="post-content-singlepost singlepost-elements">{{ post.content }}</p>
-                <img v-bind:src="post.attachment" alt="" class="post-image-singlepost singlepost-elements">
+                <img v-bind:src="post.attachment" alt="image-du-post" class="post-image-singlepost singlepost-elements">
                 <div class="reaction-infos-singlepost singlepost-elements">
                     <p class="singlepost-elements">
                         <!-- Here we display the number of comments -->
@@ -45,8 +45,8 @@
                             <h2 class="comment-form-title">Ajouter un commentaire:</h2>
                         </div>
                         <div class="form-field">
-                            <label for="comment">Contenu</label>
-                            <textarea v-model="comment" name="comment" id="comment" required />
+                            <label for="commentaire">Contenu</label>
+                            <textarea v-model="comment" name="commentaire" id="comment" required />
                         </div>
                         <div class="comment-button-container">
                             <input class="comment-button" type="submit" value="Commenter !">
@@ -66,20 +66,20 @@
             </div>
             <form id="form" class="validate" @submit.prevent="updatePost" enctype="multipart/form-data">
                 <div class="form-field">
-                    <label for="title">Titre du post</label>
-                    <input type="text" v-model="title" name="title" id="title">
+                    <label for="titre">Titre du post</label>
+                    <input type="text" v-model="title" name="titre" id="title">
                 </div>
                 <div class="form-field">
-                    <label for="content">Contenu du post (texte)</label>
-                    <input type="text" v-model="content" name="content" id="content">
+                    <label for="contenu">Contenu du post (texte)</label>
+                    <input type="text" v-model="content" name="contenu" id="content">
                 </div>
                 <div class="form-field">
-                    <label for="attachement">Image: </label>
-                    <input type="file" ref="file" @change="selectFile" name="attachement" id="modify-post-pic">
+                    <label for="image">Image: </label>
+                    <input type="file" ref="file" @change="selectFile" name="image" id="modify-post-pic">
                 </div>
                 <div class="form-field" id="post-preview-container">
-                    <label v-if="imgPreview" for="preview">Aperçu de l'image:</label>
-                    <img id="post-preview" v-if="imgPreview" :src="imgPreview" />
+                    <label v-if="imgPreview" for="aperçu-photo">Aperçu de l'image:</label>
+                    <img id="post-preview" v-if="imgPreview" :src="imgPreview" alt="aperçu-de-la-photo-de-profil" />
                 </div>
                 <div>
                     <input type="submit" value="Modifier !">
