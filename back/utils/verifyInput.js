@@ -46,7 +46,7 @@ module.exports = {
     },
     validComment: function (value) {
         // Lettres, Chiffres et quelques caractères spéciaux autorisés, 100 caractères maximum
-        const regexComment = /^[a-zA-ZÀ-ÿ0-9"][a-zA-ZÀ-ÿ-0-9- '"!?.:;,)(]{1,100}$/
+        const regexComment = /^[a-zA-ZÀ-ÿ0-9"][a-zA-ZÀ-ÿ-0-9- '"!?.:;,\n)(]{1,100}$/
         return regexComment.test(value)
     },
 }
