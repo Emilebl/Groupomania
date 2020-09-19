@@ -35,7 +35,9 @@
                 </div>
                 <div class="form-example">
                     <input type="submit" value="Modifier le profil !">
-                    {{ error }}
+                </div>
+                <div class="error-message-container">
+                    <p class="modify-profile-error-msg">{{ modifyProfileErrorMsg }}</p>
                 </div>
                 <!-- This button deletes the profile when clicked -->
                 <button class="delete-profile-button" @click="deleteProfile">Supprimer le Profil</button>
@@ -58,7 +60,8 @@ export default {
             file: '',
             imgPreview: '',
 
-            error: '',
+            modifyProfileErrorMsg: '',
+            deleteProfileErrorMsg: '',
 
             // REGEX for the name inputs, and the bio input
             nameRGX: /^([a-zA-ZÀ-ÿ][a-zA-ZÀ-ÿ- ']{1,30})?$/,
@@ -97,9 +100,9 @@ export default {
             let bioRESULT = this.TextareaRGX.test(this.bio);
 
             if (firstNameRESULT == false || lastNameRESULT == false) {
-                this.error = 'Veuillez rentrer un nom/prénom valide (30 caractères max)'
+                this.modifyProfileErrorMsg = 'Veuillez rentrer un nom/prénom valide (30 caractères max)'
             } else if (bioRESULT == false) {
-                this.error = 'Veuillez rentrer une bio valide (100 charactères maximum, certains caractères spéciaux sont interdits)'
+                this.modifyProfileErrorMsg = 'Veuillez rentrer une bio valide (100 charactères maximum, certains caractères spéciaux sont interdits)'
             } else {
                 const formData = new FormData();
                 formData.append('lastName', this.lastName);
@@ -110,6 +113,7 @@ export default {
                 axios.put('http://localhost:3000/api/users/update', formData, {headers: {'Authorization': 'Bearer ' + localStorage.getItem('token')}})
                 .then(res => {
                     console.log(res);
+                    this.modifyProfileErrorMsg = '',
                     this.lastName = '';
                     this.firstName = '';
                     this.bio = '';
@@ -118,7 +122,7 @@ export default {
                     this.recallProfile()
                 }, err => {
                     console.log(err.response);
-                    this.error = err.response.data.error;
+                    this.modifyProfileErrorMsg = err.response.data.error;
                 })
                 }
         },
@@ -144,7 +148,7 @@ export default {
             this.$router.push('/signup')
             }, err => {
                 console.log(err.response);
-                this.error = err.response.data.error;
+                this.deleteProfileErrorMsg = err.response.data.error;
             })
         }
     }
@@ -208,6 +212,18 @@ export default {
 .myprofile-component {
     width: 95%;
 }
+
+.error-message-container{
+    display: flex;
+    justify-content: center;
+    color: rgb(212, 0, 0);
+}
+
+.modify-profile-error-msg {
+    margin-top: 5%;
+    width: 50%;
+}
+
 @media (max-width: 768px) {
     .profile-infos-element {
         width: 80%;

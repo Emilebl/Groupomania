@@ -12,7 +12,9 @@
             </div>
             <div class="form-field" id="login-button-container">
                 <input type="submit" value="Se connecter !">
-                {{ error }}
+            </div>
+            <div class="error-message-container">
+                <p class="login-error-msg">{{ loginErrorMsg }}</p>
             </div>
         </form>
         <a id="signup-to-login" v-bind:href="signupUrl">Pas encore de compte ?</a>
@@ -30,7 +32,7 @@ export default {
             password: '',
             signupUrl: '/signup',
 
-            error: '',
+            loginErrorMsg: '',
             
             // Regex for the inputs
             emailRGX: /^[a-z0-9._-]+@[a-z0-9.-]{2,}[.][a-z]{2,3}$/,
@@ -45,9 +47,9 @@ export default {
             let passwordRESULT = this.passwordRGX.test(this.password);
 
             if (emailRESULT == false) {
-                this.error = 'Email invalide'
+                this.loginErrorMsg = 'Email invalide'
             } else if (passwordRESULT == false) {
-                this.error = 'Mot de passe invalide'
+                this.loginErrorMsg = 'Mot de passe invalide'
             } else {
                     let user = {
                     email: this.email,
@@ -57,6 +59,7 @@ export default {
                 .then(res => {
                     console.log(res);
                     if (res.status === 200) {
+                        this.loginErrorMsg = ''
                         localStorage.setItem('token', res.data.token);
                         this.$router.push('/');
                     }
@@ -74,5 +77,15 @@ export default {
 #login-button-container {
     display: flex;
     justify-content: center;
+}
+
+.error-message-container{
+    display: flex;
+    justify-content: center;
+    color: rgb(212, 0, 0);
+}
+
+.login-error-msg {
+    width: 50%;
 }
 </style>

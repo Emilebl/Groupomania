@@ -32,7 +32,9 @@
             </div>
             <div class="form-field" id="signup-button-container">
                 <input type="submit" value="S'inscrire !" />
-                {{ error }}
+            </div>
+           <div class="error-message-container">
+            <p class="signup-error-msg">{{ signupErrorMsg }}</p>
             </div>
         </form>
         <a id="signup-to-login" v-bind:href="loginUrl">Déjà un compte ?</a>
@@ -57,7 +59,7 @@ export default {
 
             loginUrl: '/login',
 
-            error: '',
+            signupErrorMsg: '',
 
             // Regex for the inputs
             nameRGX: /^[a-zA-ZÀ-ÿ][a-zA-ZÀ-ÿ- ']{1,30}$/,
@@ -81,13 +83,13 @@ export default {
             let bioRESULT = this.bioRGX.test(this.bio);
 
             if (firstNameRESULT == false || lastNameRESULT == false) {
-                this.error = 'Veuillez rentrer un nom/prénom valide'
+                this.signupErrorMsg = 'Veuillez rentrer un nom/prénom valide'
             } else if (emailRESULT == false) {
-                this.error = 'Veuillez rentrer un mail valide'
+                this.signupErrorMsg = 'Veuillez rentrer un mail valide'
             } else if (passwordRESULT == false) {
-                this.error = 'Veuillez rentrer un mot de passe valide: entre 6 et 20 caractères, au moins 1 majuscule, 1 minuscule et 1 chiffre'
+                this.signupErrorMsg = 'Veuillez rentrer un mot de passe valide: entre 6 et 20 caractères, au moins 1 majuscule, 1 minuscule et 1 chiffre'
             } else if (bioRESULT == false) {
-                this.error = 'Veuillez rentrer une bio valide (100 charactères maximum, certains caractères spéciaux sont interdits)'
+                this.signupErrorMsg = 'Veuillez rentrer une bio valide (100 charactères maximum, certains caractères spéciaux sont interdits)'
             } else {
                 const userInfos = new FormData();
                 userInfos.append('email', this.email);
@@ -100,11 +102,11 @@ export default {
                 axios.post('http://localhost:3000/api/users/signup', userInfos, {headers: {'Content-Type': 'multipart/form-data'}})
                 .then(res => {
                     console.log(res);
-                    this.error= '';
+                    this.signupErrorMsg= '';
                     this.$router.push('/login');
                 }, err => {
                     console.log(err.response);
-                    this.error = err.response.data.error;
+                    this.signupErrorMsg = err.response.data.error;
                 })
             }
         }
@@ -129,6 +131,16 @@ export default {
 #signup-button-container {
     display: flex;
     justify-content: center;
+}
+
+.error-message-container{
+    display: flex;
+    justify-content: center;
+    color: rgb(212, 0, 0);
+}
+
+.signup-error-msg {
+    width: 50%;
 }
 
 

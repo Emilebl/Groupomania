@@ -24,7 +24,9 @@
             </div>
             <div>
                 <input type="submit" value="Publier !">
-                {{ error }}
+            </div>
+            <div class="error-message-container">
+                <p class="add-post-error-msg">{{ addPostErrorMsg }}</p>
             </div>
         </form>
     </section>
@@ -48,7 +50,7 @@ export default {
             file: '',
             imgPreview: '',
 
-            error: '',
+            addPostErrorMsg: '',
 
             // Regex for the post title, and post content
             TitleRGX: /^[a-zA-ZÀ-ÿ0-9"][a-zA-ZÀ-ÿ-0-9- '"!?.:;,)(]{1,50}$/,
@@ -67,9 +69,9 @@ export default {
             let contentRESULT = this.ContentRGX.test(this.content);
 
             if (titleRESULT == false) {
-                this.error = 'Titre non valide ! 50 Caractères maximum et évitez les caractères spéciaux'
+                this.addPostErrorMsg = 'Titre non valide ! 50 Caractères max et évitez les caractères spéciaux'
             } else if (contentRESULT == false) {
-                this.error = 'Texte non valide ! 300 Caractères maximum et évitez les caractères spéciaux'
+                this.addPostErrorMsg = 'Texte non valide ! 300 Caractères max et évitez les caractères spéciaux'
             } else {
                 const formData = new FormData();
                 formData.append('title', this.title);
@@ -125,6 +127,17 @@ export default {
     border: 2px solid black;
     display: flex;
     flex-direction: column;
+}
+
+.error-message-container{
+    display: flex;
+    justify-content: center;
+    color: rgb(212, 0, 0);
+}
+
+.add-post-error-msg {
+    margin-top: 5%;
+    width: 50%;
 }
 
 </style>

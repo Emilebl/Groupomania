@@ -50,7 +50,9 @@
                         </div>
                         <div class="comment-button-container">
                             <input class="comment-button" type="submit" value="Commenter !">
-                            <div>{{ commentError }}</div>
+                        </div>
+                        <div class="error-message-container">
+                            <p class="comment-error-msg">{{ commentErrorMsg }}</p>
                         </div>
                     </form>
                 </div>
@@ -81,7 +83,9 @@
                 </div>
                 <div>
                     <input type="submit" value="Modifier !">
-                    {{ error }}
+                </div>
+                <div class="error-message-container">
+                    <p class="modify-post-error-msg">{{ modifyPostErrorMsg }}</p>
                 </div>
                 <button class="delete-post-button" v-show="AuthorisationToDeleteOrModifyPost" @click="deletePost">Supprimer le post</button>
                     <div>{{ deleteError }}</div>
@@ -133,7 +137,8 @@ export default {
             like : 1,
             dislike : -1,
 
-            commentError: '',
+            modifyPostErrorMsg: '',
+            commentErrorMsg: '',
             deleteError: '',
             // REGEX for the post title, content, and the comment content
             TitleRGX: /^([a-zA-ZÀ-ÿ0-9"][a-zA-ZÀ-ÿ-0-9- '"!?.:;,)(]{1,50})?$/,
@@ -184,9 +189,9 @@ export default {
             let contentRESULT = this.ContentRGX.test(this.content);
 
             if (titleRESULT == false) {
-                this.error = 'Titre non valide ! 50 Caractères maximum et évitez les caractères spéciaux'
+                this.modifyPostErrorMsg = 'Titre non valide ! 50 Caractères maximum et évitez les caractères spéciaux'
             } else if (contentRESULT == false) {
-                this.error = 'Texte non valide ! 300 Caractères maximum et évitez les caractères spéciaux'
+                this.modifyPostErrorMsg = 'Texte non valide ! 300 Caractères maximum et évitez les caractères spéciaux'
             } else {
                 const formData = new FormData();
                 formData.append('newTitle', this.title);
@@ -198,6 +203,7 @@ export default {
                 .then(res => {
                     window.scrollTo(0,0);
                     console.log(res);
+                    this.modifyPostErrorMsg = '',
                     this.title = '';
                     this.content = '';
                     this.file = '';
@@ -265,7 +271,7 @@ export default {
             let commentRESULT = this.CommentRGX.test(this.comment);
 
             if (commentRESULT == false) {
-                this.commentError = 'Texte non valide ! 100 Caractères maximum et évitez les caractères spéciaux'
+                this.commentErrorMsg = 'Texte non valide ! 100 Caractères maximum et évitez les caractères spéciaux'
             } else {
                 let comment = {
                     content: this.comment
@@ -274,7 +280,7 @@ export default {
                 .then(res => {
                     console.log(res);
                     this.comment = '';
-                    this.commentError = '';
+                    this.commentErrorMsg = '';
                     this.recallSinglePost()
                 }, err => {
                     console.log(err.response);
@@ -444,6 +450,21 @@ export default {
     font-size: 1.2em;
 }
 
+.error-message-container{
+    display: flex;
+    justify-content: center;
+    color: rgb(212, 0, 0);
+}
+
+.modify-post-error-msg {
+    margin-top: 5%;
+    width: 50%;
+}
+
+.comment-error-msg {
+    margin-top: 5%;
+    width: 50%;
+}
 
 
 @media (max-width: 768px) {
@@ -475,6 +496,16 @@ export default {
         border: none;
         font-size: 1em;
         cursor: pointer;
+    }
+
+    .comment-error-msg {
+        margin-top: 5%;
+        width: 80%;
+    }
+
+    .modify-post-error-msg {
+        margin-top: 5%;
+        width: 80%;
     }
 }
 </style>
