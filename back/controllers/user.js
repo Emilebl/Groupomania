@@ -64,7 +64,7 @@ exports.signup = (req, res) => {
             })
             .catch(err => { res.status(500).json({ err }) })
     } else {
-        console.log('oups une erreur est survenue')
+        console.log('Invalid Inputs')
     }
 };
 
