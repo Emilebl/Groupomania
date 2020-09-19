@@ -21,17 +21,25 @@ exports.signup = (req, res) => {
     else {
         attachmentURL == null
     };
-    
+
+    // if (bio == undefined) {
+    //     bio == null
+    // };
+    // console.log(bio)
+
     if (email == null || firstName == null || lastName == null || password == null) {
         res.status(400).json({ error: 'il manque un paramètre' })
     }
 
-    // Verification of the email and password input using the verifyInput utils
+    // Verification of the inputs using the verifyInput utils
+    let firstNameOk = verifyInput.validName(firstName);
+    let lastNameOk = verifyInput.validName(lastName);
     let emailOk = verifyInput.validEmail(email);
     let mdpOK = verifyInput.validPassword(password);
+    let bioOk = verifyInput.validBio(bio);
     
     
-    if (emailOk == true && mdpOK == true) {
+    if (firstNameOk == true && lastNameOk == true && emailOk == true && mdpOK == true && bioOk == true) {
         // Verify if the user exists or not
         models.User.findOne({
             attributes: ['email'],
@@ -74,35 +82,39 @@ exports.login = (req, res) => {
     let email = req.body.email;
     let password = req.body.password;
 
-    if (email == null || password == null) {
-        res.status(400).json({ error: 'Il manque un paramètre' })
-    }
-    //Verify if the user exists
-    models.User.findOne({
-        where: { email: email }
-    })
-        .then(user => {
-            // if user found, we verify the password
-            if (user) {
-                bcrypt.compare(password, user.password, (errComparePassword, resComparePassword) => {
-                    // if password is correct, we generate a session token with the util generateToken
-                    if (resComparePassword) {
-                        res.status(200).json({
-                            userId: user.id,
-                            token: utils.generateToken(user),
-                            isAdmin: user.isAdmin
-                        })
-                    // if password is incorrect, we send this error message
-                    } else {
-                        res.status(403).json({ error: 'Mot de passe non valide' });
-                    };
-                })
-            //  if the user is not found, we send this error message
-            } else {
-                res.status(404).json({ 'erreur': 'Cet utilisateur n\'existe pas' })
-            }
+    let emailOk = verifyInput.validEmail(email);
+    let mdpOK = verifyInput.validPassword(password);
+
+    if (emailOk == true && mdpOK == true) { 
+        //Verify if the user exists
+        models.User.findOne({
+            where: { email: email }
         })
-        .catch(err => { res.status(500).json({ err }) })
+            .then(user => {
+                // if user found, we verify the password
+                if (user) {
+                    bcrypt.compare(password, user.password, (errComparePassword, resComparePassword) => {
+                        // if password is correct, we generate a session token with the util generateToken
+                        if (resComparePassword) {
+                            res.status(200).json({
+                                userId: user.id,
+                                token: utils.generateToken(user),
+                                isAdmin: user.isAdmin
+                            })
+                        // if password is incorrect, we send this error message
+                        } else {
+                            res.status(403).json({ error: 'Mot de passe non valide' });
+                        };
+                    })
+                //  if the user is not found, we send this error message
+                } else {
+                    res.status(404).json({ 'erreur': 'Cet utilisateur n\'existe pas' })
+                }
+            })
+            .catch(err => { res.status(500).json({ err }) })
+        } else {
+            console.log('Invalid Inputs')
+        }
 };
 
 // Get informations from the User profile
@@ -135,24 +147,33 @@ exports.updateProfile = (req, res) => {
     else {
         attachmentURL == null
     };
-    // Find the user profile that has the id retrieved from the token
-    models.User.findOne({
-        attributes: ['id','bio'],
-        where: { id: userId }
-    })
-    // If user found, we modify it with the new informations. If a field was not filled in the request it will stay the same as before
-    .then(user => {
-    user.update({
-        firstName:(firstName ? firstName : user.firstName),
-        lastName:(lastName ? lastName : user.lastName),
-        profilePic:(attachmentURL ? attachmentURL : user.profilePic),
-        bio: (bio ? bio : user.bio)
-    })
-    .then(() => res.status(201).json({ confirmation: 'bio modifiée avec succès'}))
-    .catch(err => res.status(500).json(err))
 
-    })
-    .catch(err => json(err))
+    let firstNameOk = verifyInput.validNameModif(firstName);
+    let lastNameOk = verifyInput.validNameModif(lastName);
+    let bioOk = verifyInput.validBio(bio);
+
+    if (firstNameOk == true && lastNameOk == true && bioOk == true) {
+        // Find the user profile that has the id retrieved from the token
+        models.User.findOne({
+            attributes: ['id','bio'],
+            where: { id: userId }
+        })
+        // If user found, we modify it with the new informations. If a field was not filled in the request it will stay the same as before
+        .then(user => {
+        user.update({
+            firstName:(firstName ? firstName : user.firstName),
+            lastName:(lastName ? lastName : user.lastName),
+            profilePic:(attachmentURL ? attachmentURL : user.profilePic),
+            bio: (bio ? bio : user.bio)
+        })
+        .then(() => res.status(201).json({ confirmation: 'profil modifié avec succès'}))
+        .catch(err => res.status(500).json(err))
+
+        })
+        .catch(err => json(err))
+    } else {
+        console.log('invalid inputs')
+    }
 };
 
 // Delete a user

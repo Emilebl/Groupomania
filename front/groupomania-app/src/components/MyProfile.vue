@@ -61,8 +61,8 @@ export default {
             error: '',
 
             // REGEX for the name inputs, and the bio input
-            nameRGX: /^$|^[a-zA-ZÀ-ÿ ]+$/,
-            TextareaRGX: /^[\s\S]{0,100}$/
+            nameRGX: /^([a-zA-ZÀ-ÿ][a-zA-ZÀ-ÿ- ']{1,30})?$/,
+            TextareaRGX: /^([a-zA-ZÀ-ÿ0-9"][a-zA-ZÀ-ÿ-0-9- '"!?.:;,\n)(]{1,100})?$/
         }
     },
     // When this component is created, the app will redirect to the /login page if the localstorage has no token
@@ -97,9 +97,9 @@ export default {
             let bioRESULT = this.TextareaRGX.test(this.bio);
 
             if (firstNameRESULT == false || lastNameRESULT == false) {
-                this.error = 'Veuillez rentrer un nom/prénom valide'
+                this.error = 'Veuillez rentrer un nom/prénom valide (30 caractères max)'
             } else if (bioRESULT == false) {
-                this.error = 'Veuillez rentrer une bio valide (100 charactères maximum)'
+                this.error = 'Veuillez rentrer une bio valide (100 charactères maximum, certains caractères spéciaux sont interdits)'
             } else {
                 const formData = new FormData();
                 formData.append('lastName', this.lastName);

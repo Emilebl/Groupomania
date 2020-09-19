@@ -60,10 +60,10 @@ export default {
             error: '',
 
             // Regex for the inputs
-            nameRGX: /^[a-zA-ZÀ-ÿ ]+$/,
+            nameRGX: /^[a-zA-ZÀ-ÿ][a-zA-ZÀ-ÿ- ']{1,30}$/,
             emailRGX: /^[a-z0-9._-]+@[a-z0-9.-]{2,}[.][a-z]{2,3}$/,
             passwordRGX: /^((?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,20})$/,
-            TextareaRGX: /^[\s\S]{0,100}$/
+            bioRGX: /^([a-zA-ZÀ-ÿ0-9"][a-zA-ZÀ-ÿ-0-9- '"!?.:;,\n)(]{1,100})?$/
         }
     },
     methods:{
@@ -78,7 +78,7 @@ export default {
             let lastNameRESULT = this.nameRGX.test(this.lastName);
             let emailRESULT = this.emailRGX.test(this.email);
             let passwordRESULT = this.passwordRGX.test(this.password);
-            let bioRESULT = this.TextareaRGX.test(this.bio);
+            let bioRESULT = this.bioRGX.test(this.bio);
 
             if (firstNameRESULT == false || lastNameRESULT == false) {
                 this.error = 'Veuillez rentrer un nom/prénom valide'
@@ -87,7 +87,7 @@ export default {
             } else if (passwordRESULT == false) {
                 this.error = 'Veuillez rentrer un mot de passe valide: entre 6 et 20 caractères, au moins 1 majuscule, 1 minuscule et 1 chiffre'
             } else if (bioRESULT == false) {
-                this.error = 'Veuillez rentrer une bio valide (100 charactères maximum)'
+                this.error = 'Veuillez rentrer une bio valide (100 charactères maximum, certains caractères spéciaux sont interdits)'
             } else {
                 const userInfos = new FormData();
                 userInfos.append('email', this.email);

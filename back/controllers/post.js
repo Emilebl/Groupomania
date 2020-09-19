@@ -1,6 +1,7 @@
 //Import
 let models = require('../models');
 let utils = require('../utils/jwtUtils');
+let verifyInput = require('../utils/verifyInput');
 const fs = require('fs');
 const post = require('../models/post');
 
@@ -27,11 +28,15 @@ exports.createPost = (req, res) => {
             else {
                 attachmentURL == null
             };
+
+            let titleOk = verifyInput.validPostTitle(title);
+            let contentOk = verifyInput.validPostContent(content);
+
             // If the request contains only empty fields, we send this error message
             if ((title == 'null' && content == 'null' && attachmentURL == null)) {
                 res.status(400).json({ error: 'Rien à publier' })
             // Else we create the post
-            } else {
+            } else if (titleOk == true && contentOk == true) {
                 models.Post.create({
                     title: title,
                     content: content,
@@ -44,6 +49,8 @@ exports.createPost = (req, res) => {
                 .catch((err) => {
                     res.status(500).json(err)
                 })
+            } else {
+                console.log('invalid inputs')
             };
         } else {
             // If user not found we send an error
@@ -157,16 +164,23 @@ exports.updatePost = (req, res) => {
             else {
                 attachmentURL == null
             };
-            // We modify the post with the new informations. If a field was not filled in the request it will stay the same as before
-            models.Post.update({
-                title: (title ? title : post.title),
-                content: (content ? content : post.content),
-                attachment: (attachmentURL ? attachmentURL : post.attachment)
-            },
-            { where: { id: req.params.id }}
-            )
-            .then(() => {res.status(201).json({confirmation: 'Post modifié avec succès'})})
-            .catch((err) => {res.status(500).json(err)})
+            let titleOk = verifyInput.validPostTitleModif(title);
+            let contentOk = verifyInput.validPostContentModif(content);
+
+            if (titleOk == true && contentOk == true) {
+                // We modify the post with the new informations. If a field was not filled in the request it will stay the same as before
+                models.Post.update({
+                    title: (title ? title : post.title),
+                    content: (content ? content : post.content),
+                    attachment: (attachmentURL ? attachmentURL : post.attachment)
+                },
+                { where: { id: req.params.id }}
+                )
+                .then(() => {res.status(201).json({confirmation: 'Post modifié avec succès'})})
+                .catch((err) => {res.status(500).json(err)})
+            } else {
+                console.log('invalid inputs')
+            }
         // If the connected user is neither the post creator or an admin
         // The modification is not allowed and we send this error message
         } else {
@@ -328,22 +342,26 @@ exports.commentPost = (req, res) => {
             // Recuperation of the request body
             let content = req.body.content;
             let postId = req.params.id;
+
+            let commentOk = verifyInput.validComment(content)
             // if the field is empty, we send this error message
             if (content == 'null' ) {
                 res.status(400).json({ error: 'Rien à commenter' })
             // if not we create the comment
+            } else if (commentOk == true) {
+                models.Comment.create({
+                    content: content,
+                    PostId: postId,
+                    UserId: user.id
+                })
+                    .then((newComment) => {
+                        res.status(201).json(newComment)
+                    })
+                    .catch((err) => {
+                        res.status(500).json(err)
+                    })
             } else {
-            models.Comment.create({
-                content: content,
-                PostId: postId,
-                UserId: user.id
-            })
-                .then((newComment) => {
-                    res.status(201).json(newComment)
-                })
-                .catch((err) => {
-                    res.status(500).json(err)
-                })
+                console.log('invalid inputs')
             };
         } else {
             res.status(400).json(error);

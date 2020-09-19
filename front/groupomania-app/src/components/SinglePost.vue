@@ -50,7 +50,7 @@
                         </div>
                         <div class="comment-button-container">
                             <input class="comment-button" type="submit" value="Commenter !">
-                            {{ error }}
+                            <div>{{ commentError }}</div>
                         </div>
                     </form>
                 </div>
@@ -84,7 +84,7 @@
                     {{ error }}
                 </div>
                 <button class="delete-post-button" v-show="AuthorisationToDeleteOrModifyPost" @click="deletePost">Supprimer le post</button>
-                    {{ deleteError }}
+                    <div>{{ deleteError }}</div>
             </form>
         </section>
     </div>
@@ -133,12 +133,12 @@ export default {
             like : 1,
             dislike : -1,
 
-            error: '',
+            commentError: '',
             deleteError: '',
             // REGEX for the post title, content, and the comment content
-            TitleRGX: /^[\s\S]{0,50}$/,
-            ContentRGX: /^[\s\S]{0,300}$/,
-            CommentRGX: /^[\s\S]{0,100}$/,
+            TitleRGX: /^([a-zA-ZÀ-ÿ0-9"][a-zA-ZÀ-ÿ-0-9- '"!?.:;,)(]{1,50})?$/,
+            ContentRGX: /^([a-zA-ZÀ-ÿ0-9"][a-zA-ZÀ-ÿ-0-9- '"!?.:;,\n)(]{1,300})?$/,
+            CommentRGX: /^[a-zA-ZÀ-ÿ0-9"][a-zA-ZÀ-ÿ-0-9- '"!?.:;,)(]{1,100}$/
 
             // showUpdateForm: true,
         }
@@ -184,9 +184,9 @@ export default {
             let contentRESULT = this.ContentRGX.test(this.content);
 
             if (titleRESULT == false) {
-                this.error = 'Titre trop long ! 50 Caractères maximum'
+                this.error = 'Titre non valide ! 50 Caractères maximum et évitez les caractères spéciaux'
             } else if (contentRESULT == false) {
-                this.error = 'Contenu trop long ! 300 Caractères maximum'
+                this.error = 'Texte non valide ! 300 Caractères maximum et évitez les caractères spéciaux'
             } else {
                 const formData = new FormData();
                 formData.append('newTitle', this.title);
@@ -265,7 +265,7 @@ export default {
             let commentRESULT = this.CommentRGX.test(this.comment);
 
             if (commentRESULT == false) {
-                this.error = 'Commentaire trop long ! 100 Caractères maximum'
+                this.commentError = 'Texte non valide ! 100 Caractères maximum et évitez les caractères spéciaux'
             } else {
                 let comment = {
                     content: this.comment
@@ -274,6 +274,7 @@ export default {
                 .then(res => {
                     console.log(res);
                     this.comment = '';
+                    this.commentError = '';
                     this.recallSinglePost()
                 }, err => {
                     console.log(err.response);

@@ -51,8 +51,8 @@ export default {
             error: '',
 
             // Regex for the post title, and post content
-            TitleRGX: /^[\s\S]{0,50}$/,
-            ContentRGX: /^[\s\S]{0,300}$/
+            TitleRGX: /^[a-zA-ZÀ-ÿ0-9"][a-zA-ZÀ-ÿ-0-9- '"!?.:;,)(]{1,50}$/,
+            ContentRGX: /^[a-zA-ZÀ-ÿ0-9"][a-zA-ZÀ-ÿ-0-9- '"!?.:;,\n)(]{1,300}$/
         }
     },
     methods: {
@@ -67,9 +67,9 @@ export default {
             let contentRESULT = this.ContentRGX.test(this.content);
 
             if (titleRESULT == false) {
-                this.error = 'Titre trop long ! 50 Caractères maximum'
+                this.error = 'Titre non valide ! 50 Caractères maximum et évitez les caractères spéciaux'
             } else if (contentRESULT == false) {
-                this.error = 'Contenu trop long ! 300 Caractères maximum'
+                this.error = 'Texte non valide ! 300 Caractères maximum et évitez les caractères spéciaux'
             } else {
                 const formData = new FormData();
                 formData.append('title', this.title);
