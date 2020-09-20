@@ -320,7 +320,7 @@ export default {
     padding: 2%;
     margin-top: 10%;
     width: auto;
-    height: 1%;
+    height: auto;
     font-size: 1em;
     font-weight: bolder;
     cursor: pointer;
