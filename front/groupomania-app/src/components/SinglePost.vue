@@ -369,7 +369,7 @@ export default {
 
 .creator-name-singlepost {
     font-size: 1.3em;
-    color: #4287f5;
+    color: #0846AA;
     margin-left: 4%;
 }
 
@@ -398,15 +398,15 @@ export default {
     display: flex;
     justify-content: space-around;
     font-size: 1.5em;
-    color: #557596;
+    color: #354C5F;
 }
 
 .like-span-singlepost {
-    color: green;
+    color: #007500;
 }
 
 .dislike-span-singlepost {
-    color: red;
+    color: #c00000;
 }
 
 .like-dislike-buttons {
@@ -429,11 +429,11 @@ export default {
 
 
 .like-button-singlepost {
-    color: green;
+    color: #007500;
 }
 
 .dislike-button-singlepost {
-    color: red;
+    color: #c00000;
 }
 
 .comment-list {

@@ -131,7 +131,7 @@ export default {
 
 .creator-name-wallsinglepost {
     font-size: 1.3em;
-    color: #4287f5;
+    color: #0846AA;
     margin-left: 4%;
     
 }
@@ -163,7 +163,7 @@ export default {
     display: flex;
     justify-content: space-around;
     font-size: 1.5em;
-    color: #557596;
+    color: #354C5F;
 }
 
 .reaction-button-singlewallpost {
@@ -173,25 +173,25 @@ export default {
 }
 
 .like-span-wallsinglepost {
-    color: green;
+    color: #007500;
 }
 
 .dislike-span-wallsinglepost {
-    color: red;
+    color: #c00000;
 }
 
 .like-button-singlewallpost {
-    color: green;
+    color: #007500;
 }
 
 .dislike-button-singlewallpost {
-    color: red;
+    color: #c00000;
 }
 
 
 .go-to-singlepost-button {
-  background-color: #42f5b0;
-  color: #7842f5;
+  background-color: #68F8C1;
+  color: #460BD0;
   border: none;
   border-radius: 10px;
   padding: 2%;

@@ -70,8 +70,8 @@ nav {
 }
 
 .header-button {
-  background-color: #42f5b0;
-  color: #7842f5;
+  background-color: #68F8C1;
+  color:#460BD0;
   border: none;
   border-radius: 10px;
   padding: 15px 32px;
