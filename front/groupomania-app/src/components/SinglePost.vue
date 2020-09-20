@@ -9,7 +9,7 @@
                 </div>
                 <h1 class="singlepost-elements">{{ post.title }}</h1>
                 <p class="post-content-singlepost singlepost-elements">{{ post.content }}</p>
-                <img v-bind:src="post.attachment" alt="image-du-post" class="post-image-singlepost singlepost-elements">
+                <img v-show="post.attachment" v-bind:src="post.attachment" alt="image-du-post" class="post-image-singlepost singlepost-elements">
                 <div class="reaction-infos-singlepost singlepost-elements">
                     <p class="singlepost-elements">
                         <!-- Here we display the number of comments -->
@@ -164,6 +164,9 @@ export default {
                 this.Reactions = res.data.singlePost.UserReacts;
                 this.userIdOrder = res.data.singlePost.UserId;
                 this.connectedId = res.data.userConnected;
+                // if (this.post.attachment == null) {
+
+                // }
                 // If the user connected is also the creator of the post on the current page
                 // OR if the user connected is and Admin
                 // "AuthorisationToDeleteOrModifyPost" will return true and the modify/delete section will appear
