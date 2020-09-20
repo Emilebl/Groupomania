@@ -75,21 +75,24 @@ nav {
   border: none;
   border-radius: 10px;
   padding: 15px 32px;
-  width: 46%;
-  height: 50%;
-  font-size: 1.4em;
+  width: auto;
+  height: auto;
+  font-size: 1.2em;
   cursor: pointer;
   
   text-align: center;
   text-decoration: none;
   display: inline-block;
-
+}
+.header-button:focus {
+  outline: none;
+  box-shadow: none;
 }
 
 @media (max-width: 1200px) {
   
   .header-button {
-    font-size: 1.35em;
+    font-size: 1.1em;
     padding: none;
   }
 }
@@ -102,7 +105,7 @@ nav {
   }
     
   .header-button {
-    font-size: 1.2em;
+    font-size: 1em;
     padding: none;
   }
 
@@ -119,7 +122,7 @@ nav {
     padding: none;
   }
   .header-button {
-    font-size: 1.05em;
+    font-size: 0.85em;
     width: 100%;
     height: 100%;
     padding: none;
@@ -145,7 +148,7 @@ nav {
         margin-left: -12%;
     }
     .header-button {
-    font-size: 0.8em;
+    font-size: 0.75em;
     width: 100%;
     height: 100%;
     padding: 5px 15px;
