@@ -13,7 +13,7 @@ module.exports = {
     },
       this.tokenSign,
       {
-        expiresIn: '12h'
+        expiresIn: '8h'
       })
   },
   // Token decoding to retrieve the id
