@@ -22,11 +22,6 @@ exports.signup = (req, res) => {
         attachmentURL == null
     };
 
-    // if (bio == undefined) {
-    //     bio == null
-    // };
-    // console.log(bio)
-
     if (email == null || firstName == null || lastName == null || password == null) {
         res.status(400).json({ error: 'il manque un paramètre' })
     }
