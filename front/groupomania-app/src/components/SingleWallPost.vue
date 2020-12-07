@@ -8,17 +8,17 @@
             </div>
             <h2 class="wallsinglepost-elements">{{ title }}</h2>
             <p class="post-content-wallsinglepost wallsinglepost-elements">{{ content }}</p>
-            <img v-show="imgUrl" v-bind:src="imgUrl" alt="image-du-post" class="post-image wallsinglepost-elements">
+            <img @click="goToSinglePost" v-show="imgUrl" v-bind:src="imgUrl" alt="image-du-post" class="post-image wallsinglepost-elements">
             <div class="reaction-infos-wallsinglepost wallsinglepost-elements">
                 <p>
                     <!-- Here we display the number of comments -->
-                    <span>{{ comments.length }} Commentaires <font-awesome-icon :icon="['fas', 'comments']" /></span>
+                    <span @click="goToSinglePost" id="commentaires-link">{{ comments.length }} Commentaires <font-awesome-icon :icon="['fas', 'comments']" /></span>
                 </p>
-                <p class="like-dislike-buttons wallsinglepost-elements">
+                <p class="like-dislike-buttons-wall wallsinglepost-elements">
                     <!-- Here we display the number of likes and dislikes on the post,
                     and the buttons that will add/remove likes/dislikes when clicked -->
-                    <span class="like-span-wallsinglepost">{{ nbOfLikes }} <button class="like-button-singlewallpost reaction-button-singlewallpost" @click="likePost(postId)" ><font-awesome-icon :icon="['fas', 'thumbs-up']" /></button></span>
-                    <span class="dislike-span-wallsinglepost">{{ nbOfDislikes }} <button class="dislike-button-singlewallpost reaction-button-singlewallpost" @click="dislikePost(postId)" ><font-awesome-icon :icon="['fas', 'thumbs-down']" /></button></span>
+                    <span class="like-span-wallsinglepost"><button class="like-button-singlewallpost reaction-button-singlewallpost" @click="likePost(postId)" ><font-awesome-icon :icon="['fas', 'thumbs-up']" /></button> {{ nbOfLikes }}</span>
+                    <span class="dislike-span-wallsinglepost"><button class="dislike-button-singlewallpost reaction-button-singlewallpost" @click="dislikePost(postId)" ><font-awesome-icon :icon="['fas', 'thumbs-down']" /></button> {{ nbOfDislikes }}</span>
                 </p>
             </div>
         </div>
@@ -59,6 +59,9 @@ export default {
     mounted() {
         this.nbOfLikes = this.reactions.filter(i => i.type === true).length;
         this.nbOfDislikes = this.reactions.filter(i => i.type === false).length;
+        if (this.userProfilePic === null) {
+            this.userProfilePic = require("@/assets/default-profile-pic.png")
+        }
     },
     methods: {
         // Method that makes an axios call to the backend to create a new LIKE on the post
@@ -102,7 +105,7 @@ export default {
 <style>
 
 .wallsinglepost-elements {
-    margin-bottom: 4%;
+    margin-bottom: 2%;
 }
 .single-post-wallsinglepost {
     display: flex;
@@ -118,13 +121,13 @@ export default {
 
 .user-infos-wallsinglepost {
     display: flex;
-    align-items: flex-start;
+    align-items: center;
 }
 
 .user-profile-pic-wallsinglepost {
     float: left;
-    width:  75px;
-    height: 75px;
+    width:  45px;
+    height: 45px;
     object-fit: cover;
     border-radius: 50%;
 }
@@ -153,17 +156,21 @@ export default {
     margin-left: auto;
     margin-right: auto;
     border-radius: 3px;
-    width: 70%;
+    width: 100%;
     height: auto;
     object-fit: cover;
-
+    cursor: pointer;
 }
 
 .reaction-infos-wallsinglepost {
     display: flex;
-    justify-content: space-around;
-    font-size: 1.5em;
+    justify-content: space-between;
+    font-size: 1.1em;
     color: #354C5F;
+}
+
+#commentaires-link {
+    cursor: pointer;
 }
 
 .reaction-button-singlewallpost {
@@ -173,74 +180,82 @@ export default {
 }
 
 .like-span-wallsinglepost {
-    color: #007500;
+    color: #354C5F;
 }
 
 .dislike-span-wallsinglepost {
-    color: #c00000;
+    color: #354C5F;
 }
 
 .like-button-singlewallpost {
-    color: #007500;
+    color: #354C5F;
+    background: none;
+}
+.like-button-singlewallpost:focus {
+    outline: none;
+    box-shadow: none;
 }
 
 .dislike-button-singlewallpost {
-    color: #c00000;
+    color: #354C5F;
+    background: none;
+}
+.dislike-button-singlewallpost:focus {
+    outline: none;
+    box-shadow: none;
+}
+
+.like-dislike-buttons-wall {
+    display: flex;
+    text-align: right;
+    justify-content: space-between;
+    width: 15%;
+    background: none;
 }
 
 
 .go-to-singlepost-button {
-  background-color: #68F8C1;
-  color: #460BD0;
+  background-color: #4287f5;
+  color: #FFFFFF;
   border: none;
-  border-radius: 10px;
-  padding: 2%;
-  margin-right: 10px;
+  border-radius: 3px;
+  padding: 1%;
   width: auto;
   height: 1%;
   font-size: 1em;
-  font-weight: bolder;
+  font-weight: bold;
   cursor: pointer;
-  
+  box-shadow: 1.5px 1px 3px grey;
+
+  transition: all 0.1s ease;
 }
+.go-to-singlepost-button:hover {
+    transform: scale(1.05);
+}
+.go-to-singlepost-button:focus {
+    outline: none;
+    box-shadow: none;
+}
+
+
 @media (max-width: 768px) {
     .reaction-infos-wallsinglepost {
-        font-size: 1.2em;
-        flex-direction: column-reverse;
-        align-items: center;
+        font-size: 0.95em;
     }
 
-    .like-dislike-buttons {
-        display: flex;
-        width: 40%;
-        justify-content: space-between;
-    }
-}
-
-@media (max-width: 480px) {
-    .single-post-wallsinglepost {
-        padding-left: 3%;
-        padding-right: 3%;
-    }
-
-    .post-infos-wallsinglepost {
-        width: 100%;
+    .like-dislike-buttons-wall {
+        width: 27%;
     }
 
     .go-to-singlepost-button {
-        height: 5%;
-        width: auto;
+        padding: 2%;
+        margin-top: 1%;
     }
-    .reaction-infos-wallsinglepost {
-        font-size: 1.2em;
-        color: #557596;
+    .wallsinglepost-elements {
+        margin-bottom: 4%;
     }
-
-    .reaction-button-singlewallpost {
-        border: none;
+    .post-content-wallsinglepost {
         font-size: 1em;
-        cursor: pointer;
     }
 }
-
 </style>

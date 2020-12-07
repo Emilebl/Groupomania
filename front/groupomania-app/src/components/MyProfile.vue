@@ -3,44 +3,47 @@
         <!-- This section displays the profile informations about the currently connected user -->
         <section class="profile-infos-container">
             <h1 >Informations du profil</h1>
-            <p class="profile-infos-element"><span class="profile-infos-span">Prénom: </span>{{profileInfos.firstName}}</p>
-            <p class="profile-infos-element"><span class="profile-infos-span">Nom: </span>{{profileInfos.lastName}}</p>
-            <p class="profile-infos-element"><span class="profile-infos-span">Photo de Profil: </span><img v-bind:src="profileInfos.profilePic" alt="" id="myProfileImage"></p>
-            <p class="profile-infos-element"><span class="profile-infos-span">Bio: </span>{{profileInfos.bio}}</p>
-            <p class="profile-infos-element"><span class="profile-infos-span">E-mail: </span>{{profileInfos.email}}</p>
+            <div class="profile-infos-div">
+                <p class="profile-infos-element"><span class="profile-infos-span">Prénom: </span>{{profileInfos.firstName}}</p>
+                <p class="profile-infos-element"><span class="profile-infos-span">Nom: </span>{{profileInfos.lastName}}</p>
+                <p class="profile-infos-element"><span class="profile-infos-span">Bio: </span>{{profileInfos.bio}}</p>
+                <p class="profile-infos-element"><span class="profile-infos-span">E-mail: </span>{{profileInfos.email}}</p>
+                <p class="profile-infos-element" id="myprofile-pic-element"><span class="profile-infos-span">Photo de Profil: </span>
+                <img v-bind:src="profileInfos.profilePic" alt="" id="myProfileImage"></p>
+            </div>
         </section>
         <!-- This section contains a form to modify infos on the profile -->
         <section class="form-container">
             <h1 class="modify-profile-title">Modifications du profil</h1>
             <form @submit.prevent="updateProfile" enctype="multipart/form-data" id="form" class="validate">
                 <div class="form-field">
-                    <label for="Prenom">Nouveau Prénom</label>
+                    <label for="Prenom">Prénom</label>
                     <input type="text" v-model="firstName" name="Prenom" id="firstName">
                 </div>
                 <div class="form-field">
-                    <label for="Nom">Nouveau Nom de famille</label>
+                    <label for="Nom">Nom</label>
                     <input type="text" v-model="lastName" name="Nom" id="lastName">
                 </div>
                 <div class="form-field">
-                    <label for="bio">Nouvelle Bio</label>
+                    <label for="bio">Bio</label>
                     <textarea v-model="bio" name="bio" id="bio" />
                 </div>
                 <div class="form-field">
-                    <label for="photo-de-profil">Nouvelle photo de profil </label>
+                    <label for="photo-de-profil">Photo</label>
                     <input type="file" ref="file" @change="selectFile" name="photo-de-profil" id="modify-profile-pic">
                 </div>
                 <div class="form-field" id="post-preview-container">
                     <label v-if="imgPreview" for="aperçu-photo">Aperçu de l'image:</label>
                     <img id="post-preview" v-if="imgPreview" :src="imgPreview" alt="aperçu-de-la-photo-de-profil" />
                 </div>
-                <div class="form-example">
-                    <input type="submit" value="Modifier le profil !">
+                <div class="submit-button-container">
+                    <input type="submit" class="submit-button" value="Modifier !">
+                    <!-- This button deletes the profile when clicked -->
+                    <button class="delete-profile-button" @click="deleteProfile">Supprimer</button>
                 </div>
                 <div class="error-message-container">
                     <p class="modify-profile-error-msg">{{ modifyProfileErrorMsg }}</p>
                 </div>
-                <!-- This button deletes the profile when clicked -->
-                <button class="delete-profile-button" @click="deleteProfile">Supprimer le Profil</button>
             </form>
         </section>
     </div>
@@ -80,6 +83,9 @@ export default {
         .then(res => {
             console.log(res);
             this.profileInfos = res.data;
+            if (this.profileInfos.profilePic === null) {
+                this.profileInfos.profilePic = require("@/assets/default-profile-pic.png")
+            }
         }, err => {
             console.log(err.response);
             // if the response is an error (token expired), we are redirected to the login page
@@ -133,6 +139,9 @@ export default {
                 window.scrollTo(0,0);
                 console.log(res);
                 this.profileInfos = res.data;
+                if (this.profileInfos.profilePic === null) {
+                    this.profileInfos.profilePic = require("@/assets/default-profile-pic.png")
+                }
             }, err => {
                 console.log(err.response);
                 this.$router.push('/login')
@@ -158,34 +167,43 @@ export default {
 <style>
 .delete-profile-button {
     background-color: #c00000;
-    color: white;
+    color: #FFFFFF;
     border: none;
-    border-radius: 10px;
+    border-radius: 3px;
     padding: 2%;
-    margin-top: 10%;
+    margin: auto;
     width: auto;
-    height: auto;
+    height: 1%;
     font-size: 1em;
-    font-weight: bolder;
+    font-weight: bold;
     cursor: pointer;
+    box-shadow: 1.5px 1px 3px grey;
 }
 
 .profile-infos-container {
-    border: solid 0.5px grey;
-    background-color: #e5eef7;
     border-radius: 10px;
     display: flex;
     flex-direction: column;
     align-items: center;
     margin-top: 3%;
-    padding-top: 3%;
-    padding-bottom: 3%;
 }
+
+.profile-infos-container h1 {
+    margin-bottom: 3%;
+}
+
+.profile-infos-div {
+    background-color: #FFFFFF;
+    border-radius: 2%;
+    width: 100%;
+    height: auto;
+    padding: 5%;
+}
+
+
 .profile-infos-element {
     min-width: 30%;
-    margin-top: 1%;
-    display: flex;
-    justify-content: space-between;
+    margin-top: 3%;
 }
 
 .profile-infos-span {
@@ -194,11 +212,17 @@ export default {
 
 #myProfileImage {
    width:  200px;
-   height: auto;
+   height: 200px;
    object-fit: cover;
-   border-radius: 2%;
+   border-radius: 50%;
+   margin-top: 3%;
    margin-left: auto;
    margin-right: auto;
+}
+
+#myprofile-pic-element {
+    display: flex;
+    flex-direction: column;
 }
 
 .modify-profile-title {
@@ -207,9 +231,12 @@ export default {
 
 #modify-profile-pic {
     border: none;
+    color: transparent;
 }
 
 .myprofile-component {
+    display: flex;
+    justify-content: space-around;
     width: 95%;
 }
 
@@ -225,13 +252,19 @@ export default {
 }
 
 @media (max-width: 768px) {
-    .profile-infos-element {
+    .myprofile-component {
+        flex-direction: column;
+        margin-bottom: 4%;
+    }
+
+    .profile-infos-div {
         width: 80%;
+        margin-bottom: 5%;
     }
 
     #myProfileImage {
         width:  150px;
-        margin-left: 5%;
+        height: 150px;
     }
 }
 

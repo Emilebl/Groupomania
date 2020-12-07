@@ -10,8 +10,8 @@
                 <label for="mot-de-passe">Mot de passe</label>
                 <input type="password" v-model="password" name="mot-de-passe" id="password" required>
             </div>
-            <div class="form-field" id="login-button-container">
-                <input type="submit" value="Se connecter !">
+            <div class="submit-button-container">
+                <input type="submit" class="submit-button" value="Se connecter !">
             </div>
             <div class="error-message-container">
                 <p class="login-error-msg">{{ loginErrorMsg }}</p>
@@ -65,7 +65,12 @@ export default {
                     }
                 }, err => {
                     console.log(err.response);
-                    this.loginErrorMsg = err.response.data.erreur;
+                    if (err.request.status === 429) {
+                        this.loginErrorMsg = err.response.data;
+                    } else {
+                        this.loginErrorMsg = err.response.data.error;
+                    }
+                    
                 })
             }
         }

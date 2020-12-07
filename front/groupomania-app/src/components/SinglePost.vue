@@ -7,7 +7,7 @@
                     <img v-bind:src="post.User.profilePic" alt="photo-de-profil-du-createur-du-post" class="user-profile-pic-singlepost">
                     <span class="creator-name-singlepost">{{post.User.firstName}} {{post.User.lastName}}</span>
                 </div>
-                <h1 class="singlepost-elements">{{ post.title }}</h1>
+                <h2 class="singlepost-elements">{{ post.title }}</h2>
                 <p class="post-content-singlepost singlepost-elements">{{ post.content }}</p>
                 <img v-show="post.attachment" v-bind:src="post.attachment" alt="image-du-post" class="post-image-singlepost singlepost-elements">
                 <div class="reaction-infos-singlepost singlepost-elements">
@@ -18,8 +18,8 @@
                     <p class="like-dislike-buttons singlepost-elements">
                         <!-- Here we display the number of likes and dislikes on the post,
                         and the buttons that will add/remove likes/dislikes when clicked -->
-                        <span class="like-span-singlepost">{{ nbOfLikes }} <button class="like-button-singlepost reaction-button-singlepost" @click="likePost(post.id)" ><font-awesome-icon :icon="['fas', 'thumbs-up']" /></button> </span>
-                        <span class="dislike-span-singlepost">{{ nbOfDislikes }} <button class="dislike-button-singlepost reaction-button-singlepost" @click="dislikePost(post.id)" ><font-awesome-icon :icon="['fas', 'thumbs-down']" /></button></span>
+                        <span class="like-span-singlepost"><button class="like-button-singlepost reaction-button-singlepost" @click="likePost(post.id)" ><font-awesome-icon :icon="['fas', 'thumbs-up']" /></button> {{ nbOfLikes }}</span>
+                        <span class="dislike-span-singlepost"><button class="dislike-button-singlepost reaction-button-singlepost" @click="dislikePost(post.id)" ><font-awesome-icon :icon="['fas', 'thumbs-down']" /></button> {{ nbOfDislikes }}</span>
                     </p>
                 </div>
                 <!-- We use the "v-for" to create a <div> for each element from the array "Comments" -->
@@ -39,21 +39,22 @@
                     v-bind:isAdmin="isAdmin" />
                 </div>
                 <!-- This div contains the form to add a new comment -->
-                <div class="form-container">
-                    <form @submit.prevent="commentPost(post.id)" id="form" class="validate">
-                        <div class="form-title"> 
+                <div class="form-container-comment">
+                    <form @submit.prevent="commentPost(post.id)" id="form-comment" class="validate">
+                        <!-- <div class="form-title"> 
                             <h2 class="comment-form-title">Ajouter un commentaire:</h2>
-                        </div>
+                        </div> -->
                         <div class="form-field">
-                            <label for="commentaire">Contenu</label>
+                            <label for="commentaire">Ajouter un commentaire:</label>
                             <textarea v-model="comment" name="commentaire" id="comment" required />
                         </div>
                         <div class="comment-button-container">
                             <input class="comment-button" type="submit" value="Commenter !">
                         </div>
-                        <div class="error-message-container">
+                        <span class="error-message-container">{{ commentErrorMsg }}</span>
+                        <!-- <div class="error-message-container">
                             <p class="comment-error-msg">{{ commentErrorMsg }}</p>
-                        </div>
+                        </div> -->
                     </form>
                 </div>
             </div>
@@ -62,16 +63,16 @@
         It will only appear if "AuthorisationToDeleteOrModifyPost" returns true -->
         <section v-show="AuthorisationToDeleteOrModifyPost" class="form-container">
             <div class="form-title"> 
-                <h1>Modifier le post</h1>
+                <h1>Modifier la publication</h1>
             </div>
             <form id="form" class="validate" @submit.prevent="updatePost" enctype="multipart/form-data">
                 <div class="form-field">
-                    <label for="titre">Titre du post</label>
+                    <label for="titre">Titre</label>
                     <input type="text" v-model="title" name="titre" id="title">
                 </div>
                 <div class="form-field">
-                    <label for="contenu">Contenu du post (texte)</label>
-                    <input type="text" v-model="content" name="contenu" id="content">
+                    <label for="contenu">Contenu</label>
+                    <textarea type="text" v-model="content" name="contenu" id="content"/>
                 </div>
                 <div class="form-field">
                     <label for="image">Image: </label>
@@ -81,13 +82,13 @@
                     <label v-if="imgPreview" for="aperçu-photo">Aperçu de l'image:</label>
                     <img id="post-preview" v-if="imgPreview" :src="imgPreview" alt="aperçu-de-la-photo-de-profil" />
                 </div>
-                <div>
-                    <input type="submit" value="Modifier !">
+                <div class="submit-button-container">
+                    <input type="submit" class="submit-button" value="Modifier !">
+                    <button class="delete-post-button" v-show="AuthorisationToDeleteOrModifyPost" @click="deletePost">Supprimer le post</button>
                 </div>
                 <div class="error-message-container">
                     <p class="modify-post-error-msg">{{ modifyPostErrorMsg }}</p>
                 </div>
-                <button class="delete-post-button" v-show="AuthorisationToDeleteOrModifyPost" @click="deletePost">Supprimer le post</button>
                     <div>{{ deleteError }}</div>
             </form>
         </section>
@@ -161,12 +162,13 @@ export default {
             .then(res => {
                 console.log(res);
                 this.post = res.data.singlePost;
+                if (this.post.User.profilePic === null) {
+                    this.post.User.profilePic = require("@/assets/default-profile-pic.png")
+                }
                 this.Reactions = res.data.singlePost.UserReacts;
                 this.userIdOrder = res.data.singlePost.UserId;
                 this.connectedId = res.data.userConnected;
-                // if (this.post.attachment == null) {
-
-                // }
+                
                 // If the user connected is also the creator of the post on the current page
                 // OR if the user connected is and Admin
                 // "AuthorisationToDeleteOrModifyPost" will return true and the modify/delete section will appear
@@ -224,6 +226,9 @@ export default {
             .then(res => {
             console.log(res);
             this.post = res.data.singlePost;
+            if (this.post.User.profilePic === null) {
+                this.post.User.profilePic = require("@/assets/default-profile-pic.png")
+            }
             this.Reactions = res.data.singlePost.UserReacts;
             this.userIdOrder = res.data.singlePost.UserId;
             this.nbOfLikes = this.Reactions.filter(i => i.type === true).length;
@@ -317,20 +322,22 @@ export default {
 
 .delete-post-button {
     background-color: #c00000;
-    color: white;
+    color: #FFFFFF;
     border: none;
-    border-radius: 10px;
+    border-radius: 3px;
     padding: 2%;
-    margin-top: 10%;
+    margin: auto;
     width: auto;
-    height: auto;
+    height: 1%;
     font-size: 1em;
-    font-weight: bolder;
+    font-weight: bold;
     cursor: pointer;
+    box-shadow: 1.5px 1px 3px grey;
 }
 
 #modify-post-pic {
     border: none;
+    color: transparent;
 }
 
 .single-post-page {
@@ -341,10 +348,9 @@ export default {
 }
 
 .post-container-singlepost {
-    background-color: #e5eef7;
+    background-color: #ffffff;
     border-radius: 10px;
-    width: 90%;
-    margin-bottom: 3%;
+    width: 100%;
     margin-top: 3%;
     display: flex;
     flex-direction: column;
@@ -359,7 +365,7 @@ export default {
 
 .user-infos-singlepost {
     display: flex;
-    align-items: flex-start;
+    align-items: center;
 }
 
 .user-profile-pic-singlepost {
@@ -378,7 +384,7 @@ export default {
 
 .post-infos-singlepost {
     text-align: left;
-    width: 75%;
+    width: 60%;
 }
 
 .post-content-singlepost {
@@ -391,30 +397,30 @@ export default {
     margin-left: auto;
     margin-right: auto;
     border-radius: 3px;
-    width: 80%;
+    width: 100%;
     height: auto;
     object-fit: cover;
-
 }
 
 .reaction-infos-singlepost {
     display: flex;
-    justify-content: space-around;
-    font-size: 1.5em;
+    justify-content: space-between;
+    font-size: 1.1em;
     color: #354C5F;
 }
 
 .like-span-singlepost {
-    color: #007500;
+    color: #354C5F;
 }
 
 .dislike-span-singlepost {
-    color: #c00000;
+    color: #354C5F;
 }
 
 .like-dislike-buttons {
     display: flex;
-    min-width: 20%;
+    text-align: right;
+    width: 10%;
     justify-content: space-between;
 }
 
@@ -432,11 +438,11 @@ export default {
 
 
 .like-button-singlepost {
-    color: #007500;
+    color: #354C5F;
 }
 
 .dislike-button-singlepost {
-    color: #c00000;
+    color: #354C5F;
 }
 
 .comment-list {
@@ -449,14 +455,11 @@ export default {
     text-align: center;
 }
 
-.comment-form-title {
-    font-size: 1.2em;
-}
-
 .error-message-container{
     display: flex;
     justify-content: center;
     color: rgb(212, 0, 0);
+    margin-top: 1%;
 }
 
 .modify-post-error-msg {
@@ -464,51 +467,76 @@ export default {
     width: 50%;
 }
 
+.form-container-comment {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 3%;
+}
+
+#form-comment {
+    width: 100%;
+    padding: 1.5rem;
+    box-sizing: border-box;
+    background: rgb(223, 223, 223);
+    border-radius: 5px;
+}
+
+#form-comment label {
+    font-size: 1em;
+}
+
+#form-comment textarea {
+    margin-top: 2%;
+}
+
 .comment-error-msg {
     margin-top: 5%;
     width: 50%;
 }
 
-
-@media (max-width: 768px) {
-    .reaction-infos-singlepost {
-        font-size: 1.2em;
-        flex-direction: column-reverse;
-        align-items: center;
-    }
-
-    .like-dislike-buttons {
-        display: flex;
-        width: 40%;
-        justify-content: space-between;
-    }
+.comment-button {
+  background-color: #4287f5;
+  color: #FFFFFF;
+  border: none;
+  border-radius: 3px;
+  padding: 1%;
+  width: auto;
+  height: 1%;
+  font-size: 1em;
+  font-weight: bold;
+  cursor: pointer;
+  box-shadow: 1.5px 1px 3px grey;
+  
+}
+.comment-button:focus {
+    outline: none;
+    box-shadow: none;
 }
 
-@media (max-width: 480px) {
-    .post-container-singlepost {
-        padding-left: 3%;
-        padding-right: 3%;
-        width: 85%;
-    }
 
+
+@media (max-width: 768px) {
+    .like-dislike-buttons {
+        width: 27%;
+    }
+    .reaction-infos-singlepost {
+        font-size: 0.95em;
+    }
+    .post-content-singlepost {
+    font-size: 1em;
+    }
+    .comment-button {
+        padding: 2%;
+    }
     .post-infos-singlepost {
-        width: 100%;
+        text-align: left;
+        width: 70%;
     }
-    
-    .reaction-button-singlepost {
-        border: none;
-        font-size: 1em;
-        cursor: pointer;
-    }
-
-    .comment-error-msg {
-        margin-top: 5%;
-        width: 80%;
+    .user-profile-pic-singlepost {
+        width:  45px;
+        height: 45px;
     }
 
-    .modify-post-error-msg {
-        margin-top: 5%;
-        width: 80%;
-    }
 }
 </style>

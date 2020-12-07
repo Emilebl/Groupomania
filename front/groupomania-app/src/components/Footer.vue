@@ -1,9 +1,9 @@
 <template>
-    <footer>
+    <div id="footer">
         <p>
             Emile Bailay - Groupomania App {{year}}
         </p>
-    </footer>
+    </div>
 </template>
 
 <script>
@@ -22,14 +22,17 @@ export default {
 </script>
 
 <style>
-footer {
+#footer {
+    position: absolute;
+    background-color: #354C5F;
+    color: white;
+    bottom: 0;
+    left: 0;
     width: 100%;
-    padding: 3%;
-    border-top: black solid 1px;
+    padding: 1%;
     display: flex;
     justify-content: center;
     align-items: center;
     font-family: Arial, Helvetica, sans-serif;
 }
-
 </style>

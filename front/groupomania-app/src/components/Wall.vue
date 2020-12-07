@@ -1,5 +1,4 @@
 <template>
-    <div>
         <div class="wall-container">
             <!-- Here we insert the "AddPost" component, 
             and we specify its props values with infos of the user currently connected -->
@@ -9,7 +8,7 @@
             v-bind:profilePicUrl="profileInfos.profilePic" />
             <!-- This section will contain the list of posts created by the users -->
             <section class="post-list-container">
-                <h1 class="post-list-title">Mur de publications</h1>
+                <h1 class="post-list-title">Mur des publications</h1>
                 <!-- We use the "v-for" to create a <div> for each element from the array called "postList" -->
                 <div v-for="post in postList" :key="`${post.id}-${post.UserReacts.filter(i => i.type === true).length}-${post.UserReacts.filter(i => i.type === false).length}`" class="single-post-container">
                     <!-- Each time this <div> is created it will insert the component "SingleWallPost" 
@@ -29,7 +28,6 @@
                 </div>
             </section>
         </div>
-    </div>
 </template>
 
 <script>
@@ -94,6 +92,9 @@ export default {
             .then(res => {
                 console.log(res);
                 this.profileInfos = res.data;
+                if (this.profileInfos.profilePic === null) {
+                    this.profileInfos.profilePic = require("@/assets/default-profile-pic.png")
+                }
                 this.isAdmin = res.data.isAdmin;
             }, err => {
                 console.log(err.response);
@@ -112,13 +113,13 @@ export default {
     display: flex;
     flex-direction: column;
     align-items: center;
+    margin-bottom: 3%;
 }
 
 .post-list-container {
     display: flex;
     flex-direction: column;
     align-items: center;
-    width: 100%;
 }
 
 .post-list-title {
@@ -126,10 +127,9 @@ export default {
 }
 
 .single-post-container {
-    border: solid 0.5px grey;
-    background-color: #e5eef7;
+    background-color: #ffffff;
     border-radius: 10px;
-    width: 75%;
+    width: 65%;
     margin-bottom: 3%;
     position: relative;
 }
@@ -137,7 +137,7 @@ export default {
 @media (max-width: 480px) {
 
     .single-post-container {
-        width: 95%;
+        width: 80%;
     }
 }
 </style>

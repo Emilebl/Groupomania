@@ -15,23 +15,27 @@
                 <input type="email" v-model="email" name="email" id="email-signup" required />
             </div>
             <div class="form-field">
-                <label for="mot-de-passe">Password</label>
-                <input type="password" v-model="password" name="mot-de-passe" id="password-signup" required />
+                <label for="mot-de-passe">Mot de passe</label>
+                <input type="password" v-model="password" name="mot-de-passe" id="password-signup" placeholder="6-20 Car, au moins 1 maj, 1 min et 1 num" required />
             </div>
             <div class="form-field">
-                <label for="bio">Bio</label>
-                <textarea v-model="bio" name="bio" id="bio-signup" placeholder="(facultatif)"  />
+                <label for="mot-de-passe">Confirmation mot de passe</label>
+                <input type="password" v-model="passwordConf" name="mot-de-passe-confirmation" id="passwordConf-signup" placeholder="6-20 Car, au moins 1 maj, 1 min et 1 num" required />
             </div>
             <div class="form-field">
-                <label for="photo-de-profil">Photo</label>
-                <input type="file" ref="file" @change="selectFile" name="photo-de-profil" id="profilePic" required>
+                <label for="bio">Bio (facultatif)</label>
+                <textarea v-model="bio" name="bio" id="bio-signup"/>
+            </div>
+            <div class="form-field">
+                <label for="photo-de-profil">Photo (facultatif)</label>
+                <input type="file" ref="file" @change="selectFile" name="photo-de-profil" id="profilePic">
             </div>
             <div class="form-field" id="signup-preview-container">
                 <label v-if="imgPreview" for="aperçu-photo">Aperçu de votre photo:</label>
                 <img id="signup-preview" v-if="imgPreview" :src="imgPreview" alt="aperçu-de-la-photo-de-profil" />
             </div>
-            <div class="form-field" id="signup-button-container">
-                <input type="submit" value="S'inscrire !" />
+            <div class="submit-button-container">
+                <input type="submit" class="submit-button" value="S'inscrire !" />
             </div>
            <div class="error-message-container">
             <p class="signup-error-msg">{{ signupErrorMsg }}</p>
@@ -53,6 +57,7 @@ export default {
             lastName: '',
             email: '',
             password: '',
+            passwordConf: '',
             bio: '',
             file: '',
             imgPreview: '',
@@ -80,6 +85,7 @@ export default {
             let lastNameRESULT = this.nameRGX.test(this.lastName);
             let emailRESULT = this.emailRGX.test(this.email);
             let passwordRESULT = this.passwordRGX.test(this.password);
+            // let passwordConfRESULT = this.passwordRGX.test(this.passwordConf);
             let bioRESULT = this.bioRGX.test(this.bio);
 
             if (firstNameRESULT == false || lastNameRESULT == false) {
@@ -88,6 +94,10 @@ export default {
                 this.signupErrorMsg = 'Veuillez rentrer un mail valide'
             } else if (passwordRESULT == false) {
                 this.signupErrorMsg = 'Veuillez rentrer un mot de passe valide: entre 6 et 20 caractères, au moins 1 majuscule, 1 minuscule et 1 chiffre'
+            // } else if (passwordConfRESULT == false) {
+            //     this.signupErrorMsg = 'Veuillez rentrer un mot de passe valide: entre 6 et 20 caractères, au moins 1 majuscule, 1 minuscule et 1 chiffre'
+            } else if (this.passwordConf != this.password) {
+                this.signupErrorMsg = 'Veuillez confirmer correctement le mot de passe'
             } else if (bioRESULT == false) {
                 this.signupErrorMsg = 'Veuillez rentrer une bio valide (100 charactères maximum, certains caractères spéciaux sont interdits)'
             } else {
@@ -117,6 +127,12 @@ export default {
 <style>
 #profilePic {
     border: none;
+    cursor: pointer;
+    color: transparent;
+}
+#profilePic:focus {
+    outline: none;
+    box-shadow: none;
 }
 
 #signup-preview {
@@ -145,13 +161,26 @@ export default {
 
 
 #signup-to-login {
-    background-color: #42f5b0; /* Green */
-    color: #7842f5;
+    background-color: #4287f5;
+    color: #FFFFFF;
     border: none;
+    border-radius: 3px;
+    padding: 3%;
+    margin-top: 5%;
+    width: auto;
+    height: 1%;
+    font-size: 1em;
+    font-weight: bold;
+    cursor: pointer;
+    box-shadow: 1.5px 1px 3px grey;
     text-decoration: none;
-    font-weight: bolder;
-    border-radius: 10px;
-    padding: 15px 32px;
-    margin-top: 3%;
+    margin-bottom: 5%;
+
+    transition: all 0.1s ease;
 }
+
+#signup-to-login:hover {
+    transform: scale(1.05);
+}
+
 </style>

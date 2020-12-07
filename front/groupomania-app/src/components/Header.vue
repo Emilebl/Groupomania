@@ -2,8 +2,8 @@
     <header>
         <router-link to="/" @click="scrollToTop"><img id="groupomania_logo" src="@/assets/icon-left-font-monochrome-white.svg" alt="groupomania-logo"></router-link>
         <nav v-show="alreadyConnected">
-            <button class="header-button" id="mon_profil_button" @click="goToProfile"><font-awesome-icon :icon="['fas', 'user']" /> Mon Profil</button>
-            <button class="header-button" id="logout_button" @click="logout"><font-awesome-icon :icon="['fas', 'sign-out-alt']" /> Deconnexion</button>
+            <button class="header-button" id="mon_profil_button" @click="goToProfile"><font-awesome-icon :icon="['fas', 'user']" /></button>
+            <button class="header-button" id="logout_button" @click="logout"><font-awesome-icon :icon="['fas', 'sign-out-alt']" /></button>
         </nav>
     </header>
 </template>
@@ -44,116 +44,79 @@ export default {
 
 <style>
 header {
-    position: sticky;
-    top: 0;
-    z-index:200;
-    background-color: #4287f5;
-    width: 98%;
-    padding: 1%;
-    border-radius: 5px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    font-family: Arial, Helvetica, sans-serif;
+  position: sticky;
+  top: 0;
+  z-index:200;
+  background-color: #4287f5;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-family: Arial, Helvetica, sans-serif;
 }
 
 #groupomania_logo {
-    width: 82%;
+  margin-left: 5%;
+  width: 55%;
+  transition: all 0.2s ease;
+  margin-top: 1%;
+  margin-bottom: 1%;
 }
-
+#groupomania_logo:hover {
+transform: scale(1.05);
+}
 nav {
-    width: 40%;
-    height: auto;
-    padding: 1%;
-    display: flex;
-    justify-content: space-between;
+  width: 10%;
+  height: auto;
+  padding: 1%;
+  display: flex;
+  justify-content: space-between;
 }
 
 .header-button {
-  background-color: #68F8C1;
-  color:#460BD0;
+  background-color: #4287f5;
+  color:#FFFFFF;
   border: none;
-  border-radius: 10px;
-  padding: 15px 32px;
+  border-radius: 10%;
+  padding: 5%;
   width: auto;
   height: auto;
-  font-size: 1.2em;
+  font-size: 1.3em;
   cursor: pointer;
-  
+  outline: none;
+  box-shadow: none;
   text-align: center;
   text-decoration: none;
   display: inline-block;
+
+  transition: all 0.2s ease;
 }
 .header-button:focus {
   outline: none;
   box-shadow: none;
 }
-
-@media (max-width: 1200px) {
-  
-  .header-button {
-    font-size: 1.1em;
-    padding: none;
-  }
+.header-button:hover {
+  transform: scale(1.1);
 }
-
-
-@media (max-width: 1024px) {
-  nav {
-    width: 50%;
-    justify-content: flex-start
-  }
-    
-  .header-button {
-    font-size: 1em;
-    padding: none;
-  }
-
-  #mon_profil_button {
-      margin-right: 6%;
-  }
-}
-
 
 @media (max-width: 768px) {
+  header {
+    padding: 1%;
+  }
   nav {
-    flex-direction: column;
-    align-items: center;
-    padding: none;
+  width: 15%;
   }
-  .header-button {
-    font-size: 0.85em;
-    width: 100%;
-    height: 100%;
-    padding: none;
-  }
-
-  #mon_profil_button {
-      margin-bottom: 8px;
-      margin-right: 0%;
-  }
-
-  #logout_button {
-      margin-top: 8px;
-  }
-}
+} 
 
 @media (max-width: 480px) {
 
-    nav {
-    width: 60%;
-    }
-    #groupomania_logo {
-        width: 82%;
-        margin-left: -12%;
-    }
-    .header-button {
-    font-size: 0.75em;
-    width: 100%;
-    height: 100%;
-    padding: 5px 15px;
-    margin-top: 5px;
-    }
-}
+  nav {
+  width: 26%;
+  }
+
+  #groupomania_logo {
+  width: 65%;
+  }
+} 
 
 </style>

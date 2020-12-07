@@ -1,9 +1,9 @@
 <template>
     <!-- This section contains the form to create a new post -->
     <section class="form-container">
-        <div class="form-title">
+        <div class="form-title-addpost">
             <img v-bind:src="profilePicUrl" class="add-post-user-pp" alt="user-photo-de-profil-ajout-post"> 
-            <h1>Créer un post</h1>
+            <h1>Quoi de neuf ?</h1>
         </div>
         <form action="" @submit.prevent="addPost" enctype="multipart/form-data" id="form" class="validate">
             <div class="form-field">
@@ -11,7 +11,7 @@
                 <input type="text" v-model="title" name="titre" id="title" required>
             </div>
             <div class="form-field">
-                <label for="contenu">Contenu (texte)</label>
+                <label for="contenu">Contenu</label>
                 <textarea v-model="content" name="contenu" id="content" required  />
             </div>
             <div class="form-field">
@@ -22,8 +22,8 @@
                 <label v-if="imgPreview" for="preview">Aperçu de l'image:</label>
                 <img id="post-preview" v-if="imgPreview" :src="imgPreview" />
             </div>
-            <div>
-                <input type="submit" value="Publier !">
+            <div class="submit-button-container">
+                <input type="submit" class="submit-button" value="Publier !">
             </div>
             <div class="error-message-container">
                 <p class="add-post-error-msg">{{ addPostErrorMsg }}</p>
@@ -98,16 +98,26 @@ export default {
 </script>
 
 <style>
+
+.form-title-addpost {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+}
+
 .add-post-user-pp {
     float: left;
-    width:  75px;
-    height: 75px;
+    width:  45px;
+    height: 45px;
+    margin: 3%;
     object-fit: cover;
     border-radius: 50%;
 }
 
 #add-post-pic {
     border: none;
+    color: transparent;
 }
 
 #post-preview {
@@ -119,16 +129,6 @@ export default {
    margin-right: auto;
 }
 
-.add-post-form {
-    width: 70%;
-    height: 250px;
-    margin: 2%;
-    padding: 1%;
-    border: 2px solid black;
-    display: flex;
-    flex-direction: column;
-}
-
 .error-message-container{
     display: flex;
     justify-content: center;
@@ -138,6 +138,34 @@ export default {
 .add-post-error-msg {
     margin-top: 5%;
     width: 50%;
+}
+
+.submit-button-container {
+    display: flex;
+}
+
+.submit-button {
+    background-color: #00bd3f;
+    color: #FFFFFF;
+    border: none;
+    border-radius: 3px;
+    padding: 2%;
+    margin: auto;
+    width: auto;
+    height: 1%;
+    font-size: 1em;
+    font-weight: bold;
+    cursor: pointer;
+    box-shadow: 1.5px 1px 3px grey;
+
+    transition: all 0.1s ease;
+}
+.submit-button:hover {
+    transform: scale(1.05);
+}
+.submit-button:focus {
+    outline: none;
+    box-shadow: none;
 }
 
 </style>

@@ -1,17 +1,17 @@
 <template>
     <!-- This element displays a single comment inside the comment list -->
-    <div class="comment-container">
+    <!-- <div class="comment-container"> -->
         <div class="comment-user-infos">
             <img v-bind:src="profilePic" alt="photo-de-profil-du-créateur-du-commentaire" class="comment-user-profile-pic">
             <div class="comment-text-area">
-                <span class="comment-creator-name" >{{ firstName }} {{ lastName }}</span> a commenté:
+                <span class="comment-creator-name" >{{ firstName }} {{ lastName }}</span>:
                 <p class="comment-content">{{ content }}</p>
             </div>
+            <!-- This button to delete the comment is only shown if "AuthorisationToDeleteComment" returns 'true' -->
+            <button class="delete-comment-button" v-show="AuthorisationToDeleteComment" @click="deleteComment(commentId, userId)"><font-awesome-icon :icon="['fas', 'minus-circle']" /></button>
+            {{ error }}
         </div>
-        <!-- This button to delete the comment is only shown if "AuthorisationToDeleteComment" returns 'true' -->
-        <button class="delete-comment-button" v-show="AuthorisationToDeleteComment" @click="deleteComment(commentId, userId)"><font-awesome-icon :icon="['fas', 'trash']" /></button>
-        {{ error }}
-    </div>
+    <!-- </div> -->
 </template>
 
 <script>
@@ -45,6 +45,9 @@ export default {
         if (this.userId === this.connectedUserId || this.isAdmin === true) {
             this.AuthorisationToDeleteComment = true
         }
+        if (this.profilePic === null) {
+            this.profilePic = require("@/assets/default-profile-pic.png")
+        }
     },
     methods: {
         // Method that sends to the backend a request to delete a specific comment
@@ -65,34 +68,33 @@ export default {
 <style>
 
 .comment-container {
-    border-radius: 10px;
+    border: solid black 1px;
+    border-radius: 4px;
     display: flex;
-    justify-content: flex-start;
-    width: 90%;
-    margin: 1%;
+    width: 100%;
 }
 
 .comment-user-infos {
     display: flex;
-    align-items: flex-start;
-    min-width: auto;
+    justify-content: flex start;
+    width: 100%;
 }
 
 .comment-user-profile-pic {
     float: left;
-    width:  50px;
-    height: 50px;
+    width:  30px;
+    height: 30px;
     object-fit: cover;
     border-radius: 50%;
-    margin: 2%;
+    margin: 0.7%;
 }
 
 .comment-text-area {
-    background: #bbdeff;
+    background: #e8f4ff;
     border-radius: 10px;
-    padding: 3%;
-    margin: 2%;
-    min-width: auto;
+    padding: 1.2%;
+    margin: 0.7%;
+    width: auto;
 }
 
 .comment-creator-name {
@@ -105,13 +107,15 @@ export default {
 }
 
 .delete-comment-button {
-    margin-top: 1%;
-    height: 30%;
     border: none;
     background: none;
-    color: #c00000;
+    color: #521919;
     font-size: 1.2em;
     cursor: pointer;
+    transition: all 0.1s ease;
+}
+.delete-comment-button:hover {
+  transform: scale(1.1);
 }
 
 .delete-comment-button:focus {
@@ -119,5 +123,20 @@ export default {
   box-shadow: none;
 }
 
+@media (max-width: 768px) {
+    .comment-user-profile-pic {
+        margin: 2%;
+    }
+    .comment-content {
+    font-size: 1em;
+    }
+    .comment-text-area {
+        padding: 3%;
+        margin: 2%;
+    }
+    .delete-comment-button {
+        font-size: 1em;
+    }
+}
 
 </style>
